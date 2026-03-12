@@ -44,17 +44,53 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildCard(u) {
     const card = document.createElement('div');
     card.className = 'unit-card';
-    card.innerHTML = `
-      <div class="unit-card-header" style="background:linear-gradient(135deg,${u.accentColor},${darken(u.accentColor)})">
-        <div class="unit-card-label">${u.benchmark} · ${u.benchmarkLabel}</div>
-        <div class="unit-card-title">${u.title}</div>
-        <div class="unit-card-days">${u.days} Days</div>
-      </div>
-      <div class="unit-card-body">
-        <p class="unit-card-desc">${u.description}</p>
-        <div class="unit-card-tags">${u.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-        <div class="unit-card-cta" onclick="event.stopPropagation();window.location.href='${u.path}'">Open Unit →</div>
-      </div>`;
+
+    const header = document.createElement('div');
+    header.className = 'unit-card-header';
+    header.style.background = `linear-gradient(135deg,${u.accentColor},${darken(u.accentColor)})`;
+
+    const label = document.createElement('div');
+    label.className = 'unit-card-label';
+    label.textContent = `${u.benchmark} · ${u.benchmarkLabel}`;
+
+    const title = document.createElement('div');
+    title.className = 'unit-card-title';
+    title.textContent = u.title;
+
+    const days = document.createElement('div');
+    days.className = 'unit-card-days';
+    days.textContent = `${u.days} Days`;
+
+    header.appendChild(label);
+    header.appendChild(title);
+    header.appendChild(days);
+
+    const body = document.createElement('div');
+    body.className = 'unit-card-body';
+
+    const desc = document.createElement('p');
+    desc.className = 'unit-card-desc';
+    desc.textContent = u.description;
+
+    const tags = document.createElement('div');
+    tags.className = 'unit-card-tags';
+    u.tags.forEach(t => {
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = t;
+      tags.appendChild(tag);
+    });
+
+    const cta = document.createElement('div');
+    cta.className = 'unit-card-cta';
+    cta.textContent = 'Open Unit →';
+    cta.addEventListener('click', e => { e.stopPropagation(); window.location.href = u.path; });
+
+    body.appendChild(desc);
+    body.appendChild(tags);
+    body.appendChild(cta);
+    card.appendChild(header);
+    card.appendChild(body);
     card.addEventListener('click', () => window.location.href = u.path);
     return card;
   }
