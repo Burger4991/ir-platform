@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function renderGrid() {
-    const live = UNITS_REGISTRY.filter(u => u.status === 'live' && matches(u));
+    const live = window.UNITS_REGISTRY.filter(u => u.status === 'live' && matches(u));
     grid.innerHTML = '';
 
-    if (live.length === 0 && activeCategory !== 'all') {
+    if (live.length === 0 && (activeCategory !== 'all' || searchQuery)) {
       grid.innerHTML = '<div class="empty-state">No units match this filter yet.</div>';
       return;
     }

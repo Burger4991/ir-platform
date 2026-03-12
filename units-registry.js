@@ -1,4 +1,4 @@
-const UNITS_REGISTRY = [
+window.UNITS_REGISTRY = [
   {
     id: "alicogia",
     title: "The Story of Ali Cogia, Merchant of Baghdad",
