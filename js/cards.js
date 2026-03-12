@@ -11,6 +11,18 @@ function esc(str) {
 }
 
 function renderDayContent(day) {
+  if (typeof UNIT !== 'undefined' && UNIT.meta && UNIT.meta.status === 'coming-soon') {
+    const grid = document.getElementById('content-grid');
+    if (grid) grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 24px;">
+        <div style="font-size:48px;margin-bottom:16px;">📚</div>
+        <div style="font-size:20px;font-weight:800;color:var(--text-primary);margin-bottom:8px;">${esc(UNIT.meta.title)}</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">${esc(UNIT.meta.benchmark)} — ${esc(UNIT.meta.benchmarkLabel)}</div>
+        <div style="font-size:14px;color:var(--text-secondary);background:var(--accent-light);border:1px solid var(--accent-border);padding:12px 24px;border-radius:8px;display:inline-block;">Content coming soon</div>
+      </div>`;
+    return;
+  }
+
   const grid = document.getElementById('content-grid');
   const dayData = UNIT.days[day];
   if (!dayData) { grid.innerHTML = '<p style="padding:20px;color:var(--text-muted)">No content for this day.</p>'; return; }
