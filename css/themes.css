@@ -1,0 +1,82 @@
+/* ── Warm Minimal (default) ── */
+:root,
+body.theme-warm {
+  --bg-page:       #faf7f3;
+  --bg-header:     #f5ede0;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #fdfcfa;
+  --bg-nav:        #2d2416;
+  --bg-filter:     #faf7f3;
+  --border:        #e8dfd4;
+  --border-light:  #f0ebe4;
+  --accent:        #c96a2e;
+  --accent-light:  #fef3ee;
+  --accent-border: #f5d5c0;
+  --text-primary:  #1c1410;
+  --text-secondary:#6b5540;
+  --text-muted:    #9c7e5a;
+  --text-nav:      #f5e6c8;
+  --text-nav-muted:rgba(245,230,200,0.5);
+  --shadow:        0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lifted: 0 4px 16px rgba(201,106,46,0.15);
+  --card-bellringer: #c96a2e;
+  --card-organizer:  #4a7c59;
+  --card-vocab:      #9c5ea3;
+  --card-teacher:    #6b7fa3;
+  --card-passage:    #9c7e5a;
+  --card-esol:       #b07ac0;
+}
+
+body.theme-dark {
+  --bg-page:       #1a1410;
+  --bg-header:     #211a14;
+  --bg-card:       #2a221a;
+  --bg-card-hover: #2f261e;
+  --bg-nav:        #0e0c08;
+  --bg-filter:     #1a1410;
+  --border:        #3a2e24;
+  --border-light:  #2e2418;
+  --accent:        #e2c96e;
+  --accent-light:  rgba(226,201,110,0.1);
+  --accent-border: rgba(226,201,110,0.3);
+  --text-primary:  #f5e6c8;
+  --text-secondary:#c8a87a;
+  --text-muted:    #8a6a4a;
+  --text-nav:      #f5e6c8;
+  --text-nav-muted:rgba(245,230,200,0.5);
+  --shadow:        0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lifted: 0 4px 16px rgba(226,201,110,0.2);
+  --card-bellringer:#e2c96e;
+  --card-organizer: #6aaa80;
+  --card-vocab:     #c07ad0;
+  --card-teacher:   #8aa0c8;
+  --card-passage:   #b09070;
+  --card-esol:      #d090e0;
+}
+
+body.theme-edtech {
+  --bg-page:       #f4f3ff;
+  --bg-header:     #eeecff;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #faf9ff;
+  --bg-nav:        #1a1a2e;
+  --bg-filter:     #f4f3ff;
+  --border:        #dddaf5;
+  --border-light:  #eceaff;
+  --accent:        #6c4fad;
+  --accent-light:  #f0ecff;
+  --accent-border: #c4b8f0;
+  --text-primary:  #1a1a2e;
+  --text-secondary:#4a3a7a;
+  --text-muted:    #8a7ab0;
+  --text-nav:      #e8e4ff;
+  --text-nav-muted:rgba(232,228,255,0.5);
+  --shadow:        0 2px 8px rgba(108,79,173,0.08);
+  --shadow-lifted: 0 4px 16px rgba(108,79,173,0.2);
+  --card-bellringer:#6c4fad;
+  --card-organizer: #3a8a5a;
+  --card-vocab:     #9040a0;
+  --card-teacher:   #4060a0;
+  --card-passage:   #7060a0;
+  --card-esol:      #a060c0;
+}
