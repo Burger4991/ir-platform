@@ -1,6 +1,15 @@
 // Renders the content grid for a given day from UNIT.days[day]
 // Called by nav.js switchDay()
 
+// Escape HTML entities for safe innerHTML injection of data strings
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function renderDayContent(day) {
   const grid = document.getElementById('content-grid');
   const dayData = UNIT.days[day];
@@ -47,17 +56,17 @@ function buildBellringerCard(data, day, reveal) {
   const wordsStr = data.words.join(', ');
   const questionsHTML = data.questions.map((q, qi) => `
     <div style="margin-bottom:14px;">
-      <div class="bellringer-passage">${q.stem}</div>
+      <div class="bellringer-passage">${esc(q.stem)}</div>
       <div>
         ${q.options.map(o => `
           <div class="mc-option${o.correct ? ' correct' : ''}${o.correct && !reveal ? ' hidden' : ''}">
-            <span>${o.letter}.</span>
-            <span>${o.text}</span>
+            <span>${esc(o.letter)}.</span>
+            <span>${esc(o.text)}</span>
             <span class="answer-marker"> ✓</span>
           </div>`).join('')}
       </div>
-      <div class="written-prompt">Written: ${q.writtenPrompt}</div>
-      <div class="written-model${reveal ? ' visible' : ''}">${q.writtenModel}</div>
+      <div class="written-prompt">Written: ${esc(q.writtenPrompt)}</div>
+      <div class="written-model${reveal ? ' visible' : ''}">${esc(q.writtenModel)}</div>
     </div>`).join('');
 
   return makeCard(
@@ -76,23 +85,23 @@ function buildOrganizerCard(data, reveal) {
   const tableRows = data.rows.map(row => {
     const color = grColors[row.label] || '#999';
     const cells = data.columns.map((col, ci) => {
-      if (ci === 0) return `<td style="width:90px;vertical-align:middle;padding:6px 8px;border-top:1px solid var(--border-light);"><span class="gr-badge" style="background:${color}">${row.label}</span></td>`;
+      if (ci === 0) return `<td style="width:90px;vertical-align:middle;padding:6px 8px;border-top:1px solid var(--border-light);"><span class="gr-badge" style="background:${esc(color)}">${esc(row.label)}</span></td>`;
       const cellContent = row.cells[ci - 1] || '';
       if (row.isPreFilled) {
         return `<td style="padding:6px 8px;border-top:1px solid var(--border-light);color:var(--text-secondary);">
-          <span class="exemplar-text">${cellContent}</span>
+          <span class="exemplar-text">${esc(cellContent)}</span>
           <span class="hidden-hint">—</span>
         </td>`;
       }
-      return `<td style="padding:6px 8px;border-top:1px solid var(--border-light);color:var(--text-muted);font-style:italic;">${cellContent || 'Students respond…'}</td>`;
+      return `<td style="padding:6px 8px;border-top:1px solid var(--border-light);color:var(--text-muted);font-style:italic;">${esc(cellContent) || 'Students respond…'}</td>`;
     }).join('');
     return `<tr class="${row.isPreFilled ? 'exemplar' + (!reveal ? ' hidden' : '') : 'student'}">${cells}</tr>`;
   }).join('');
 
   const body = `
-    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">${data.benchmarkFocus}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">${esc(data.benchmarkFocus)}</div>
     <table class="organizer-table" style="width:100%;border-collapse:collapse;">
-      <thead><tr><th style="width:90px;"></th>${data.columns.map(c=>`<th style="padding:6px 8px;text-align:left;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;background:rgba(0,0,0,0.04);">${c}</th>`).join('')}</tr></thead>
+      <thead><tr><th style="width:90px;"></th>${data.columns.map(c=>`<th style="padding:6px 8px;text-align:left;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;background:rgba(0,0,0,0.04);">${esc(c)}</th>`).join('')}</tr></thead>
       <tbody>${tableRows}</tbody>
     </table>`;
 
@@ -105,11 +114,11 @@ function buildVocabCard(vocab, day) {
   const items = vocab.map(v => `
     <div class="vocab-item">
       <div>
-        <div class="vocab-word">${v.word}</div>
-        <div class="vocab-pos">${v.partOfSpeech}</div>
-        <div class="vocab-example">"${v.exampleSentence}"</div>
+        <div class="vocab-word">${esc(v.word)}</div>
+        <div class="vocab-pos">${esc(v.partOfSpeech)}</div>
+        <div class="vocab-example">"${esc(v.exampleSentence)}"</div>
       </div>
-      <div class="vocab-def">${v.definition}</div>
+      <div class="vocab-def">${esc(v.definition)}</div>
     </div>`).join('');
   return makeCard(`Vocabulary · Day ${day}`, vocab.map(v=>v.word).join(', '), `<div class="vocab-list">${items}</div>`, '--card-vocab');
 }
@@ -119,7 +128,7 @@ function buildTeacherCard(notes, isTeacherView) {
   const card = makeCard(
     'Teacher Notes',
     'Instructional guidance',
-    `<div class="teacher-note-body">${notes || 'No teacher notes for this day.'}</div>`,
+    `<div class="teacher-note-body">${esc(notes) || 'No teacher notes for this day.'}</div>`,
     '--card-teacher',
     isTeacherView ? '' : 'teacher-only-hidden'
   );
@@ -131,14 +140,15 @@ function buildTeacherCard(notes, isTeacherView) {
 
 // ── Text Passage ──
 function buildPassageCard(passage) {
+  if (!passage || !passage.paragraphs || !passage.paragraphs.length) return makeCard('Text Passage', 'No passage', '', '--card-passage');
   const parasHTML = passage.paragraphs.map(p =>
-    `<p class="passage-para"><span class="para-num">[${p.number}]</span>${p.text}</p>`
+    `<p class="passage-para"><span class="para-num">[${esc(p.number)}]</span>${esc(p.text)}</p>`
   ).join('');
-  const cubesHTML = passage.cubesGuide.map(c =>
+  const cubesHTML = (passage.cubesGuide || []).map(c =>
     `<div class="cubes-item">
-      <span class="cubes-letter" style="color:var(--accent)">${c.letter}</span>
-      <span class="cubes-action">${c.action}</span>
-      <span class="cubes-example">e.g. "${c.example}"</span>
+      <span class="cubes-letter" style="color:var(--accent)">${esc(c.letter)}</span>
+      <span class="cubes-action">${esc(c.action)}</span>
+      <span class="cubes-example">e.g. "${esc(c.example)}"</span>
     </div>`
   ).join('');
   const body = `
@@ -154,12 +164,12 @@ function buildPassageCard(passage) {
 function buildEsolCard(esol) {
   if (!esol) return makeCard('ESOL Scaffolds', 'No ESOL data', '', '--card-esol', 'esol-card');
   const framesHTML = esol.frames.map(f =>
-    `<div class="esol-frame"><span class="esol-level-badge">${f.level}</span>${f.frame}</div>`
+    `<div class="esol-frame"><span class="esol-level-badge">${esc(f.level)}</span>${esc(f.frame)}</div>`
   ).join('');
   const wordBankHTML = esol.wordBank && esol.wordBank.length
-    ? `<div style="margin-top:10px;"><div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Word Bank</div><div class="esol-word-bank">${esol.wordBank.map(w=>`<span class="esol-word">${w}</span>`).join('')}</div></div>`
+    ? `<div style="margin-top:10px;"><div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Word Bank</div><div class="esol-word-bank">${esol.wordBank.map(w=>`<span class="esol-word">${esc(w)}</span>`).join('')}</div></div>`
     : '';
-  const body = `<div class="esol-frame-list">${framesHTML}</div>${wordBankHTML}${esol.l1Note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">${esol.l1Note}</div>` : ''}`;
+  const body = `<div class="esol-frame-list">${framesHTML}</div>${wordBankHTML}${esol.l1Note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">${esc(esol.l1Note)}</div>` : ''}`;
   return makeCard('ESOL Scaffolds · Levels 1–3', 'Sentence frames + word bank', body, '--card-esol', 'esol-card');
 }
 
@@ -197,6 +207,9 @@ function applyRevealState(reveal) {
 // Called when teacher view changes
 function applyTeacherView(isTeacher) {
   document.querySelectorAll('.teacher-only-hidden').forEach(el => {
+    el.style.display = isTeacher ? '' : 'none';
+  });
+  document.querySelectorAll('.teacher-badge').forEach(el => {
     el.style.display = isTeacher ? '' : 'none';
   });
 }
