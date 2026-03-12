@@ -1,5 +1,5 @@
 (function() {
-  const saved = localStorage.getItem('ir-theme') || 'warm';
+  const saved = localStorage.getItem('ir-theme') || 'edtech';
   applyTheme(saved);
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -9,7 +9,10 @@
         const t = btn.dataset.theme;
         applyTheme(t);
         localStorage.setItem('ir-theme', t);
-        document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+        document.querySelectorAll('.theme-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.theme === t);
+          b.setAttribute('aria-pressed', b.dataset.theme === t ? 'true' : 'false');
+        });
       });
     });
   });
