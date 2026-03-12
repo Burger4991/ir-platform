@@ -241,6 +241,105 @@ body.spotlight-mode .card:not(.spotlight-focus) { opacity: 0.3; }
 body.font-large .card-body { font-size: 115%; }
 body.font-xlarge .card-body { font-size: 130%; }
 
+/* ── Typography Polish ── */
+body { font-size: 15px; }
+.card-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; }
+.card-body { font-size: 14px; line-height: 1.6; }
+.passage-para { font-size: 15px; line-height: 1.75; }
+.card-header { padding: 14px 16px 12px; }
+.card-body { padding: 0 16px 16px; }
+.content-grid { gap: 16px; }
+
+/* ── Transition Polish ── */
+.card { transition: box-shadow 0.15s ease, transform 0.15s ease, opacity 0.15s ease; }
+.card:hover:not(.dimmed) { transform: translateY(-2px); }
+.tool-btn { transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease; }
+.tool-btn:active { transform: scale(0.97); }
+.filter-btn { transition: all 0.15s ease; }
+
+/* ── Home Page Polish ── */
+.hero h1 { font-size: 36px; }
+.stat-num { font-size: 28px; }
+.unit-card { border-radius: 12px; }
+.filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.unit-card-cta { border-radius: 8px; }
+
+/* ── Background Gradients (Violet, Azure) ── */
+body.theme-violet { background: linear-gradient(160deg, #1e1045 0%, #2d1b69 100%) fixed; }
+body.theme-azure  { background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) fixed; }
+
+/* ── Midnight: glowing card borders ── */
+body.theme-midnight .card {
+  background: var(--bg-card);
+  border: 1px solid rgba(67,97,238,0.25);
+  box-shadow: 0 0 0 1px rgba(67,97,238,0.15), 0 0 20px rgba(67,97,238,0.06);
+}
+body.theme-midnight .card:hover:not(.dimmed) {
+  box-shadow: 0 0 0 1px rgba(67,97,238,0.4), 0 0 30px rgba(67,97,238,0.15);
+}
+body.theme-midnight .day-tab.active { box-shadow: 0 0 10px var(--accent); }
+
+/* ── Ocean: left-border cards, underline tabs ── */
+body.theme-ocean .card {
+  border: none;
+  border-left: 4px solid var(--card-accent-color, var(--accent));
+  border-radius: 0 10px 10px 0;
+  box-shadow: none;
+}
+body.theme-ocean .card .card-header { border-top: none; }
+body.theme-ocean .card:hover:not(.dimmed) { box-shadow: 2px 2px 12px rgba(14,165,233,0.12); }
+body.theme-ocean .day-tabs { background: #fff; border-bottom: 2px solid var(--border); }
+body.theme-ocean .day-tab {
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  background: transparent;
+}
+body.theme-ocean .day-tab.active {
+  border-bottom-color: var(--accent);
+  background: transparent;
+  color: var(--accent);
+}
+
+/* ── Slate: top-accent bar cards, boxed tabs ── */
+body.theme-slate .card { border-radius: 4px; }
+body.theme-slate .card .card-header { border-top: 3px solid var(--card-accent-color, var(--accent)); border-radius: 0; }
+body.theme-slate .day-tabs { gap: 6px; padding: 8px 24px; border-bottom: 1px solid var(--border); background: var(--bg-page); }
+body.theme-slate .day-tab {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  border-bottom-color: var(--border);
+  margin-bottom: 0;
+}
+body.theme-slate .day-tab.active {
+  background: var(--text-primary);
+  color: #fff;
+  border-color: var(--text-primary);
+}
+
+/* ── Violet: glassmorphism cards, frosted pills ── */
+body.theme-violet .card {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(139,92,246,0.3);
+}
+body.theme-violet .card:hover:not(.dimmed) {
+  background: rgba(255,255,255,0.11);
+}
+body.theme-violet .day-tab.active { box-shadow: 0 0 10px var(--accent); }
+
+/* ── Azure: frosted glass cards ── */
+body.theme-azure .card {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(59,130,246,0.2);
+}
+body.theme-azure .card:hover:not(.dimmed) {
+  background: rgba(255,255,255,0.88);
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .content-grid { grid-template-columns: 1fr; }
