@@ -14,7 +14,7 @@ function renderDayContent(day) {
   // Build cards in order
   grid.appendChild(buildBellringerCard(dayData.bellringer, day, isRevealAnswers));
   grid.appendChild(buildOrganizerCard(dayData.organizer, isRevealAnswers));
-  grid.appendChild(buildVocabCard(dayData.vocabulary));
+  grid.appendChild(buildVocabCard(dayData.vocabulary, day));
   grid.appendChild(buildTeacherCard(dayData.teacherNotes, isTeacherView));
   if (dayData.textPassage) grid.appendChild(buildPassageCard(dayData.textPassage));
   grid.appendChild(buildEsolCard(dayData.esol));
@@ -100,7 +100,7 @@ function buildOrganizerCard(data, reveal) {
 }
 
 // ── Vocabulary ──
-function buildVocabCard(vocab) {
+function buildVocabCard(vocab, day) {
   if (!vocab || !vocab.length) return makeCard('Vocabulary', 'No vocabulary data', '', '--card-vocab');
   const items = vocab.map(v => `
     <div class="vocab-item">
@@ -111,7 +111,7 @@ function buildVocabCard(vocab) {
       </div>
       <div class="vocab-def">${v.definition}</div>
     </div>`).join('');
-  return makeCard('Vocabulary · Day', vocab.map(v=>v.word).join(', '), `<div class="vocab-list">${items}</div>`, '--card-vocab');
+  return makeCard(`Vocabulary · Day ${day}`, vocab.map(v=>v.word).join(', '), `<div class="vocab-list">${items}</div>`, '--card-vocab');
 }
 
 // ── Teacher Notes ──
