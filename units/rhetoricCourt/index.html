@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Rhetoric Court · IR Platform</title>
+  <link rel="stylesheet" href="../../css/themes.css">
+  <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body class="theme-edtech">
+
+  <nav class="nav">
+    <a href="../../index.html" class="nav-logo">IR TEACHING SYSTEM</a>
+    <div class="nav-links">
+      <a href="../../index.html">← Units</a>
+      <div class="theme-switcher">
+        <button class="theme-btn active" data-theme="edtech" aria-label="EdTech theme" aria-pressed="true">EdTech</button>
+        <button class="theme-btn" data-theme="midnight" aria-label="Midnight theme" aria-pressed="false">Midnight</button>
+        <button class="theme-btn" data-theme="ocean" aria-label="Ocean theme" aria-pressed="false">Ocean</button>
+        <button class="theme-btn" data-theme="slate" aria-label="Slate theme" aria-pressed="false">Slate</button>
+        <button class="theme-btn" data-theme="violet" aria-label="Violet theme" aria-pressed="false">Violet</button>
+        <button class="theme-btn" data-theme="azure" aria-label="Azure theme" aria-pressed="false">Azure</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="unit-header" id="unit-header">
+    <div class="unit-benchmark-label" id="unit-benchmark-label"></div>
+    <div class="unit-title" id="unit-title"></div>
+    <div class="unit-meta" id="unit-meta"></div>
+
+    <!-- Toolbar -->
+    <div class="toolbar" id="toolbar" style="position:relative">
+      <!-- Timer group -->
+      <button class="tool-btn timer-display" id="timer-display" title="Timer">⏱ <span id="timer-value">4:00</span></button>
+      <button class="tool-btn tool-btn-timer-controls" id="timer-play" title="Start/Pause">▶</button>
+      <button class="tool-btn tool-btn-timer-controls" id="timer-reset" title="Reset">↺</button>
+      <button class="tool-btn tool-btn-timer-controls" id="timer-edit" title="Edit duration">✎</button>
+      <input id="timer-edit-input" class="timer-edit-input" type="text" placeholder="4:00" style="display:none">
+
+      <div class="toolbar-divider"></div>
+
+      <!-- View group -->
+      <button class="tool-btn" id="btn-projection" title="Projection Mode (P)">⛶ Projection</button>
+      <button class="tool-btn" id="btn-spotlight" title="Spotlight Mode">◎ Spotlight</button>
+      <button class="tool-btn" id="btn-font" title="Font Size">A± Font</button>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Content toggles -->
+      <button class="tool-btn" id="btn-teacher-view" title="Teacher/Student View (T)">👁 Teacher View</button>
+      <button class="tool-btn" id="btn-reveal" title="Reveal Answers">💡 Answers</button>
+      <button class="tool-btn" id="btn-esol" title="ESOL Mode">🌐 ESOL</button>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Annotation group -->
+      <button class="tool-btn" id="btn-annotate" title="Annotate (draw)">✏️ Annotate</button>
+      <button class="tool-btn" id="btn-highlight" title="Highlight text">🖍 Highlight</button>
+      <button class="tool-btn" id="btn-clear-annotations" title="Clear annotations">✕ Clear</button>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Progress -->
+      <button class="tool-btn" id="btn-progress" title="Progress checklist">☑ Progress</button>
+      <div class="progress-panel" id="progress-panel"></div>
+
+      <!-- Downloads (right-aligned) -->
+      <button class="tool-btn tool-downloads" id="btn-downloads">↓ Downloads</button>
+      <div class="downloads-panel" id="downloads-panel"></div>
+    </div>
+  </div>
+
+  <!-- Day tabs -->
+  <div class="day-tabs" id="day-tabs"></div>
+
+  <!-- Content grid -->
+  <div class="content-grid" id="content-grid"></div>
+
+  <!-- Assessment section -->
+  <div class="assessment-section" id="assessment-section">
+    <div class="assessment-header" id="assessment-toggle">
+      Assessment Walkthrough <span>▼</span>
+    </div>
+    <div class="assessment-body" id="assessment-body"></div>
+  </div>
+
+  <!-- Timer overlay (Projection Mode) -->
+  <div class="timer-overlay" id="timer-overlay"></div>
+
+  <!-- Annotation canvas -->
+  <canvas id="annotation-canvas"></canvas>
+  <div class="annotation-toolbar" id="annotation-toolbar">
+    <span style="font-size:11px;color:#aaa;margin-right:4px;">Color:</span>
+    <div class="color-btn active" data-color="#e05050" style="background:#e05050" title="Red (Circle)"></div>
+    <div class="color-btn" data-color="#4a80d0" style="background:#4a80d0" title="Blue (Underline)"></div>
+    <div class="color-btn" data-color="#4aad6a" style="background:#4aad6a" title="Green (Box)"></div>
+    <div class="color-btn" data-color="#d0b020" style="background:#d0b020" title="Yellow (Star)"></div>
+    <div class="color-btn" data-color="#e08030" style="background:#e08030" title="Orange (Exclaim)"></div>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);margin:0 4px;"></div>
+    <button onclick="document.getElementById('btn-annotate').click()" style="font-size:11px;background:rgba(255,255,255,0.1);color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">Done</button>
+  </div>
+
+  <footer class="footer">
+    <span class="footer-text">Built with the IR Teaching System</span>
+    <div style="display:flex;gap:16px;">
+      <span class="footer-text" id="prev-day-footer" style="cursor:pointer;color:var(--accent)"></span>
+      <span class="footer-text" id="next-day-footer" style="cursor:pointer;color:var(--accent)"></span>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/nav.js"></script>
+  <script src="../../js/cards.js"></script>
+  <script src="../../js/timer.js"></script>
+  <script src="../../js/toolbar.js"></script>
+  <script src="../../js/annotations.js"></script>
+  <!-- progress functionality is in toolbar.js (updateProgressPanel) -->
+</body>
+</html>

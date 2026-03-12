@@ -163,7 +163,7 @@ window.UNITS_REGISTRY = [
     benchmarkCategory: "R.2 Informational",
     description: "Analyzing text structure, organization, and central idea in an informational article.",
     tags: ["Informational", "Text Structure"],
-    days: 6,
+    days: 4,
     accentColor: "#4a7aad",
     path: "units/mathinnovations/index.html",
     status: "coming-soon"
@@ -241,7 +241,7 @@ window.UNITS_REGISTRY = [
     benchmarkCategory: "R.2 Informational",
     description: "Text structure and central idea in an informational article about fashion and social change.",
     tags: ["Informational"],
-    days: 6,
+    days: 4,
     accentColor: "#4a7aad",
     path: "units/bloomers/index.html",
     status: "coming-soon"
@@ -254,7 +254,7 @@ window.UNITS_REGISTRY = [
     benchmarkCategory: "R.1 Literary",
     description: "Literary elements in the ancient Indian play Shakuntala — character, conflict, and symbolism.",
     tags: ["Drama", "World Literature"],
-    days: 6,
+    days: 4,
     accentColor: "#c96a2e",
     path: "units/shakuntala/index.html",
     status: "coming-soon"
