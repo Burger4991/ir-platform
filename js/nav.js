@@ -1,68 +1,89 @@
-// Renders unit metadata, day tabs, and triggers card rendering per day.
-// Depends on: UNIT (from data.js), renderDayContent (from cards.js)
+// nav.js — Sidebar navigation, day switching, keyboard shortcuts
+// Exposes: window.currentDay (number), window.switchDay (function)
 
-let currentDay = 1;
+window.currentDay = 1;
 
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof UNIT === 'undefined') return;
 
-  // Restore last day from localStorage
-  const savedDay = parseInt(localStorage.getItem('ir-last-day-' + UNIT.meta.id)) || 1;
+  // ── Populate unit header ──
+  const benchLabel = document.getElementById('unit-benchmark-label');
+  const unitTitle  = document.getElementById('unit-title');
+  const unitMeta   = document.getElementById('unit-meta');
+  if (benchLabel) benchLabel.textContent = UNIT.meta.benchmark + ' — ' + UNIT.meta.benchmarkLabel;
+  if (unitTitle)  unitTitle.textContent  = UNIT.meta.title;
+  if (unitMeta)   unitMeta.textContent   = UNIT.meta.days + '-Day Unit';
 
-  // Unit header metadata
-  document.getElementById('unit-benchmark-label').textContent =
-    `${UNIT.meta.benchmark} · ${UNIT.meta.benchmarkLabel}`;
-  document.getElementById('unit-title').textContent = UNIT.meta.title;
-  document.getElementById('unit-meta').textContent =
-    `${UNIT.meta.text} · Paragraphs ${UNIT.meta.paragraphs} · ${UNIT.meta.days}-Day Unit`;
+  // ── Sidebar unit title ──
+  const sidebarTitle = document.getElementById('sidebar-unit-title');
+  if (sidebarTitle) sidebarTitle.textContent = UNIT.meta.title;
 
-  // Build day tabs
-  const tabContainer = document.getElementById('day-tabs');
-  for (let d = 1; d <= UNIT.meta.days; d++) {
-    const tab = document.createElement('div');
-    tab.className = 'day-tab' + (d === savedDay ? ' active' : '');
-    tab.textContent = 'Day ' + d;
-    tab.dataset.day = d;
-    tab.addEventListener('click', () => switchDay(d));
-    tabContainer.appendChild(tab);
+  // ── Build day buttons in sidebar ──
+  const sidebarDays = document.getElementById('sidebar-days');
+  if (sidebarDays) {
+    for (let d = 1; d <= UNIT.meta.days; d++) {
+      const btn = document.createElement('button');
+      btn.className = 'sidebar-day-btn';
+      btn.dataset.day = d;
+      const dayData = UNIT.days[d];
+      btn.textContent = dayData && dayData.label ? dayData.label : 'Day ' + d;
+      btn.addEventListener('click', () => switchDay(d));
+      sidebarDays.appendChild(btn);
+    }
   }
 
-  // Footer prev/next
-  document.getElementById('prev-day-footer').addEventListener('click', () => {
-    if (currentDay > 1) switchDay(currentDay - 1);
-  });
-  document.getElementById('next-day-footer').addEventListener('click', () => {
-    if (currentDay < UNIT.meta.days) switchDay(currentDay + 1);
-  });
+  // ── Footer prev/next ──
+  const prevFooter = document.getElementById('prev-day-footer');
+  const nextFooter = document.getElementById('next-day-footer');
 
-  // Keyboard navigation
+  // ── Sidebar toggle ──
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      sidebarToggle.textContent = sidebar.classList.contains('collapsed') ? '›' : '‹';
+    });
+  }
+
+  // ── Keyboard nav ──
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    if (e.key === 'ArrowRight' && currentDay < UNIT.meta.days) switchDay(currentDay + 1);
-    if (e.key === 'ArrowLeft' && currentDay > 1) switchDay(currentDay - 1);
+    if (e.key === 'ArrowLeft'  && window.currentDay > 1)               switchDay(window.currentDay - 1);
+    if (e.key === 'ArrowRight' && window.currentDay < UNIT.meta.days)  switchDay(window.currentDay + 1);
   });
 
-  switchDay(savedDay);
+  // ── Restore last day ──
+  const savedDay = parseInt(localStorage.getItem('ir-last-day-' + UNIT.meta.id)) || 1;
+  const startDay = (savedDay >= 1 && savedDay <= UNIT.meta.days) ? savedDay : 1;
+  switchDay(startDay);
+
+  function updateFooter() {
+    if (prevFooter) prevFooter.textContent = window.currentDay > 1 ? '← Day ' + (window.currentDay - 1) : '';
+    if (nextFooter) nextFooter.textContent = window.currentDay < UNIT.meta.days ? 'Day ' + (window.currentDay + 1) + ' →' : '';
+    if (prevFooter) prevFooter.onclick = () => { if (window.currentDay > 1) switchDay(window.currentDay - 1); };
+    if (nextFooter) nextFooter.onclick = () => { if (window.currentDay < UNIT.meta.days) switchDay(window.currentDay + 1); };
+  }
+
+  // Make switchDay accessible globally — toolbar.js and engage.js read window.currentDay
+  window.switchDay = function switchDay(day) {
+    window.currentDay = day;
+    localStorage.setItem('ir-last-day-' + UNIT.meta.id, day);
+
+    // Update sidebar button states
+    document.querySelectorAll('.sidebar-day-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.day) === day);
+    });
+
+    updateFooter();
+
+    // Reset GR phase badge on day change
+    if (typeof window.resetGrPhase === 'function') window.resetGrPhase();
+
+    // Clear annotations on day change
+    if (typeof window.clearAnnotations === 'function') window.clearAnnotations();
+
+    // Render content
+    if (typeof renderDayContent === 'function') renderDayContent(day);
+  };
 });
-
-function switchDay(day) {
-  currentDay = day;
-  localStorage.setItem('ir-last-day-' + UNIT.meta.id, day);
-
-  // Update tabs
-  document.querySelectorAll('.day-tab').forEach(t => {
-    t.classList.toggle('active', parseInt(t.dataset.day) === day);
-  });
-
-  // Update footer nav
-  const prev = document.getElementById('prev-day-footer');
-  const next = document.getElementById('next-day-footer');
-  prev.textContent = day > 1 ? `← Day ${day - 1}` : '';
-  next.textContent = day < UNIT.meta.days ? `Day ${day + 1} →` : '';
-
-  // Clear annotation canvas on day switch
-  if (typeof clearAnnotations === 'function') clearAnnotations();
-
-  // Render cards (defined in cards.js)
-  if (typeof renderDayContent === 'function') renderDayContent(day);
-}
