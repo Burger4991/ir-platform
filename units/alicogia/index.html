@@ -24,64 +24,122 @@
     </div>
   </nav>
 
+  <!-- Benchmark Banner (hidden by default) -->
+  <div class="benchmark-banner" id="benchmark-banner" style="display:none">
+    <span id="benchmark-banner-text"></span>
+    <button onclick="document.getElementById('benchmark-banner').style.display='none'" style="background:none;border:none;color:inherit;cursor:pointer;font-size:14px;margin-left:12px;">✕</button>
+  </div>
+
   <div class="unit-header" id="unit-header">
     <div class="unit-benchmark-label" id="unit-benchmark-label"></div>
     <div class="unit-title" id="unit-title"></div>
     <div class="unit-meta" id="unit-meta"></div>
 
-    <!-- Toolbar -->
-    <div class="toolbar" id="toolbar" style="position:relative">
-      <!-- Timer group -->
-      <button class="tool-btn timer-display" id="timer-display" title="Timer">⏱ <span id="timer-value">4:00</span></button>
-      <button class="tool-btn tool-btn-timer-controls" id="timer-play" title="Start/Pause">▶</button>
-      <button class="tool-btn tool-btn-timer-controls" id="timer-reset" title="Reset">↺</button>
-      <button class="tool-btn tool-btn-timer-controls" id="timer-edit" title="Edit duration">✎</button>
-      <input id="timer-edit-input" class="timer-edit-input" type="text" placeholder="4:00" style="display:none">
+    <!-- Toolbar (grouped) -->
+    <div class="toolbar" id="toolbar">
 
-      <div class="toolbar-divider"></div>
+      <!-- Timer Group -->
+      <div class="tool-group" id="group-timer">
+        <button class="tool-btn timer-display" id="timer-display" title="Start/Pause timer">⏱ <span id="timer-value">4:00</span></button>
+        <button class="tool-btn tool-btn-sm" id="timer-play" title="Play/Pause">▶</button>
+        <button class="tool-btn tool-btn-sm" id="timer-reset" title="Reset">↺</button>
+        <button class="tool-btn tool-btn-sm" id="timer-edit" title="Edit duration">✎</button>
+        <select id="timer-presets" class="timer-presets" title="Quick presets">
+          <option value="">⚡</option>
+          <option value="120">2 min</option>
+          <option value="180">3 min</option>
+          <option value="300">5 min</option>
+          <option value="480">8 min</option>
+          <option value="720">12 min</option>
+        </select>
+        <input id="timer-edit-input" class="timer-edit-input" type="text" placeholder="4:00" style="display:none">
+      </div>
 
-      <!-- View group -->
-      <button class="tool-btn" id="btn-projection" title="Projection Mode (P)">⛶ Projection</button>
-      <button class="tool-btn" id="btn-spotlight" title="Spotlight Mode">◎ Spotlight</button>
-      <button class="tool-btn" id="btn-font" title="Font Size">A± Font</button>
+      <!-- View Group -->
+      <div class="tool-group" id="group-view">
+        <button class="tool-btn" id="btn-projection" title="Projection Mode (P)"><span class="bi">⛶</span><span class="bl">Project</span></button>
+        <button class="tool-btn" id="btn-spotlight" title="Spotlight Mode"><span class="bi">◎</span><span class="bl">Spotlight</span></button>
+        <button class="tool-btn" id="btn-font" title="Font Size"><span class="bi">Aa</span><span class="bl">Font</span></button>
+        <button class="tool-btn" id="btn-focus" title="Focus Mode"><span class="bi">⊡</span><span class="bl">Focus</span></button>
+        <button class="tool-btn" id="btn-split-screen" title="Split Screen"><span class="bi">▥</span><span class="bl">Split</span></button>
+      </div>
 
-      <div class="toolbar-divider"></div>
+      <!-- Content Group -->
+      <div class="tool-group" id="group-content">
+        <button class="tool-btn" id="btn-teacher-view" title="Teacher/Student View (T)"><span class="bi">👁</span><span class="bl">Teacher</span></button>
+        <button class="tool-btn" id="btn-reveal" title="Reveal Answers"><span class="bi">💡</span><span class="bl">Answers</span></button>
+        <button class="tool-btn" id="btn-esol" title="ESOL Level"><span class="bi">🌐</span><span class="bl">ESOL Off</span></button>
+        <button class="tool-btn" id="btn-benchmark-banner" title="Benchmark Objective"><span class="bi">🎯</span><span class="bl">Objective</span></button>
+        <button class="tool-btn" id="btn-gr-phase" title="GR Phase Badge"><span class="bi">📋</span><span class="bl">GR Phase</span></button>
+      </div>
 
-      <!-- Content toggles -->
-      <button class="tool-btn" id="btn-teacher-view" title="Teacher/Student View (T)">👁 Teacher View</button>
-      <button class="tool-btn" id="btn-reveal" title="Reveal Answers">💡 Answers</button>
-      <button class="tool-btn" id="btn-esol" title="ESOL Mode">🌐 ESOL</button>
+      <!-- Writing Group -->
+      <div class="tool-group" id="group-writing">
+        <button class="tool-btn" id="btn-race" title="RACE/ACE Writing Panel"><span class="bi">✍</span><span class="bl">RACE/ACE</span></button>
+        <button class="tool-btn" id="btn-achievement" title="Achievement Levels"><span class="bi">🏆</span><span class="bl">Levels</span></button>
+      </div>
 
-      <div class="toolbar-divider"></div>
+      <!-- CUBES Group -->
+      <div class="tool-group" id="group-cubes">
+        <button class="tool-btn" id="btn-cubes-c" data-cubes="circle" title="C — Circle key words"><span class="bi cubes-c">C</span><span class="bl">Circle</span></button>
+        <button class="tool-btn" id="btn-cubes-u" data-cubes="underline" title="U — Underline the question"><span class="bi cubes-u">U</span><span class="bl">Underline</span></button>
+        <button class="tool-btn" id="btn-cubes-b" data-cubes="box" title="B — Box important terms"><span class="bi cubes-b">B</span><span class="bl">Box</span></button>
+        <button class="tool-btn" id="btn-cubes-e" data-cubes="eliminate" title="E — Eliminate wrong answers"><span class="bi cubes-e">E</span><span class="bl">Eliminate</span></button>
+        <button class="tool-btn" id="btn-cubes-s" data-cubes="star" title="S — Star important info"><span class="bi cubes-s">S</span><span class="bl">Star</span></button>
+        <button class="tool-btn" id="btn-clear-annotations" title="Clear all annotations"><span class="bi">✕</span><span class="bl">Clear</span></button>
+      </div>
 
-      <!-- Annotation group -->
-      <button class="tool-btn" id="btn-annotate" title="Annotate (draw)">✏️ Annotate</button>
-      <button class="tool-btn" id="btn-highlight" title="Highlight text">🖍 Highlight</button>
-      <button class="tool-btn" id="btn-clear-annotations" title="Clear annotations">✕ Clear</button>
+      <!-- STOP Group -->
+      <div class="tool-group" id="group-stop">
+        <button class="tool-btn" id="btn-stop" title="STOP Analysis Mode"><span class="bi">🛑</span><span class="bl">STOP</span></button>
+      </div>
 
-      <div class="toolbar-divider"></div>
+      <!-- Tools Group -->
+      <div class="tool-group" id="group-tools">
+        <button class="tool-btn" id="btn-vocab-ref" title="Vocab Quick Reference"><span class="bi">📖</span><span class="bl">Vocab</span></button>
+        <button class="tool-btn" id="btn-vocab-flashcards" title="Vocab Flashcards"><span class="bi">🃏</span><span class="bl">Flashcards</span></button>
+        <button class="tool-btn" id="btn-exit-ticket" title="Exit Ticket"><span class="bi">🎟</span><span class="bl">Exit Ticket</span></button>
+        <button class="tool-btn" id="btn-read-aloud" title="Read Passage Aloud"><span class="bi">🔊</span><span class="bl">Read Aloud</span></button>
+        <button class="tool-btn" id="btn-line-numbers" title="Passage Line Numbers"><span class="bi">#</span><span class="bl">Line #s</span></button>
+        <button class="tool-btn" id="btn-pacing" title="Pacing Guide"><span class="bi">📅</span><span class="bl">Pacing</span></button>
+        <button class="tool-btn" id="btn-qr" title="Student QR Code"><span class="bi">⬛</span><span class="bl">QR Code</span></button>
+        <button class="tool-btn" id="btn-dyslexia" title="Dyslexia Font"><span class="bi">Df</span><span class="bl">Dyslexia</span></button>
+        <button class="tool-btn" id="btn-high-contrast" title="High Contrast"><span class="bi">◑</span><span class="bl">Contrast</span></button>
+        <button class="tool-btn" id="btn-print" title="Print / PDF" onclick="window.print()"><span class="bi">🖨</span><span class="bl">Print</span></button>
+      </div>
 
-      <!-- Progress -->
-      <button class="tool-btn" id="btn-progress" title="Progress checklist">☑ Progress</button>
+      <!-- Progress (standalone) -->
+      <button class="tool-btn" id="btn-progress" title="Progress checklist"><span class="bi">☑</span><span class="bl">Progress</span></button>
       <div class="progress-panel" id="progress-panel"></div>
 
+      <!-- Engage (standalone) -->
+      <button class="tool-btn tool-engage" id="btn-engage" title="Engage Panel"><span class="bi">📊</span><span class="bl">Engage</span></button>
+
       <!-- Downloads (right-aligned) -->
-      <button class="tool-btn tool-downloads" id="btn-downloads">↓ Downloads</button>
+      <button class="tool-btn tool-downloads" id="btn-downloads"><span class="bi">↓</span><span class="bl">Downloads</span></button>
       <div class="downloads-panel" id="downloads-panel"></div>
     </div>
   </div>
 
-  <!-- Day tabs -->
-  <div class="day-tabs" id="day-tabs"></div>
+  <!-- GR Phase Badge (floating) -->
+  <div class="gr-phase-badge" id="gr-badge" style="display:none"></div>
 
-  <!-- Content grid -->
-  <div class="content-grid" id="content-grid"></div>
+  <!-- Sidebar + Content layout -->
+  <div class="page-layout">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-unit-title" id="sidebar-unit-title"></div>
+      <nav class="sidebar-days" id="sidebar-days"></nav>
+      <div class="sidebar-card-links" id="sidebar-cards"></div>
+      <button class="sidebar-toggle" id="sidebar-toggle" title="Collapse sidebar">‹</button>
+    </div>
+    <div class="content-area" id="content-area">
+      <div class="content-grid" id="content-grid"></div>
+    </div>
+  </div>
 
   <!-- Assessment section -->
   <div class="assessment-section" id="assessment-section">
-    <div class="assessment-header" id="assessment-toggle">
-      Assessment Walkthrough <span>▼</span>
-    </div>
+    <div class="assessment-header" id="assessment-toggle">Assessment Walkthrough <span>▼</span></div>
     <div class="assessment-body" id="assessment-body"></div>
   </div>
 
@@ -91,16 +149,68 @@
   <!-- Annotation canvas -->
   <canvas id="annotation-canvas"></canvas>
   <div class="annotation-toolbar" id="annotation-toolbar">
-    <span style="font-size:11px;color:#aaa;margin-right:4px;">Color:</span>
-    <div class="color-btn active" data-color="#e05050" style="background:#e05050" title="Red (Circle)"></div>
-    <div class="color-btn" data-color="#4a80d0" style="background:#4a80d0" title="Blue (Underline)"></div>
-    <div class="color-btn" data-color="#4aad6a" style="background:#4aad6a" title="Green (Box)"></div>
-    <div class="color-btn" data-color="#d0b020" style="background:#d0b020" title="Yellow (Star)"></div>
-    <div class="color-btn" data-color="#e08030" style="background:#e08030" title="Orange (Exclaim)"></div>
+    <span style="font-size:11px;color:#aaa;margin-right:4px;">CUBES:</span>
+    <div class="cubes-btn active" data-cubes="circle" style="background:#e05050" title="C — Circle">C</div>
+    <div class="cubes-btn" data-cubes="underline" style="background:#4a80d0" title="U — Underline">U</div>
+    <div class="cubes-btn" data-cubes="box" style="background:#4aad6a" title="B — Box">B</div>
+    <div class="cubes-btn" data-cubes="eliminate" style="background:#d0b020" title="E — Eliminate">E</div>
+    <div class="cubes-btn" data-cubes="star" style="background:#e08030" title="S — Star">S</div>
     <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);margin:0 4px;"></div>
-    <button onclick="document.getElementById('btn-annotate').click()" style="font-size:11px;background:rgba(255,255,255,0.1);color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">Done</button>
+    <button onclick="document.getElementById('btn-cubes-c').click()" style="font-size:11px;background:rgba(255,255,255,0.1);color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">Done</button>
   </div>
 
+  <!-- RACE/ACE Panel -->
+  <div class="slide-panel" id="race-panel" style="display:none">
+    <div class="slide-panel-header">RACE/ACE Writing Guide <button class="panel-close" onclick="document.getElementById('race-panel').style.display='none'">✕</button></div>
+    <div class="slide-panel-body" id="race-panel-body"></div>
+  </div>
+
+  <!-- Achievement Levels Panel -->
+  <div class="slide-panel" id="achievement-panel" style="display:none">
+    <div class="slide-panel-header">Achievement Levels <button class="panel-close" onclick="document.getElementById('achievement-panel').style.display='none'">✕</button></div>
+    <div class="slide-panel-body" id="achievement-panel-body"></div>
+  </div>
+
+  <!-- Vocab Quick Reference Panel -->
+  <div class="slide-panel" id="vocab-ref-panel" style="display:none">
+    <div class="slide-panel-header">Vocabulary — Day <span id="vocab-ref-day"></span> <button class="panel-close" onclick="document.getElementById('vocab-ref-panel').style.display='none'">✕</button></div>
+    <div class="slide-panel-body" id="vocab-ref-body"></div>
+  </div>
+
+  <!-- Pacing Guide Panel -->
+  <div class="slide-panel" id="pacing-panel" style="display:none">
+    <div class="slide-panel-header">Pacing Guide — Day <span id="pacing-day"></span> <button class="panel-close" onclick="document.getElementById('pacing-panel').style.display='none'">✕</button></div>
+    <div class="slide-panel-body" id="pacing-body"></div>
+  </div>
+
+  <!-- Vocab Flashcard Overlay -->
+  <div class="fullscreen-overlay" id="flashcard-overlay" style="display:none">
+    <button class="overlay-close" onclick="document.getElementById('flashcard-overlay').style.display='none'">✕ Close</button>
+    <div class="flashcard-container" id="flashcard-container"></div>
+    <div class="flashcard-nav">
+      <button id="flashcard-prev">← Prev</button>
+      <span id="flashcard-counter"></span>
+      <button id="flashcard-next">Next →</button>
+    </div>
+  </div>
+
+  <!-- Exit Ticket Overlay -->
+  <div class="fullscreen-overlay" id="exit-ticket-overlay" style="display:none">
+    <button class="overlay-close" onclick="document.getElementById('exit-ticket-overlay').style.display='none'">✕ Close</button>
+    <div class="exit-ticket-content" id="exit-ticket-content"></div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div class="modal-overlay" id="qr-modal" style="display:none" onclick="this.style.display='none'">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-title">Student URL — Day <span id="qr-day-label"></span></div>
+      <div id="qr-code-render"></div>
+      <div class="modal-subtitle">Scan to open student view</div>
+      <button class="modal-close" onclick="document.getElementById('qr-modal').style.display='none'">Close</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <footer class="footer">
     <span class="footer-text">Built with the IR Teaching System</span>
     <div style="display:flex;gap:16px;">
@@ -116,6 +226,6 @@
   <script src="../../js/timer.js"></script>
   <script src="../../js/toolbar.js"></script>
   <script src="../../js/annotations.js"></script>
-  <!-- progress functionality is in toolbar.js (updateProgressPanel) -->
+  <script src="../../js/engage.js"></script>
 </body>
 </html>
