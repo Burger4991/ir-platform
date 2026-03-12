@@ -5,6 +5,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.theme === saved);
+      btn.setAttribute('aria-pressed', btn.dataset.theme === saved ? 'true' : 'false');
       btn.addEventListener('click', () => {
         const t = btn.dataset.theme;
         applyTheme(t);
