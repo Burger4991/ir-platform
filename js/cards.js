@@ -71,10 +71,11 @@ function buildBellringerCard(data, day, reveal) {
       <div class="bellringer-passage">${esc(q.stem)}</div>
       <div>
         ${q.options.map(o => `
-          <div class="mc-option${o.correct ? ' correct' : ''}${o.correct && !reveal ? ' hidden' : ''}">
-            <span>${esc(o.letter)}.</span>
-            <span>${esc(o.text)}</span>
-            <span class="answer-marker"> ✓</span>
+          <div class="mc-choice mc-option${o.correct ? ' correct' : ''}${o.correct && !reveal ? ' hidden' : ''}" data-stop-label="${esc(o.stopLabel || '')}">
+            <span class="mc-letter">${esc(o.letter)}.</span>
+            <span class="mc-text">${esc(o.text)}</span>
+            <span class="stop-badge">${esc(o.stopLabel || '')}</span>
+            ${o.correct ? '<span class="answer-marker"> ✓</span>' : ''}
           </div>`).join('')}
       </div>
       <div class="written-prompt">Written: ${esc(q.writtenPrompt)}</div>
@@ -175,14 +176,20 @@ function buildPassageCard(passage) {
 // ── ESOL Scaffolds ──
 function buildEsolCard(esol) {
   if (!esol) return makeCard('ESOL Scaffolds', 'No ESOL data', '', '--card-esol', 'esol-card');
-  const framesHTML = esol.frames.map(f =>
-    `<div class="esol-frame"><span class="esol-level-badge">${esc(f.level)}</span>${esc(f.frame)}</div>`
+  const level = window.currentEsolLevel || 'l34';
+  const tier = esol[level] || esol.l34 || esol;
+  const frames = tier.frames || (Array.isArray(tier) ? tier : []);
+  const wordBank = tier.wordBank || esol.wordBank || [];
+  const levelLabel = { l12: 'L1–2', l34: 'L3–4', l5: 'L5' }[level] || 'L3–4';
+  const framesHTML = frames.map(f =>
+    `<div class="esol-frame"><span class="esol-level-badge">${esc(f.level || levelLabel)}</span>${esc(f.frame)}</div>`
   ).join('');
-  const wordBankHTML = esol.wordBank && esol.wordBank.length
-    ? `<div style="margin-top:10px;"><div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Word Bank</div><div class="esol-word-bank">${esol.wordBank.map(w=>`<span class="esol-word">${esc(w)}</span>`).join('')}</div></div>`
+  const wordBankHTML = wordBank.length
+    ? `<div style="margin-top:10px;"><div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Word Bank</div><div class="esol-word-bank">${wordBank.map(w=>`<span class="esol-word">${esc(w)}</span>`).join('')}</div></div>`
     : '';
-  const body = `<div class="esol-frame-list">${framesHTML}</div>${wordBankHTML}${esol.l1Note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">${esc(esol.l1Note)}</div>` : ''}`;
-  return makeCard('ESOL Scaffolds · Levels 1–3', 'Sentence frames + word bank', body, '--card-esol', 'esol-card');
+  const l1Note = tier.l1Note || esol.l1Note || '';
+  const body = `<div class="esol-frame-list">${framesHTML}</div>${wordBankHTML}${l1Note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">${esc(l1Note)}</div>` : ''}`;
+  return makeCard(`ESOL Scaffolds · ${levelLabel}`, 'Sentence frames + word bank', body, '--card-esol', 'esol-card');
 }
 
 // ── Expand / Collapse ──
