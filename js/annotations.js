@@ -50,7 +50,6 @@
           canvas.classList.remove('visible');
           annotToolbar.classList.remove('visible');
           document.getElementById('btn-annotate').classList.remove('active');
-          document.getElementById('annotation-canvas').style.display = 'none';
           enableTextHighlight();
         } else {
           disableTextHighlight();
@@ -64,13 +63,15 @@
     if (btnClear) btnClear.addEventListener('click', clearAnnotations);
 
     // Canvas draw events
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('mouseleave', endDraw);
-    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); const t = e.touches[0]; startDraw({offsetX: t.clientX, offsetY: t.clientY}); });
-    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); const t = e.touches[0]; draw({offsetX: t.clientX, offsetY: t.clientY}); });
-    canvas.addEventListener('touchend', endDraw);
+    if (canvas) {
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', endDraw);
+      canvas.addEventListener('mouseleave', endDraw);
+      canvas.addEventListener('touchstart', (e) => { e.preventDefault(); const t = e.touches[0]; startDraw({offsetX: t.clientX, offsetY: t.clientY}); });
+      canvas.addEventListener('touchmove', (e) => { e.preventDefault(); const t = e.touches[0]; draw({offsetX: t.clientX, offsetY: t.clientY}); });
+      canvas.addEventListener('touchend', endDraw);
+    }
   });
 
   function startDraw(e) {

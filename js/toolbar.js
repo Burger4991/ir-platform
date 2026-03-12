@@ -1,3 +1,11 @@
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // ── Projection Mode ──
   const btnProjection = document.getElementById('btn-projection');
@@ -79,6 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Downloads Panel ──
   const btnDownloads = document.getElementById('btn-downloads');
   const downloadsPanel = document.getElementById('downloads-panel');
+  // ── Progress Panel ── (declared here so Downloads handler can reference it)
+  const btnProgress = document.getElementById('btn-progress');
+  const progressPanel = document.getElementById('progress-panel');
+
   btnDownloads.addEventListener('click', (e) => {
     e.stopPropagation();
     downloadsPanel.classList.toggle('visible');
@@ -98,9 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ── Progress Panel ──
-  const btnProgress = document.getElementById('btn-progress');
-  const progressPanel = document.getElementById('progress-panel');
   btnProgress.addEventListener('click', (e) => {
     e.stopPropagation();
     progressPanel.classList.toggle('visible');
@@ -131,21 +140,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const stop = a.stopProtocol;
     const stepsHTML = stop.steps.map(s => `
       <div class="stop-cell">
-        <div class="stop-letter">${s.letter}</div>
-        <div class="stop-label">${s.label}</div>
-        <div class="stop-desc">${s.description}</div>
+        <div class="stop-letter">${esc(s.letter)}</div>
+        <div class="stop-label">${esc(s.label)}</div>
+        <div class="stop-desc">${esc(s.description)}</div>
       </div>`).join('');
 
     const tiersHTML = a.raceGuide.tiers.map(t => `
       <div style="margin-bottom:10px;padding:10px 12px;background:var(--bg-page);border-radius:6px;">
-        <div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">${t.tier} — ${t.label}</div>
-        <div style="font-size:12px;color:var(--text-secondary);font-style:italic;">"${t.frame}"</div>
+        <div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">${esc(t.tier)} — ${esc(t.label)}</div>
+        <div style="font-size:12px;color:var(--text-secondary);font-style:italic;">"${esc(t.frame)}"</div>
       </div>`).join('');
 
     assessBody.innerHTML = `
       <div style="margin-bottom:16px;">
         <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">STOP Protocol</div>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">${stop.description}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">${esc(stop.description)}</div>
         <div class="stop-grid">${stepsHTML}</div>
       </div>
       <div>

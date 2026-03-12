@@ -4,13 +4,8 @@
   let intervalId = null;
   let isRunning = false;
 
-  const display = document.getElementById('timer-value');
-  const overlay = document.getElementById('timer-overlay');
-  const playBtn = document.getElementById('timer-play');
-  const resetBtn = document.getElementById('timer-reset');
-  const editBtn = document.getElementById('timer-edit');
-  const editInput = document.getElementById('timer-edit-input');
-  const timerDisplayBtn = document.getElementById('timer-display');
+  // Assigned in DOMContentLoaded — must not query DOM at parse time
+  let display, overlay, playBtn, resetBtn, editBtn, editInput, timerDisplayBtn;
 
   function formatTime(s) {
     const m = Math.floor(s / 60);
@@ -80,6 +75,14 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    display = document.getElementById('timer-value');
+    overlay = document.getElementById('timer-overlay');
+    playBtn = document.getElementById('timer-play');
+    resetBtn = document.getElementById('timer-reset');
+    editBtn = document.getElementById('timer-edit');
+    editInput = document.getElementById('timer-edit-input');
+    timerDisplayBtn = document.getElementById('timer-display');
+
     updateDisplay();
 
     playBtn.addEventListener('click', () => isRunning ? stop() : start());
