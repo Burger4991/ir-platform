@@ -1341,6 +1341,9 @@ body.focus-mode .focus-nav { display: flex; }
   width: 100%;
 }
 
+/* Neutralise old .active sidebar rule — new .sidebar-day--active handles this (Task 8) */
+.sidebar-day-btn.active { background: transparent; color: inherit; font-weight: normal; }
+
 /* ── Accessibility: reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
