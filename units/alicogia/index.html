@@ -130,6 +130,16 @@
       <button class="sidebar-toggle" id="sidebar-toggle" title="Collapse sidebar">‹</button>
     </div>
     <div class="content-area" id="content-area">
+      <div id="day-progress-bar" style="display:none">
+        <div class="day-progress-meta">
+          <span id="day-progress-label">Day 1</span>
+          <span id="day-progress-count">0 / 0 activities</span>
+        </div>
+        <div class="day-progress-track">
+          <div class="day-progress-fill" id="day-progress-fill"></div>
+        </div>
+        <div class="day-progress-segments" id="day-progress-segments"></div>
+      </div>
       <div class="content-grid" id="content-grid"></div>
     </div>
   </div>
@@ -257,11 +267,28 @@
     </div>
   </div>
 
+  <!-- Day Complete Overlay (H7) -->
+  <div id="day-complete-overlay">
+    <div class="day-complete-card">
+      <div class="day-complete-emoji" id="day-complete-emoji">🎉</div>
+      <div class="day-complete-title" id="day-complete-title">Day Complete</div>
+      <div class="day-complete-subtitle" id="day-complete-subtitle"></div>
+      <div class="day-complete-stats">
+        <div class="day-complete-stat">
+          <div class="day-complete-stat-value" id="day-complete-count">0</div>
+          <div class="day-complete-stat-label">Activities</div>
+        </div>
+      </div>
+      <button class="day-complete-btn" id="day-complete-btn">Next Day →</button>
+    </div>
+  </div>
+
   <!-- Focus Mode UI — shown/hidden by CSS via body.focus-mode class, no inline styles needed -->
   <div class="focus-header" id="focus-header">
     <button id="focus-back-btn">← Back to Day</button>
     <span class="focus-step-label" id="focus-step-label"></span>
     <div class="focus-step-dots" id="focus-step-dots"></div>
+    <div class="focus-attention-anchor" id="focus-attention-anchor"></div>
   </div>
   <div class="focus-nav" id="focus-nav">
     <button class="focus-nav-btn" id="focus-prev-btn">← Back</button>
