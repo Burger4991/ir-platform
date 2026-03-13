@@ -29,7 +29,7 @@ function renderActivities(day) {
     return;
   }
 
-  if (typeof UNIT === 'undefined') { grid.innerHTML = ''; return; }
+  if (typeof UNIT === 'undefined' || !UNIT.days) { grid.innerHTML = ''; return; }
   const dayData = UNIT.days[day];
   if (!dayData) { grid.innerHTML = '<p style="padding:20px;color:var(--text-muted)">No content for this day.</p>'; return; }
 
@@ -62,7 +62,7 @@ function buildActivityEl(activity) {
   el.className = `activity activity--${activity.type} activity--${activity.grPhase}`;
   el.dataset.activityId = activity.id;
 
-  const badgeHTML = `<span class="activity-gr-badge gr-${activity.grPhase}">${grPhaseLabel(activity.grPhase)}</span>`;
+  const badgeHTML = `<span class="activity-gr-badge gr-${esc(activity.grPhase)}">${esc(grPhaseLabel(activity.grPhase))}</span>`;
   const stratBadges = activity.strategies.map(s =>
     `<span class="activity-strategy-badge badge-${s}">${s.toUpperCase()}</span>`
   ).join('');
