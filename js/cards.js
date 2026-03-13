@@ -1,20 +1,26 @@
-// Renders the content grid for a given day from UNIT.days[day]
-// Called by nav.js switchDay()
+// js/cards.js
+// Renders the activity sequence for a given day using UNIT.days[day]
+// Depends on: js/activities.js (buildActivities), UNIT global, window.currentEsolLevel
 
-// Escape HTML entities for safe innerHTML injection of data strings
 function esc(str) {
   return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// ── Public entry point (called by nav.js on day switch) ──
 function renderDayContent(day) {
+  renderActivities(day);
+}
+
+function renderActivities(day) {
+  const grid = document.getElementById('content-grid');
+  if (!grid) return;
+
+  // Coming-soon stub
   if (typeof UNIT !== 'undefined' && UNIT.meta && UNIT.meta.status === 'coming-soon') {
-    const grid = document.getElementById('content-grid');
-    if (grid) grid.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:60px 24px;">
+    grid.innerHTML = `
+      <div style="text-align:center;padding:60px 24px;">
         <div style="font-size:48px;margin-bottom:16px;">📚</div>
         <div style="font-size:20px;font-weight:800;color:var(--text-primary);margin-bottom:8px;">${esc(UNIT.meta.title)}</div>
         <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">${esc(UNIT.meta.benchmark)} — ${esc(UNIT.meta.benchmarkLabel)}</div>
@@ -23,212 +29,234 @@ function renderDayContent(day) {
     return;
   }
 
-  const grid = document.getElementById('content-grid');
+  if (typeof UNIT === 'undefined') { grid.innerHTML = ''; return; }
   const dayData = UNIT.days[day];
   if (!dayData) { grid.innerHTML = '<p style="padding:20px;color:var(--text-muted)">No content for this day.</p>'; return; }
 
+  const activities = buildActivities(dayData);
   grid.innerHTML = '';
 
-  const isTeacherView = document.body.classList.contains('teacher-view');
-  const isRevealAnswers = document.body.classList.contains('reveal-answers');
+  activities.forEach(activity => {
+    grid.appendChild(buildActivityEl(activity));
+  });
 
-  // Build cards in order
-  grid.appendChild(buildBellringerCard(dayData.bellringer, day, isRevealAnswers));
-  grid.appendChild(buildOrganizerCard(dayData.organizer, isRevealAnswers));
-  grid.appendChild(buildVocabCard(dayData.vocabulary, day));
-  grid.appendChild(buildTeacherCard(dayData.teacherNotes, isTeacherView));
-  if (dayData.textPassage) grid.appendChild(buildPassageCard(dayData.textPassage));
-  grid.appendChild(buildEsolCard(dayData.esol));
+  // Teacher notes block (non-activity, hidden unless teacher-view)
+  if (dayData.teacherNotes) {
+    const notesBlock = document.createElement('div');
+    notesBlock.className = 'teacher-notes-block teacher-only-hidden';
+    notesBlock.innerHTML = `
+      <div class="teacher-notes-label">👁 Teacher Notes</div>
+      <div class="teacher-notes-body">${esc(dayData.teacherNotes)}</div>`;
+    grid.appendChild(notesBlock);
+  }
 
-  wireExpandCollapse();
+  // Re-apply current state
+  applyRevealState(document.body.classList.contains('reveal-answers'));
+  applyTeacherView(!document.body.classList.contains('student-view'));
   if (typeof updateProgressPanel === 'function') updateProgressPanel(day);
 }
 
-// ── Card factory ──
-function makeCard(label, summary, bodyHTML, accentVar, extraClass) {
-  const card = document.createElement('div');
-  card.className = 'card' + (extraClass ? ' ' + extraClass : '');
-  card.style.setProperty('--card-accent-color', `var(${accentVar})`);
-  card.innerHTML = `
-    <div class="card-header">
-      <div>
-        <div class="card-label">${label}</div>
-        <div class="card-summary">${summary}</div>
-      </div>
-      <span class="card-toggle">▼ expand</span>
+// ── Activity element builder ──
+function buildActivityEl(activity) {
+  const el = document.createElement('div');
+  el.className = `activity activity--${activity.type} activity--${activity.grPhase}`;
+  el.dataset.activityId = activity.id;
+
+  const badgeHTML = `<span class="activity-gr-badge gr-${activity.grPhase}">${grPhaseLabel(activity.grPhase)}</span>`;
+  const stratBadges = activity.strategies.map(s =>
+    `<span class="activity-strategy-badge badge-${s}">${s.toUpperCase()}</span>`
+  ).join('');
+
+  el.innerHTML = `
+    <div class="activity-header">
+      ${badgeHTML}
+      <span class="activity-title">${esc(activity.title)}</span>
+      <div class="activity-strategy-badges">${stratBadges}</div>
+      <button class="activity-focus-btn" data-id="${esc(activity.id)}" title="Focus Mode">⊡ Focus</button>
     </div>
-    <div class="card-collapsed-hint">Click to view…</div>
-    <div class="card-body">${bodyHTML}</div>`;
-  return card;
+    <div class="activity-body">
+      ${buildActivityBody(activity)}
+    </div>`;
+
+  // Wire focus button
+  el.querySelector('.activity-focus-btn').addEventListener('click', () => {
+    if (typeof enterFocusMode === 'function') enterFocusMode(activity.id);
+  });
+
+  return el;
 }
 
-// ── Bellringer ──
-function buildBellringerCard(data, day, reveal) {
-  if (!data) return makeCard('Bellringer', 'No bellringer data', '', '--card-bellringer');
-  const wordsStr = data.words.join(', ');
-  const questionsHTML = data.questions.map((q, qi) => `
-    <div style="margin-bottom:14px;">
-      <div class="bellringer-passage">${esc(q.stem)}</div>
-      <div>
-        ${q.options.map(o => `
-          <div class="mc-choice mc-option${o.correct ? ' correct' : ''}${o.correct && !reveal ? ' hidden' : ''}" data-stop-label="${esc(o.stopLabel || '')}">
-            <span class="mc-letter">${esc(o.letter)}.</span>
-            <span class="mc-text">${esc(o.text)}</span>
-            <span class="stop-badge">${esc(o.stopLabel || '')}</span>
-            ${o.correct ? '<span class="answer-marker"> ✓</span>' : ''}
-          </div>`).join('')}
-      </div>
-      <div class="written-prompt">Written: ${esc(q.writtenPrompt)}</div>
-      <div class="written-model${reveal ? ' visible' : ''}">${esc(q.writtenModel)}</div>
-    </div>`).join('');
-
-  return makeCard(
-    `Bellringer · Day ${day}`,
-    wordsStr,
-    `<p style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">4 min timed · 2 MC + 1 written</p>${questionsHTML}`,
-    '--card-bellringer'
-  );
+function grPhaseLabel(phase) {
+  const map = { 'i-do':'I DO', 'we-do':'WE DO', 'you-do-partner':'YOU DO W/ PARTNER', 'you-do':'YOU DO' };
+  return map[phase] || phase;
 }
 
-// ── Organizer ──
-function buildOrganizerCard(data, reveal) {
-  if (!data) return makeCard('Organizer', 'No organizer data', '', '--card-organizer');
-  const grColors = { 'I Do':'#4a7c59', 'We Do':'#7aaa89', 'You Do w/ Partner':'#9c7e5a', 'You Do':'#bbb' };
+// ── Activity body by type ──
+function buildActivityBody(activity) {
+  switch (activity.type) {
+    case 'mc':                return buildMcBody(activity.data);
+    case 'organizer-row':     return buildOrganizerRowBody(activity.data);
+    case 'vocabulary':        return buildVocabBody(activity.data);
+    case 'written-response':  return buildWrittenResponseBody(activity.data);
+    case 'passage-annotation':return buildPassageAnnotationBody(activity.data);
+    default: return `<p style="color:var(--text-muted)">Unknown activity type: ${esc(activity.type)}</p>`;
+  }
+}
 
-  const tableRows = data.rows.map(row => {
-    const color = grColors[row.label] || '#999';
-    const cells = data.columns.map((col, ci) => {
-      if (ci === 0) return `<td style="width:90px;vertical-align:middle;padding:6px 8px;border-top:1px solid var(--border-light);"><span class="gr-badge" style="background:${esc(color)}">${esc(row.label)}</span></td>`;
-      const cellContent = row.cells[ci - 1] || '';
-      if (row.isPreFilled) {
-        return `<td style="padding:6px 8px;border-top:1px solid var(--border-light);color:var(--text-secondary);">
-          <span class="exemplar-text">${esc(cellContent)}</span>
-          <span class="hidden-hint">—</span>
-        </td>`;
-      }
-      return `<td style="padding:6px 8px;border-top:1px solid var(--border-light);color:var(--text-muted);font-style:italic;">${esc(cellContent) || 'Students respond…'}</td>`;
-    }).join('');
-    return `<tr class="${row.isPreFilled ? 'exemplar' + (!reveal ? ' hidden' : '') : 'student'}">${cells}</tr>`;
+// ── MC ──
+function buildMcBody(data) {
+  const optionsHTML = data.options.map(o => `
+    <button class="mc-option-btn${o.correct ? ' mc-answer-correct' : ''}"
+            data-correct="${o.correct ? 'true' : 'false'}"
+            data-stop-label="${esc(o.stopLabel || '')}">
+      <span class="mc-letter">${esc(o.letter)}.</span>
+      <span class="mc-text">${esc(o.text)}</span>
+      <span class="mc-stop-label ${stopLabelClass(o.stopLabel)}">${esc(o.stopLabel || '')}</span>
+    </button>`).join('');
+
+  const writtenHTML = data.writtenPrompt ? `
+    <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+      <strong>Written:</strong> ${esc(data.writtenPrompt)}
+    </div>
+    <div class="written-model" style="display:none;margin-top:6px;font-size:12px;color:var(--accent);font-style:italic;">${esc(data.writtenModel || '')}</div>` : '';
+
+  return `
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">4 min timed · STOP strategy available</p>
+    <p class="bellringer-passage">${esc(data.stem)}</p>
+    <div class="mc-options-list" style="display:flex;flex-direction:column;gap:0;">${optionsHTML}</div>
+    ${writtenHTML}`;
+}
+
+function stopLabelClass(label) {
+  const map = { 'Proven':'stop-proven', 'Opposite':'stop-opposite', 'Silly':'stop-silly', 'Tricky':'stop-tricky' };
+  return map[label] || '';
+}
+
+// ── Organizer Row ──
+function buildOrganizerRowBody(data) {
+  const phaseColors = { 'I Do':'#4a7c59', 'We Do':'#7aaa89', 'You Do w/ Partner':'#9c7e5a', 'You Do':'#888' };
+  const color = phaseColors[data.label] || '#888';
+  const cellsHTML = data.columns.slice(1).map((col, i) => {
+    const content = data.cells[i] || '';
+    if (data.isPreFilled && content) {
+      return `<div class="org-cell-content exemplar-text">${esc(content)}</div>`;
+    }
+    return `<div class="org-cell-placeholder">${esc(content) || 'Students respond…'}</div>`;
   }).join('');
 
-  const body = `
-    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">${esc(data.benchmarkFocus)}</div>
-    <table class="organizer-table" style="width:100%;border-collapse:collapse;">
-      <thead><tr><th style="width:90px;"></th>${data.columns.map(c=>`<th style="padding:6px 8px;text-align:left;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;background:rgba(0,0,0,0.04);">${esc(c)}</th>`).join('')}</tr></thead>
-      <tbody>${tableRows}</tbody>
-    </table>`;
-
-  return makeCard('Organizer · ' + data.benchmarkFocus.split('—')[0].trim(), data.columns.join(' · '), body, '--card-organizer');
+  return `
+    <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;">${esc(data.benchmarkFocus)}</div>
+    <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:grid;grid-template-columns:80px 1fr 1fr;gap:6px;margin-bottom:4px;">
+      <div></div>${data.columns.slice(1).map(c => `<div>${esc(c)}</div>`).join('')}
+    </div>
+    <div class="activity-org-row">
+      <div class="org-cell-badge" style="background:${esc(color)}">${esc(data.label)}</div>
+      ${cellsHTML}
+    </div>`;
 }
 
 // ── Vocabulary ──
-function buildVocabCard(vocab, day) {
-  if (!vocab || !vocab.length) return makeCard('Vocabulary', 'No vocabulary data', '', '--card-vocab');
-  const items = vocab.map(v => `
-    <div class="vocab-item">
-      <div>
-        <div class="vocab-word">${esc(v.word)}</div>
-        <div class="vocab-pos">${esc(v.partOfSpeech)}</div>
-        <div class="vocab-example">"${esc(v.exampleSentence)}"</div>
-      </div>
-      <div class="vocab-def">${esc(v.definition)}</div>
-    </div>`).join('');
-  return makeCard(`Vocabulary · Day ${day}`, vocab.map(v=>v.word).join(', '), `<div class="vocab-list">${items}</div>`, '--card-vocab');
+// NOTE: class names (vocab-word, vocab-def, vocab-example, vocab-esol-frame) are required by
+// focus.js stepVocabWord/stepVocabDef/stepVocabFrame for progressive reveal via querySelectorAll.
+function buildVocabBody(data) {
+  const level = window.currentEsolLevel || 'l34';
+  const esol = data.esolFrames;
+  let esolHTML = '';
+  if (esol) {
+    const tier = esol[level] || esol.l34 || esol;
+    const frames = tier.frames || (Array.isArray(tier) ? tier : []);
+    const wordBank = tier.wordBank || esol.wordBank || [];
+    const levelLabel = { l12:'L1–2', l34:'L3–4', l5:'L5' }[level] || 'L3–4';
+    if (frames.length || wordBank.length) {
+      esolHTML = `
+        <div class="vocab-esol-frame" style="margin-top:10px;padding:10px 12px;background:var(--bg-page);border-radius:6px;border:1px solid var(--border);">
+          <div style="font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">ESOL ${esc(levelLabel)} — Sentence Frames</div>
+          ${frames.map(f => `<div style="font-size:12px;color:var(--text-secondary);font-style:italic;margin-bottom:4px;">"${esc(f.frame || f)}"</div>`).join('')}
+          ${wordBank.length ? `<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">${wordBank.map(w => `<span style="background:var(--accent-light);border:1px solid var(--accent-border);border-radius:4px;padding:2px 7px;font-size:10px;color:var(--accent);">${esc(w)}</span>`).join('')}</div>` : ''}
+        </div>`;
+    }
+  }
+
+  return `
+    <div class="vocab-word" style="font-size:20px;font-weight:800;color:var(--text-primary);">${esc(data.word)}</div>
+    <div class="vocab-pos" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">${esc(data.partOfSpeech)}</div>
+    <div class="vocab-def" style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:6px;">${esc(data.definition)}</div>
+    <div class="vocab-example" style="font-size:12px;color:var(--text-muted);font-style:italic;">"${esc(data.exampleSentence)}"</div>
+    ${esolHTML}`;
 }
 
-// ── Teacher Notes ──
-function buildTeacherCard(notes, isTeacherView) {
-  const card = makeCard(
-    'Teacher Notes',
-    'Instructional guidance',
-    `<div class="teacher-note-body">${esc(notes) || 'No teacher notes for this day.'}</div>`,
-    '--card-teacher',
-    isTeacherView ? '' : 'teacher-only-hidden'
-  );
-  // Add teacher badge to header
-  const label = card.querySelector('.card-label');
-  label.innerHTML += ' <span class="teacher-badge">👁 Teacher Only</span>';
-  return card;
+// ── Written Response ──
+// Single frame with .race-labels / .cer-labels inside.
+// CSS toggles which set of labels shows: body.cer-active .race-labels { display:none } / body.cer-active .cer-labels { display:block }
+function buildWrittenResponseBody(data) {
+  const raceSteps = [
+    { key: 'restate', label: 'R — Restate' },
+    { key: 'answer',  label: 'A — Answer'  },
+    { key: 'cite',    label: 'C — Cite'    },
+    { key: 'explain', label: 'E — Explain' }
+  ];
+  const cerSteps = [
+    { key: 'restate', label: 'Claim'     },
+    { key: 'answer',  label: 'Evidence'  },
+    { key: 'cite',    label: 'Reasoning' },
+    { key: 'explain', label: 'Extension' }
+  ];
+
+  const makeRows = (steps) => steps.map(s => data.frame[s.key] ? `
+    <div class="activity-frame-row">
+      <span class="activity-frame-label">${esc(s.label)}</span>
+      <span class="activity-frame-text">"${esc(data.frame[s.key])}"</span>
+    </div>` : '').join('');
+
+  return `
+    <div style="font-size:13px;color:var(--text-primary);font-weight:600;margin-bottom:12px;">${esc(data.prompt)}</div>
+    <div class="activity-race-frame">
+      <div class="race-labels">${makeRows(raceSteps)}</div>
+      <div class="cer-labels">${makeRows(cerSteps)}</div>
+    </div>`;
 }
 
-// ── Text Passage ──
-function buildPassageCard(passage) {
-  if (!passage || !passage.paragraphs || !passage.paragraphs.length) return makeCard('Text Passage', 'No passage', '', '--card-passage');
-  const parasHTML = passage.paragraphs.map(p =>
-    `<p class="passage-para"><span class="para-num">[${esc(p.number)}]</span>${esc(p.text)}</p>`
+// ── Passage Annotation ──
+function buildPassageAnnotationBody(data) {
+  const parasHTML = data.paragraphs.map(p =>
+    `<p class="passage-para"><span class="para-num">[${esc(String(p.number))}]</span>${esc(p.text)}</p>`
   ).join('');
-  const cubesHTML = (passage.cubesGuide || []).map(c =>
+
+  const cubesHTML = data.cubesGuide.map(c =>
     `<div class="cubes-item">
       <span class="cubes-letter" style="color:var(--accent)">${esc(c.letter)}</span>
       <span class="cubes-action">${esc(c.action)}</span>
       <span class="cubes-example">e.g. "${esc(c.example)}"</span>
     </div>`
   ).join('');
-  const body = `
+
+  return `
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">
+      Use the <strong>Passage drawer (→)</strong> to annotate with CUBES tools.
+    </p>
     <div id="passage-text">${parasHTML}</div>
-    <div class="cubes-guide">
-      <div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">CUBES Annotation Guide</div>
+    ${cubesHTML ? `<div class="cubes-guide" style="margin-top:14px;">
+      <div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">CUBES Guide</div>
       ${cubesHTML}
-    </div>`;
-  return makeCard('Text Passage', `Paragraphs ${passage.paragraphs[0].number}–${passage.paragraphs[passage.paragraphs.length-1].number}`, body, '--card-passage');
+    </div>` : ''}`;
 }
 
-// ── ESOL Scaffolds ──
-function buildEsolCard(esol) {
-  if (!esol) return makeCard('ESOL Scaffolds', 'No ESOL data', '', '--card-esol', 'esol-card');
-  const level = window.currentEsolLevel || 'l34';
-  const tier = esol[level] || esol.l34 || esol;
-  const frames = tier.frames || (Array.isArray(tier) ? tier : []);
-  const wordBank = tier.wordBank || esol.wordBank || [];
-  const levelLabel = { l12: 'L1–2', l34: 'L3–4', l5: 'L5' }[level] || 'L3–4';
-  const framesHTML = frames.map(f =>
-    `<div class="esol-frame"><span class="esol-level-badge">${esc(f.level || levelLabel)}</span>${esc(f.frame)}</div>`
-  ).join('');
-  const wordBankHTML = wordBank.length
-    ? `<div style="margin-top:10px;"><div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Word Bank</div><div class="esol-word-bank">${wordBank.map(w=>`<span class="esol-word">${esc(w)}</span>`).join('')}</div></div>`
-    : '';
-  const l1Note = tier.l1Note || esol.l1Note || '';
-  const body = `<div class="esol-frame-list">${framesHTML}</div>${wordBankHTML}${l1Note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">${esc(l1Note)}</div>` : ''}`;
-  return makeCard(`ESOL Scaffolds · ${levelLabel}`, 'Sentence frames + word bank', body, '--card-esol', 'esol-card');
-}
-
-// ── Expand / Collapse ──
-function wireExpandCollapse() {
-  document.querySelectorAll('.card').forEach(card => {
-    const header = card.querySelector('.card-header');
-    const toggle = card.querySelector('.card-toggle');
-    header.addEventListener('click', () => {
-      const isExpanded = card.classList.toggle('expanded');
-      toggle.textContent = isExpanded ? '▲ collapse' : '▼ expand';
-
-      // Spotlight mode: dim others when one expands
-      if (document.body.classList.contains('spotlight-mode') && isExpanded) {
-        document.querySelectorAll('.card').forEach(c => {
-          c.classList.toggle('spotlight-focus', c === card);
-          c.classList.toggle('dimmed', c !== card);
-        });
-      } else if (document.body.classList.contains('spotlight-mode') && !isExpanded) {
-        document.querySelectorAll('.card').forEach(c => {
-          c.classList.remove('spotlight-focus', 'dimmed');
-        });
-      }
-    });
+// ── State: Reveal Answers ──
+// CSS handles exemplar-text opacity via body.reveal-answers .exemplar-text { opacity: 1 }
+function applyRevealState(reveal) {
+  // MC: show correct answer styling
+  document.querySelectorAll('.mc-answer-correct').forEach(el => {
+    el.classList.toggle('mc-correct', reveal);
+  });
+  // Written model answers
+  document.querySelectorAll('.written-model').forEach(el => {
+    el.style.display = reveal ? 'block' : 'none';
   });
 }
 
-// Called when reveal state changes — re-evaluates all MC answers + organizer exemplars
-function applyRevealState(reveal) {
-  document.querySelectorAll('.mc-option.correct').forEach(el => el.classList.toggle('hidden', !reveal));
-  document.querySelectorAll('.written-model').forEach(el => el.classList.toggle('visible', reveal));
-  document.querySelectorAll('.organizer-table tr.exemplar').forEach(el => el.classList.toggle('hidden', !reveal));
-}
-
-// Called when teacher view changes
+// ── State: Teacher View ──
 function applyTeacherView(isTeacher) {
   document.querySelectorAll('.teacher-only-hidden').forEach(el => {
-    el.style.display = isTeacher ? '' : 'none';
-  });
-  document.querySelectorAll('.teacher-badge').forEach(el => {
     el.style.display = isTeacher ? '' : 'none';
   });
 }
