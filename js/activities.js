@@ -65,8 +65,9 @@ function buildActivities(dayData) {
   }
 
   // ── Vocabulary (one activity per word) ──
-  if (dayData.vocabulary && dayData.vocabulary.length) {
-    dayData.vocabulary.forEach((v, i) => {
+  const vocabItems = dayData.vocabulary || dayData.vocab || [];
+  if (vocabItems.length) {
+    vocabItems.forEach((v, i) => {
       activities.push({
         id: 'vocab-' + i,
         type: 'vocabulary',
@@ -77,7 +78,7 @@ function buildActivities(dayData) {
           word: v.word,
           partOfSpeech: v.partOfSpeech || '',
           definition: v.definition || '',
-          exampleSentence: v.exampleSentence || '',
+          exampleSentence: v.exampleSentence || v.example || '',
           esolFrames: dayData.esol || null
         }
       });
