@@ -235,16 +235,16 @@ window.UNITS_REGISTRY = [
   },
   {
     id: "bloomers",
-    title: "Bloomers & Blue Jeans",
+    title: "Corsets, Bloomers & Blue Jeans",
     benchmark: "ELA.10.R.2.1",
-    benchmarkLabel: "Text Structure",
+    benchmarkLabel: "Central Idea",
     benchmarkCategory: "R.2 Informational",
-    description: "Text structure and central idea in an informational article about fashion and social change.",
-    tags: ["Informational"],
+    description: "Text structure and central idea in an informational article about how 500 years of fashion changes reflect evolving societal values.",
+    tags: ["Informational", "Central Idea", "Fashion History"],
     days: 4,
     accentColor: "#4a7aad",
     path: "units/bloomers/index.html",
-    status: "coming-soon"
+    status: "live"
   },
   {
     id: "shakuntala",
