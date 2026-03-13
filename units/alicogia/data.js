@@ -4,6 +4,7 @@ const UNIT = {
     title: 'The Story of Ali Cogia, Merchant of Baghdad',
     benchmark: 'ELA.10.R.1.1',
     benchmarkLabel: 'Literary Elements',
+    benchmarkDescription: 'Analyze how an author develops and individualizes the responses of characters to situations using literary elements and devices',
     benchmarkCategory: 'R.1 Literary',
     text: 'One Thousand and One Nights',
     paragraphs: '1-18',
@@ -19,10 +20,10 @@ const UNIT = {
           {
             stem: 'Read: "In the reign of Haroun-al-Raschid, there lived in Bagdad a merchant named Ali Cogia, who, having neither wife nor child, contented himself with the modest profits produced by his trade." What does "contented" most likely mean as used in this passage?',
             options: [
-              { letter: 'A', text: 'Frustrated and restless', correct: false },
-              { letter: 'B', text: 'Satisfied and at ease', correct: true },
-              { letter: 'C', text: 'Bored and indifferent', correct: false },
-              { letter: 'D', text: 'Proud and ambitious', correct: false }
+              { letter: 'A', text: 'Frustrated and restless', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Satisfied and at ease', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'Bored and indifferent', correct: false, stopLabel: 'Tricky' },
+              { letter: 'D', text: 'Proud and ambitious', correct: false, stopLabel: 'Silly' }
             ],
             writtenPrompt: 'What does the word "contented" reveal about Ali Cogia\'s character at the start of the story?',
             writtenModel: 'The word "contented" reveals that Ali Cogia is satisfied with his life. He is not driven by greed or ambition — he is at peace with what he has, which makes him a trustworthy and honorable character.'
@@ -30,10 +31,10 @@ const UNIT = {
           {
             stem: 'Read: "...he reproached him for having neglected the duty of a good Mussulman." What does REPROACHED most likely mean?',
             options: [
-              { letter: 'A', text: 'Praised and celebrated', correct: false },
-              { letter: 'B', text: 'Ignored completely', correct: false },
-              { letter: 'C', text: 'Criticized or blamed', correct: true },
-              { letter: 'D', text: 'Forgiven and excused', correct: false }
+              { letter: 'A', text: 'Praised and celebrated', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Ignored completely', correct: false, stopLabel: 'Silly' },
+              { letter: 'C', text: 'Criticized or blamed', correct: true, stopLabel: 'Proven' },
+              { letter: 'D', text: 'Forgiven and excused', correct: false, stopLabel: 'Tricky' }
             ],
             writtenPrompt: 'Why might being "reproached" motivate Ali Cogia to act? How does this connect to the story\'s theme of duty?',
             writtenModel: 'Being reproached — criticized for failing a duty — would motivate Ali Cogia because it implies social and moral pressure. In this culture, failing religious duty is shameful. This connects to the theme that honor and duty are central values in this society.'
@@ -72,14 +73,40 @@ const UNIT = {
         ]
       },
       esol: {
-        frames: [
-          { level: 'L1–L2', frame: 'The character of ___ is shown as ___ because ___.' },
-          { level: 'L3–L4', frame: 'The author reveals that ___ by describing him as ___, which suggests ___.' },
-          { level: 'L5', frame: 'Through the characterization of ___, the author establishes ___ which foreshadows ___.' }
-        ],
-        wordBank: ['contented', 'prosperous', 'merchant', 'Baghdad', 'disturbed', 'duty', 'pilgrimage'],
-        l1Note: 'Visual dictionary available. Allow L1 students to respond in home language first, then translate key terms. Focus on the word "contented" — show vs. tell: he is NOT greedy.'
+        l12: {
+          frames: [
+            'The character of ___ is shown as ___ because ___.'
+          ],
+          wordBank: ['contented', 'merchant', 'Baghdad', 'duty', 'pilgrimage', 'prosperous', 'disturbed']
+        },
+        l34: {
+          frames: [
+            'The author reveals that ___ by describing him as ___, which suggests ___.'
+          ],
+          wordBank: []
+        },
+        l5: {
+          frames: [
+            'Through the characterization of ___, the author establishes ___ which foreshadows ___.'
+          ]
+        }
       },
+      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
+      exitTicket: {
+        prompt: 'What literary element does the author use to develop Ali Cogia as a character in today\'s passage, and what does it reveal about him?',
+        frame: 'The author uses ___ to develop Ali Cogia by...'
+      },
+      raceFrames: {
+        task: 'Write a RACE response: How does the author use characterization in the opening paragraphs to develop Ali Cogia as a principled character?',
+        restate: 'The author uses characterization to develop Ali Cogia as a principled character.',
+        answer: 'Specifically, the author reveals that Ali Cogia is ___ when he...',
+        cite: 'For example, in paragraph ___, the text states, "..."',
+        explain: 'This evidence shows that Ali Cogia is principled because...'
+      },
+      engageActivities: [
+        { type: 'poll', question: 'What literary element does the author use most in today\'s passage?', choices: ['A. Characterization', 'B. Setting', 'C. Conflict', 'D. Symbolism'], correct: 'A' },
+        { type: 'tps', prompt: 'What does the opening of the story reveal about Ali Cogia as a character?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
+      ],
       progressItems: [
         'Bellringer complete (4 min)',
         'Literary elements introduced (character, setting, conflict, symbolism, theme)',
@@ -95,10 +122,10 @@ const UNIT = {
           {
             stem: 'Read: "The only matter he could not settle satisfactorily was the safe custody of a thousand pieces of gold..." What does CUSTODY most likely mean as used here?',
             options: [
-              { letter: 'A', text: 'Storage location or address', correct: false },
-              { letter: 'B', text: 'Care and safekeeping', correct: true },
-              { letter: 'C', text: 'A chest of treasure', correct: false },
-              { letter: 'D', text: 'A business agreement', correct: false }
+              { letter: 'A', text: 'Storage location or address', correct: false, stopLabel: 'Tricky' },
+              { letter: 'B', text: 'Care and safekeeping', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'A chest of treasure', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'A business agreement', correct: false, stopLabel: 'Opposite' }
             ],
             writtenPrompt: 'Why is "custody" of the gold such a problem for Ali Cogia before his journey? What does this tell us about trust in the story?',
             writtenModel: 'Custody means safekeeping, and it is a problem because Ali Cogia must trust someone else with his life savings while he is away for years. This sets up the central conflict of trust vs. betrayal — he must rely on a friend\'s honor to protect what he values most.'
@@ -106,10 +133,10 @@ const UNIT = {
           {
             stem: 'Read: "The merchant replied readily, \'Look, this is the key of my shop...\'" What does READILY most likely mean?',
             options: [
-              { letter: 'A', text: 'Slowly and with great thought', correct: false },
-              { letter: 'B', text: 'Angrily and reluctantly', correct: false },
-              { letter: 'C', text: 'Quickly and willingly', correct: true },
-              { letter: 'D', text: 'Quietly and with suspicion', correct: false }
+              { letter: 'A', text: 'Slowly and with great thought', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Angrily and reluctantly', correct: false, stopLabel: 'Silly' },
+              { letter: 'C', text: 'Quickly and willingly', correct: true, stopLabel: 'Proven' },
+              { letter: 'D', text: 'Quietly and with suspicion', correct: false, stopLabel: 'Tricky' }
             ],
             writtenPrompt: 'What does the merchant\'s "readily" agreeing to safeguard the vase suggest about his character at this point in the story?',
             writtenModel: 'The merchant agreeing readily suggests he appears trustworthy and willing at this point. He seems like a good friend. However, the reader should notice this — his easy agreement will contrast sharply with his later betrayal, showing that appearances can be deceiving.'
@@ -149,14 +176,40 @@ const UNIT = {
         ]
       },
       esol: {
-        frames: [
-          { level: 'L1–L2', frame: 'The setting of ___ is important because it shows that ___.' },
-          { level: 'L3–L4', frame: 'The author uses the setting of ___ to establish ___, which means that the characters value ___.' },
-          { level: 'L5', frame: 'By situating the story in ___ during the era of ___, the author reinforces the cultural values of ___, which heightens the significance of ___.' }
-        ],
-        wordBank: ['Baghdad', 'Mecca', 'pilgrimage', 'custody', 'readily', 'trust', 'promise', 'honor'],
-        l1Note: 'Provide a simple map showing Baghdad and Mecca. Explain "pilgrimage" as a religious journey. Help L1 students understand the cultural importance of keeping promises in this setting.'
+        l12: {
+          frames: [
+            'The setting of ___ is important because it shows that ___.'
+          ],
+          wordBank: ['Baghdad', 'Mecca', 'pilgrimage', 'custody', 'trust', 'promise', 'honor']
+        },
+        l34: {
+          frames: [
+            'The author uses the setting of ___ to establish ___, which means that the characters value ___.'
+          ],
+          wordBank: []
+        },
+        l5: {
+          frames: [
+            'By situating the story in ___ during the era of ___, the author reinforces the cultural values of ___, which heightens the significance of ___.'
+          ]
+        }
       },
+      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
+      exitTicket: {
+        prompt: 'How does the conflict in today\'s passage reveal Ali Cogia\'s character?',
+        frame: 'The conflict reveals that Ali Cogia is ___ because the author shows...'
+      },
+      raceFrames: {
+        task: 'Write a RACE response: How does the conflict in the passage reveal Ali Cogia\'s character?',
+        restate: 'The conflict in this passage reveals that Ali Cogia is ___.',
+        answer: 'Specifically, when faced with ___, Ali Cogia responds by...',
+        cite: 'For example, in paragraph ___, the text states, "..."',
+        explain: 'This response to conflict reveals that Ali Cogia is ___ because...'
+      },
+      engageActivities: [
+        { type: 'poll', question: 'What type of conflict does Ali Cogia face in today\'s reading?', choices: ['A. Man vs. Nature', 'B. Man vs. Man', 'C. Man vs. Self', 'D. Man vs. Society'], correct: 'B' },
+        { type: 'tps', prompt: 'How does the conflict in today\'s passage reveal Ali Cogia\'s values?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
+      ],
       progressItems: [
         'Bellringer complete (4 min)',
         'STOP strategy introduced and modeled',
@@ -172,10 +225,10 @@ const UNIT = {
           {
             stem: 'Read: "Results gladdened his heart." What does GLADDENED most likely mean?',
             options: [
-              { letter: 'A', text: 'Filled with worry', correct: false },
-              { letter: 'B', text: 'Made happy or joyful', correct: true },
-              { letter: 'C', text: 'Left confused and uncertain', correct: false },
-              { letter: 'D', text: 'Made harder or tougher', correct: false }
+              { letter: 'A', text: 'Filled with worry', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Made happy or joyful', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'Left confused and uncertain', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'Made harder or tougher', correct: false, stopLabel: 'Tricky' }
             ],
             writtenPrompt: 'How does the word "gladdened" compare to Ali Cogia\'s mood at the start of the story? What does this contrast suggest?',
             writtenModel: 'At the start, Ali Cogia was "contented" — satisfied with modest happiness. "Gladdened" suggests a more active joy, perhaps relief or excitement. The contrast suggests his journey brought him renewed purpose, making the coming betrayal even more devastating.'
@@ -183,10 +236,10 @@ const UNIT = {
           {
             stem: 'Read: "She has a presentiment that Ali Cogia will return." What does PRESENTIMENT most likely mean?',
             options: [
-              { letter: 'A', text: 'A memory from the past', correct: false },
-              { letter: 'B', text: 'A strong feeling about what will happen', correct: true },
-              { letter: 'C', text: 'A written message or letter', correct: false },
-              { letter: 'D', text: 'A desire for revenge', correct: false }
+              { letter: 'A', text: 'A memory from the past', correct: false, stopLabel: 'Tricky' },
+              { letter: 'B', text: 'A strong feeling about what will happen', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'A written message or letter', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'A desire for revenge', correct: false, stopLabel: 'Opposite' }
             ],
             writtenPrompt: 'Why is the wife\'s "presentiment" important to the plot? What does it foreshadow?',
             writtenModel: 'The wife\'s presentiment — her strong feeling that Ali Cogia will return — is important because it foreshadows the conflict that will follow. Her warning shows moral wisdom: she knows that breaking trust will have consequences. It also develops her character as the moral conscience of the story.'
@@ -224,14 +277,40 @@ const UNIT = {
         ]
       },
       esol: {
-        frames: [
-          { level: 'L1–L2', frame: 'The character of ___ is shown as ___ when she/he says "___".' },
-          { level: 'L3–L4', frame: 'The author uses the dialogue of ___ to reveal that she is ___, as shown when she warns "___ ".' },
-          { level: 'L5', frame: 'Through the characterization of the merchant\'s wife — revealed entirely through dialogue since she is unnamed — the author establishes ___ as a foil to the merchant\'s ___.' }
-        ],
-        wordBank: ['base', 'shameful', 'betrayed', 'presentiment', 'warned', 'gladdened', 'moral', 'conscience'],
-        l1Note: 'Focus on the wife\'s warning: "base" = dishonorable; "shameful" = embarrassing/wrong; "betrayed" = broke trust. Use gestures: thumbs down for "base," covering face for "shameful." Allow L1 students to draw the scene.'
+        l12: {
+          frames: [
+            'The character of ___ is shown as ___ when she/he says "___".'
+          ],
+          wordBank: ['base', 'shameful', 'betrayed', 'warned', 'gladdened', 'moral', 'conscience']
+        },
+        l34: {
+          frames: [
+            'The author uses the dialogue of ___ to reveal that she is ___, as shown when she warns "___".'
+          ],
+          wordBank: []
+        },
+        l5: {
+          frames: [
+            'Through the characterization of the merchant\'s wife — revealed entirely through dialogue since she is unnamed — the author establishes ___ as a foil to the merchant\'s ___.'
+          ]
+        }
       },
+      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
+      exitTicket: {
+        prompt: 'How does the author use contrast between Ali Cogia and the merchant to develop Ali Cogia\'s character?',
+        frame: 'The author contrasts ___ and ___ to show that Ali Cogia...'
+      },
+      raceFrames: {
+        task: 'Write a RACE response: How does the author use contrast to individualize Ali Cogia\'s response to betrayal?',
+        restate: 'The author uses contrast to individualize how Ali Cogia responds to betrayal.',
+        answer: 'Specifically, while the merchant ___, Ali Cogia...',
+        cite: 'For example, in paragraph ___, the text states, "..."',
+        explain: 'This contrast shows that Ali Cogia is unique because...'
+      },
+      engageActivities: [
+        { type: 'poll', question: 'What does the merchant\'s behavior reveal about his character?', choices: ['A. He is greedy and dishonest', 'B. He is fearful of Ali Cogia', 'C. He is ignorant of his crime', 'D. He is remorseful for his actions'], correct: 'A' },
+        { type: 'tps', prompt: 'How is Ali Cogia\'s response to betrayal different from what you might expect?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
+      ],
       progressItems: [
         'Bellringer complete (4 min)',
         'I Do row reviewed (Setting)',
@@ -247,10 +326,10 @@ const UNIT = {
           {
             stem: 'Read: "The merchant refused to listen to her advice, sensible though it was." What does SENSIBLE most likely mean?',
             options: [
-              { letter: 'A', text: 'Emotional and impulsive', correct: false },
-              { letter: 'B', text: 'Confusing and unclear', correct: false },
-              { letter: 'C', text: 'Reasonable and wise', correct: true },
-              { letter: 'D', text: 'Selfish and greedy', correct: false }
+              { letter: 'A', text: 'Emotional and impulsive', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Confusing and unclear', correct: false, stopLabel: 'Silly' },
+              { letter: 'C', text: 'Reasonable and wise', correct: true, stopLabel: 'Proven' },
+              { letter: 'D', text: 'Selfish and greedy', correct: false, stopLabel: 'Tricky' }
             ],
             writtenPrompt: 'The narrator calls the wife\'s advice "sensible." What does it mean when a character ignores sensible advice? What does this reveal about the merchant?',
             writtenModel: 'When a character ignores sensible — wise and reasonable — advice, it shows they are being controlled by something stronger than logic, like greed or selfishness. The merchant ignoring sensible advice reveals that his desire for gold has already corrupted his judgment. He knows what is right but chooses what is easy.'
@@ -258,10 +337,10 @@ const UNIT = {
           {
             stem: 'Read: "If you will be so obstinate..." What does OBSTINATE most likely mean?',
             options: [
-              { letter: 'A', text: 'Generous and giving', correct: false },
-              { letter: 'B', text: 'Honest and trustworthy', correct: false },
-              { letter: 'C', text: 'Careful and deliberate', correct: false },
-              { letter: 'D', text: 'Stubbornly refusing to change', correct: true }
+              { letter: 'A', text: 'Generous and giving', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Honest and trustworthy', correct: false, stopLabel: 'Silly' },
+              { letter: 'C', text: 'Careful and deliberate', correct: false, stopLabel: 'Tricky' },
+              { letter: 'D', text: 'Stubbornly refusing to change', correct: true, stopLabel: 'Proven' }
             ],
             writtenPrompt: 'How does being "obstinate" contribute to the conflict in the story? Connect to a specific moment in the text.',
             writtenModel: 'Being obstinate — stubbornly refusing to change — deepens the conflict because the merchant has a clear choice: listen to his wife\'s sensible warning or ignore it. His obstinacy means he cannot be reasoned with. This leads directly to the betrayal, making him responsible for the consequences that follow.'
@@ -300,14 +379,40 @@ const UNIT = {
         ]
       },
       esol: {
-        frames: [
-          { level: 'L1–L2', frame: 'The conflict in this story is between ___ and ___. This conflict happens because ___.' },
-          { level: 'L3–L4', frame: 'The author develops the conflict by showing that ___ chooses ___ over ___, as shown when "___".' },
-          { level: 'L5', frame: 'The external conflict between Ali Cogia and the merchant is driven by an internal conflict within the merchant — the struggle between ___ and ___. The author reveals this through the language "___," which suggests ___.' }
-        ],
-        wordBank: ['obstinate', 'sensible', 'greed', 'roused', 'temptation', 'betrayal', 'conflict', 'honor'],
-        l1Note: 'Use two-column chart: Wife\'s words (sensible, moral) vs. Merchant\'s actions (obstinate, greedy). Allow L1 students to use symbols: star for "right choice," X for "wrong choice." Focus on the moment the merchant decides.'
+        l12: {
+          frames: [
+            'The conflict in this story is between ___ and ___. This conflict happens because ___.'
+          ],
+          wordBank: ['obstinate', 'sensible', 'greed', 'temptation', 'betrayal', 'conflict', 'honor']
+        },
+        l34: {
+          frames: [
+            'The author develops the conflict by showing that ___ chooses ___ over ___, as shown when "___".'
+          ],
+          wordBank: []
+        },
+        l5: {
+          frames: [
+            'The external conflict between Ali Cogia and the merchant is driven by an internal conflict within the merchant — the struggle between ___ and ___. The author reveals this through the language "___," which suggests ___.'
+          ]
+        }
       },
+      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
+      exitTicket: {
+        prompt: 'How does the resolution of the conflict reveal what the author wants readers to understand about Ali Cogia?',
+        frame: 'The resolution shows that Ali Cogia is ___ because...'
+      },
+      raceFrames: {
+        task: 'Write a RACE response: How does the resolution of the conflict reveal the author\'s message about justice and character?',
+        restate: 'The resolution of the conflict reveals the author\'s message about justice and character.',
+        answer: 'Specifically, when ___ happens, the reader understands that...',
+        cite: 'For example, in paragraph ___, the text states, "..."',
+        explain: 'This resolution shows that the author believes ___ because...'
+      },
+      engageActivities: [
+        { type: 'poll', question: 'Which best describes the resolution of Ali Cogia\'s conflict?', choices: ['A. Ali Cogia forgives the merchant', 'B. The caliph restores justice through wisdom', 'C. Ali Cogia gives up on recovering his money', 'D. The merchant returns the gold voluntarily'], correct: 'B' },
+        { type: 'tps', prompt: 'What message does the author send about justice through the resolution of this conflict?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
+      ],
       progressItems: [
         'Bellringer complete (4 min)',
         'All organizer rows complete',
@@ -323,10 +428,10 @@ const UNIT = {
           {
             stem: 'Read: "Give it up, I entreat you!" What does ENTREAT most likely mean?',
             options: [
-              { letter: 'A', text: 'To command forcefully', correct: false },
-              { letter: 'B', text: 'To beg or plead earnestly', correct: true },
-              { letter: 'C', text: 'To threaten with consequences', correct: false },
-              { letter: 'D', text: 'To whisper secretly', correct: false }
+              { letter: 'A', text: 'To command forcefully', correct: false, stopLabel: 'Tricky' },
+              { letter: 'B', text: 'To beg or plead earnestly', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'To threaten with consequences', correct: false, stopLabel: 'Opposite' },
+              { letter: 'D', text: 'To whisper secretly', correct: false, stopLabel: 'Silly' }
             ],
             writtenPrompt: 'If the wife must "entreat" her husband rather than simply tell him — what does this reveal about the conflict between them?',
             writtenModel: 'The fact that the wife must entreat — beg and plead — rather than simply instruct reveals that the merchant has already made up his mind. She has lost the argument of reason and must resort to emotional appeal. This shows the conflict is unresolvable at this point: greed has fully overtaken his judgment.'
@@ -334,10 +439,10 @@ const UNIT = {
           {
             stem: 'Read: "The sight of the money roused all the merchant\'s greed." What does ROUSED most likely mean?',
             options: [
-              { letter: 'A', text: 'Calmed and soothed', correct: false },
-              { letter: 'B', text: 'Hidden or concealed', correct: false },
-              { letter: 'C', text: 'Stirred up or awakened', correct: true },
-              { letter: 'D', text: 'Completely destroyed', correct: false }
+              { letter: 'A', text: 'Calmed and soothed', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Hidden or concealed', correct: false, stopLabel: 'Silly' },
+              { letter: 'C', text: 'Stirred up or awakened', correct: true, stopLabel: 'Proven' },
+              { letter: 'D', text: 'Completely destroyed', correct: false, stopLabel: 'Tricky' }
             ],
             writtenPrompt: 'How does the word "roused" suggest that the merchant\'s greed was already inside him, just waiting? What does this reveal about his character?',
             writtenModel: 'The word "roused" — stirred up or awakened — implies that the greed was dormant inside the merchant, not created by the gold. The gold merely woke it. This reveals that the merchant was never truly trustworthy — his appearance of goodness was fragile, and the temptation simply revealed his true character.'
@@ -361,14 +466,40 @@ const UNIT = {
       },
       teacherNotes: 'Day 5: Mini-assessment day with STOP protocol. Begin with bellringer (4 min) then STOP strategy review. Students take mini-assessment (Q11-Q15, district-aligned) using STOP on ALL questions — label each choice S, T, O, or P before selecting. Monitor and support. Debrief answers using think-aloud. Exit ticket: which STOP category was hardest and why?',
       esol: {
-        frames: [
-          { level: 'L1–L2', frame: 'The answer is ___ because the text says "___".' },
-          { level: 'L3–L4', frame: 'I can prove my answer by looking at ___, where the text states "___," which shows ___.' },
-          { level: 'L5', frame: 'Using the STOP strategy, I can eliminate ___ (Silly/Opposite) and ___ (Tricky) because ___; the Proven answer is ___ because "___."' }
-        ],
-        wordBank: ['proven', 'evidence', 'support', 'eliminate', 'inference', 'symbolize', 'develop', 'theme'],
-        l1Note: 'Allow L1-L2 students to use word banks and sentence frames during assessment. Focus on STOP: use symbols — X for Silly/Opposite, ? for Tricky, checkmark for Proven. Read questions aloud if needed.'
+        l12: {
+          frames: [
+            'The answer is ___ because the text says "___".'
+          ],
+          wordBank: ['proven', 'evidence', 'support', 'eliminate', 'inference', 'symbolize', 'develop', 'theme']
+        },
+        l34: {
+          frames: [
+            'I can prove my answer by looking at ___, where the text states "___," which shows ___.'
+          ],
+          wordBank: []
+        },
+        l5: {
+          frames: [
+            'Using the STOP strategy, I can eliminate ___ (Silly/Opposite) and ___ (Tricky) because ___; the Proven answer is ___ because "___."'
+          ]
+        }
       },
+      pacingGuide: { bellringer: 5, vocab: 5, organizer: 20, teacher: 10, passage: 0 },
+      exitTicket: {
+        prompt: 'Identify the strongest piece of evidence you used in your RACE response and explain why it supports your claim.',
+        frame: 'The strongest evidence I used was "..." because it shows...'
+      },
+      raceFrames: {
+        task: 'Write a RACE response: How does the author use literary elements and devices throughout the story to individualize Ali Cogia\'s response to conflict?',
+        restate: 'The author uses literary elements and devices to individualize Ali Cogia\'s response to conflict.',
+        answer: 'Specifically, the author uses ___ to show that Ali Cogia is ___ when...',
+        cite: 'For example, in paragraph ___, the text states, "..."',
+        explain: 'This evidence shows that Ali Cogia is uniquely ___ because...'
+      },
+      engageActivities: [
+        { type: 'poll', question: 'Which RACE component is the hardest to write well?', choices: ['A. Restate', 'B. Answer', 'C. Cite', 'D. Explain'], correct: 'D' },
+        { type: 'tps', prompt: 'Share one piece of evidence from the text that best supports your claim about Ali Cogia.', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
+      ],
       progressItems: [
         'Bellringer complete (4 min)',
         'STOP strategy reviewed',
@@ -384,10 +515,10 @@ const UNIT = {
           {
             stem: 'Read: "How shameful it would be to have to confess that you had betrayed your trust!" What does BETRAYED most likely mean?',
             options: [
-              { letter: 'A', text: 'Protected or safeguarded', correct: false },
-              { letter: 'B', text: 'Broke or violated (a promise or trust)', correct: true },
-              { letter: 'C', text: 'Strengthened or reinforced', correct: false },
-              { letter: 'D', text: 'Questioned or doubted', correct: false }
+              { letter: 'A', text: 'Protected or safeguarded', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Broke or violated (a promise or trust)', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'Strengthened or reinforced', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'Questioned or doubted', correct: false, stopLabel: 'Tricky' }
             ],
             writtenPrompt: 'How does the word "betrayed" capture the story\'s central theme? What makes betrayal worse than simply lying or stealing?',
             writtenModel: 'Betrayal is worse than simply lying or stealing because it involves a violation of trust that was freely given. Ali Cogia trusted his friend — not a stranger — with his savings. When that trust is betrayed, it destroys not just the gold but the relationship and the friend\'s character. The word "betrayed" captures the story\'s theme: trust is sacred, and breaking it has moral consequences.'
@@ -395,10 +526,10 @@ const UNIT = {
           {
             stem: 'Read: "The sight of the money roused all the merchant\'s greed." What does GREED most likely mean?',
             options: [
-              { letter: 'A', text: 'Generosity and kindness', correct: false },
-              { letter: 'B', text: 'Confusion and uncertainty', correct: false },
-              { letter: 'C', text: 'Fear of punishment', correct: false },
-              { letter: 'D', text: 'Selfish desire for more than one needs', correct: true }
+              { letter: 'A', text: 'Generosity and kindness', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Confusion and uncertainty', correct: false, stopLabel: 'Silly' },
+              { letter: 'C', text: 'Fear of punishment', correct: false, stopLabel: 'Tricky' },
+              { letter: 'D', text: 'Selfish desire for more than one needs', correct: true, stopLabel: 'Proven' }
             ],
             writtenPrompt: 'How does the theme of "greed as destruction" develop across the whole story? Use at least one quote as evidence.',
             writtenModel: 'The theme of greed as destruction develops gradually. At first, the merchant seems trustworthy and generous, agreeing "readily" to help. But when he discovers the gold, "the sight of the money roused all the merchant\'s greed" (¶16), and he ignores his wife\'s sensible warning. His greed destroys the friendship, his integrity, and ultimately leads to his ruin — showing that desire for wealth corrupts moral judgment.'
@@ -422,14 +553,40 @@ const UNIT = {
       },
       teacherNotes: 'Day 6: ACE writing and self-assessment day. Begin with bellringer (4 min). Review ACE structure (Answer → Cite → Explain). Model with the prompt: "How does the author use characterization and conflict to develop the universal theme of trust and betrayal?" Write sample ACE response together. Students draft independently, then peer review using ACE checklist. Self-assessment exit ticket: rate your response 1-5 and identify what would move you up one level.',
       esol: {
-        frames: [
-          { level: 'L1–L2', frame: 'The theme of this story is ___. I know this because the text says "___".' },
-          { level: 'L3–L4', frame: 'The author develops the theme of ___ by using ___ (literary element). For example, "___" (¶___) shows that ___.' },
-          { level: 'L5', frame: 'The author uses ___ and ___ (literary elements) to develop the universal theme that ___. As shown in "___" (¶___), this conveys that when ___, the result is ___.' }
-        ],
-        wordBank: ['betrayed', 'greed', 'pilgrimage', 'theme', 'characterization', 'symbolism', 'trust', 'moral', 'duty', 'universal'],
-        l1Note: 'Provide the ACE frame pre-filled with the prompt: "The theme is ___ because ___." For L1 students, allow a shorter response: one sentence claim + one quote. Focus on connecting their chosen quote to the theme word (trust, greed, duty).'
+        l12: {
+          frames: [
+            'The theme of this story is ___. I know this because the text says "___".'
+          ],
+          wordBank: ['betrayed', 'greed', 'pilgrimage', 'theme', 'trust', 'moral', 'duty']
+        },
+        l34: {
+          frames: [
+            'The author develops the theme of ___ by using ___ (literary element). For example, "___" (¶___) shows that ___.'
+          ],
+          wordBank: []
+        },
+        l5: {
+          frames: [
+            'The author uses ___ and ___ (literary elements) to develop the universal theme that ___. As shown in "___" (¶___), this conveys that when ___, the result is ___.'
+          ]
+        }
       },
+      pacingGuide: { bellringer: 5, vocab: 5, organizer: 20, teacher: 10, passage: 0 },
+      exitTicket: {
+        prompt: 'What is the most important thing you learned about how authors use literary elements to develop character?',
+        frame: 'Authors use literary elements to develop character by...'
+      },
+      raceFrames: {
+        task: 'Write a RACE response: How does the author use literary elements and devices throughout the story to individualize Ali Cogia\'s response to conflict?',
+        restate: 'The author uses literary elements and devices to individualize Ali Cogia\'s response to conflict.',
+        answer: 'Specifically, the author uses ___ to show that Ali Cogia is ___ when...',
+        cite: 'For example, in paragraph ___, the text states, "..."',
+        explain: 'This evidence shows that Ali Cogia is uniquely ___ because...'
+      },
+      engageActivities: [
+        { type: 'poll', question: 'Which literary element most defines Ali Cogia as a character?', choices: ['A. Setting', 'B. Conflict', 'C. Characterization', 'D. Symbolism'], correct: 'C' },
+        { type: 'tps', prompt: 'If you were Ali Cogia, would you have made the same choices? Why or why not?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
+      ],
       progressItems: [
         'Bellringer complete (4 min)',
         'ACE structure reviewed',
@@ -441,12 +598,12 @@ const UNIT = {
   },
   assessment: {
     stopProtocol: {
-      description: 'Use STOP to evaluate each answer choice before selecting. Label EVERY choice before circling your answer.',
+      description: 'Use STOP to analyze each MC answer choice before selecting.',
       steps: [
-        { letter: 'S', label: 'Silly', description: 'Clearly wrong — no evidence in the text — eliminate first' },
-        { letter: 'T', label: 'Tricky', description: 'Plausible but not fully supported; partially correct but incomplete' },
-        { letter: 'O', label: 'Opposite', description: 'Contradicts what the text actually says' },
-        { letter: 'P', label: 'Proven', description: 'Directly supported by text evidence — the correct answer' }
+        { letter: 'S', label: 'Silly', description: 'This answer is clearly wrong or absurd — eliminate it first.' },
+        { letter: 'T', label: 'Tricky', description: 'This answer sounds right but has a related word or partial truth that misses the point.' },
+        { letter: 'O', label: 'Opposite', description: 'This answer directly contradicts the correct interpretation.' },
+        { letter: 'P', label: 'Proven', description: 'This answer is directly supported by evidence in the text — the correct answer.' }
       ]
     },
     mcQuestions: [
@@ -531,10 +688,10 @@ const UNIT = {
       ]
     },
     achievementLevels: [
-      { level: 4, label: 'Exceeds', description: 'Student identifies multiple literary elements, cites specific evidence with paragraph numbers, and explains how elements develop theme with analytical depth.' },
-      { level: 3, label: 'Meets', description: 'Student correctly identifies literary elements, cites textual evidence, and explains how the element contributes to meaning.' },
-      { level: 2, label: 'Approaching', description: 'Student identifies a literary element but evidence is vague or explanation lacks connection to theme.' },
-      { level: 1, label: 'Beginning', description: 'Student attempts to identify literary elements but relies on summary rather than analysis. Limited or no text evidence.' }
+      { level: 2, label: 'Approaching', descriptor: 'Identifies a literary element present in the text with minimal or indirect textual support.' },
+      { level: 3, label: 'Meets', descriptor: 'Explains how a literary element contributes to character development using relevant textual evidence.' },
+      { level: 4, label: 'Exceeds', descriptor: 'Analyzes the relationship between multiple literary elements and how the author uses them together to individualize a character\'s response to conflict.' },
+      { level: 5, label: 'Mastery', descriptor: 'Evaluates the author\'s deliberate craft choices — including literary elements and devices — and their cumulative effect on how Ali Cogia is developed as a uniquely motivated, principled character.' }
     ]
   },
   downloads: [
