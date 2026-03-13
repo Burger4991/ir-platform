@@ -70,7 +70,7 @@
 
     if (backBtn) backBtn.addEventListener('click', exitFocusMode);
     if (prevBtn) prevBtn.addEventListener('click', prevStep);
-    if (nextBtn) nextBtn.addEventListener('click', nextStep);
+    // nextBtn click is managed via onclick assignment in updateStepUI
 
     // Toolbar-level Focus button — focuses topmost visible activity
     const btnFocusTop = document.getElementById('btn-focus');
