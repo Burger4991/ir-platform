@@ -154,8 +154,9 @@ function buildMcBody(data) {
     <div class="written-model" style="display:none;margin-top:6px;font-size:12px;color:var(--accent);font-style:italic;">${esc(data.writtenModel || '')}</div>` : '';
 
   return `
-    <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">4 min timed · STOP strategy available</p>
+    <div class="activity-instruction">👀 Read the passage stem carefully</div>
     <p class="bellringer-passage">${esc(data.stem)}</p>
+    <div class="activity-instruction">✏️ Which answer is supported by the text?</div>
     <div class="mc-options-list" style="display:flex;flex-direction:column;gap:0;">${optionsHTML}</div>
     ${writtenHTML}`;
 }
@@ -182,6 +183,7 @@ function buildOrganizerRowBody(data) {
     <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:grid;grid-template-columns:80px 1fr 1fr;gap:6px;margin-bottom:4px;">
       <div></div>${data.columns.slice(1).map(c => `<div>${esc(c)}</div>`).join('')}
     </div>
+    <div class="activity-instruction">✏️ Fill in your row</div>
     <div class="activity-org-row">
       <div class="org-cell-badge" style="background:${esc(color)}">${esc(data.label)}</div>
       ${cellsHTML}
@@ -211,11 +213,12 @@ function buildVocabBody(data) {
   }
 
   return `
+    <div class="activity-instruction">👀 Read the word and definition</div>
     <div class="vocab-word" style="font-size:20px;font-weight:800;color:var(--text-primary);">${esc(data.word)}</div>
     <div class="vocab-pos" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">${esc(data.partOfSpeech)}</div>
     <div class="vocab-def" style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:6px;">${esc(data.definition)}</div>
     <div class="vocab-example" style="font-size:12px;color:var(--text-muted);font-style:italic;">"${esc(data.exampleSentence)}"</div>
-    ${esolHTML}`;
+    ${esolHTML ? `<div class="activity-instruction">✏️ Complete the sentence frame</div>${esolHTML}` : ''}`;
 }
 
 // ── Written Response ──
@@ -243,6 +246,7 @@ function buildWrittenResponseBody(data) {
 
   return `
     <div style="font-size:13px;color:var(--text-primary);font-weight:600;margin-bottom:12px;">${esc(data.prompt)}</div>
+    <div class="activity-instruction">✏️ Build your response using the frame below</div>
     <div class="activity-race-frame">
       <div class="race-labels">${makeRows(raceSteps)}</div>
       <div class="cer-labels">${makeRows(cerSteps)}</div>
@@ -264,9 +268,7 @@ function buildPassageAnnotationBody(data) {
   ).join('');
 
   return `
-    <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">
-      Use the <strong>Passage drawer (→)</strong> to annotate with CUBES tools.
-    </p>
+    <div class="activity-instruction">👀 Read and annotate the passage</div>
     <div id="passage-text">${parasHTML}</div>
     ${cubesHTML ? `<div class="cubes-guide" style="margin-top:14px;">
       <div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">CUBES Guide</div>
