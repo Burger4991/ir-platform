@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+  // Prevent clicks inside a popover from bubbling to the document close handler
+  document.querySelectorAll('.toolbar-popover').forEach(p => {
+    p.addEventListener('click', e => e.stopPropagation());
+  });
   // Close popovers on outside click or Escape
   document.addEventListener('click', () => {
     document.querySelectorAll('.toolbar-popover').forEach(p => p.classList.remove('popover--open'));
