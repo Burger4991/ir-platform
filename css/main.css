@@ -1285,7 +1285,7 @@ body.focus-mode .focus-nav { display: flex; }
   align-items: center;
   justify-content: center;
 }
-#day-complete-overlay.visible { display: flex; }
+#day-complete-overlay.visible { display: flex; animation: overlay-in 0.25s ease forwards; }
 .day-complete-card {
   background: linear-gradient(135deg, rgba(var(--day-accent-rgb),0.15), #0f172a 60%);
   border: 1px solid rgba(var(--day-accent-rgb), 0.3);
@@ -1295,6 +1295,7 @@ body.focus-mode .focus-nav { display: flex; }
   max-width: 400px;
   width: 90%;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: card-in 0.25s ease forwards;
 }
 .day-complete-emoji { font-size: 36px; margin-bottom: 10px; }
 .day-complete-title { font-size: 22px; font-weight: 900; color: #f1f5f9; margin-bottom: 4px; }
@@ -1319,15 +1320,9 @@ body.focus-mode .focus-nav { display: flex; }
 /* ── Transitions (I4) ── */
 #content-grid { transition: opacity 0.2s ease; }
 .focus-body   { transition: opacity 0.15s ease; }
-#day-complete-overlay.visible {
-  animation: overlay-in 0.25s ease forwards;
-}
 @keyframes overlay-in {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-.day-complete-card {
-  animation: card-in 0.25s ease forwards;
 }
 @keyframes card-in {
   from { opacity: 0; transform: translateY(12px); }
