@@ -253,11 +253,11 @@ window.UNITS_REGISTRY = [
     benchmarkLabel: "Literary Elements",
     benchmarkCategory: "R.1 Literary",
     description: "Literary elements in the ancient Indian play Shakuntala — character, conflict, and symbolism.",
-    tags: ["Drama", "World Literature"],
+    tags: ["Literary", "Drama", "World Literature", "Test Prep"],
     days: 4,
     accentColor: "#c96a2e",
     path: "units/shakuntala/index.html",
-    status: "coming-soon"
+    status: "live"
   },
   {
     id: "paineInglis",
