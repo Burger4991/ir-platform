@@ -85,5 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render content
     if (typeof renderDayContent === 'function') renderDayContent(day);
+    if (typeof window.populatePassageDrawer === 'function') window.populatePassageDrawer(day);
   };
 });

@@ -233,6 +233,33 @@
     </div>
   </div>
 
+  <!-- Passage Drawer -->
+  <div class="passage-drawer" id="passage-drawer">
+    <button class="passage-drawer-tab" id="passage-drawer-tab" aria-label="Open passage">
+      <span style="writing-mode:vertical-rl;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">📄 Passage</span>
+    </button>
+    <!-- passage-drawer-panel wraps all inner content (tab sticks out separately) -->
+    <div class="passage-drawer-panel">
+      <div class="passage-drawer-header">
+        <span class="passage-drawer-title">Text Passage</span>
+        <button id="btn-line-numbers-drawer" title="Toggle line numbers"># Lines</button>
+        <button id="btn-read-aloud-drawer" title="Read passage aloud">🔊</button>
+        <button id="passage-drawer-close" aria-label="Close passage">✕</button>
+      </div>
+      <div class="passage-drawer-body" id="passage-text-drawer"></div>
+      <div class="passage-cubes-toolbar" id="passage-cubes-toolbar">
+        <span style="font-size:11px;color:#aaa;margin-right:4px;">CUBES:</span>
+        <div class="cubes-btn" data-cubes-drawer="circle"   style="background:#e05050" title="C — Circle">C</div>
+        <div class="cubes-btn" data-cubes-drawer="underline" style="background:#4a80d0" title="U — Underline">U</div>
+        <div class="cubes-btn" data-cubes-drawer="box"       style="background:#4aad6a" title="B — Box">B</div>
+        <div class="cubes-btn" data-cubes-drawer="eliminate" style="background:#d0b020" title="E — Eliminate">E</div>
+        <div class="cubes-btn" data-cubes-drawer="star"      style="background:#e08030" title="S — Star">S</div>
+        <button id="passage-clear-canvas" style="font-size:11px;background:rgba(255,255,255,0.1);color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">Clear</button>
+      </div>
+      <canvas id="passage-drawer-canvas"></canvas>
+    </div>
+  </div>
+
   <script src="data.js"></script>
   <script src="../../js/theme.js"></script>
   <script src="../../js/nav.js"></script>
@@ -241,6 +268,7 @@
   <script src="../../js/timer.js"></script>
   <script src="../../js/toolbar.js"></script>
   <script src="../../js/annotations.js"></script>
+  <script src="../../js/passage-drawer.js"></script>
   <script src="../../js/engage.js"></script>
 </body>
 </html>
