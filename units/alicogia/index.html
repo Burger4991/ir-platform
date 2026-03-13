@@ -260,11 +260,24 @@
     </div>
   </div>
 
+  <!-- Focus Mode UI — shown/hidden by CSS via body.focus-mode class, no inline styles needed -->
+  <div class="focus-header" id="focus-header">
+    <button id="focus-back-btn">← Back to Day</button>
+    <span class="focus-step-label" id="focus-step-label"></span>
+    <div class="focus-step-dots" id="focus-step-dots"></div>
+  </div>
+  <div class="focus-nav" id="focus-nav">
+    <button class="focus-nav-btn" id="focus-prev-btn">← Back</button>
+    <span class="focus-step-info" id="focus-step-info"></span>
+    <button class="focus-nav-btn primary" id="focus-next-btn">Next →</button>
+  </div>
+
   <script src="data.js"></script>
   <script src="../../js/theme.js"></script>
   <script src="../../js/nav.js"></script>
   <script src="../../js/activities.js"></script>
   <script src="../../js/cards.js"></script>
+  <script src="../../js/focus.js"></script>
   <script src="../../js/timer.js"></script>
   <script src="../../js/toolbar.js"></script>
   <script src="../../js/annotations.js"></script>
