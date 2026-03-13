@@ -299,11 +299,6 @@ body.theme-violet .day-tab.active { box-shadow: 0 0 10px var(--accent); }
   .stop-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tool-btn, .filter-btn { transition: none; }
-  .tool-btn:active { transform: none; }
-}
-
 /* ── Tool Groups ── */
 .tool-group { display:flex; align-items:center; gap:2px; background:rgba(0,0,0,0.04); border:1px solid var(--border); border-radius:8px; padding:4px; flex-shrink:0; }
 body.theme-midnight .tool-group, body.theme-violet .tool-group { background:rgba(255,255,255,0.04); }
