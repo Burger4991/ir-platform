@@ -157,16 +157,16 @@ window.UNITS_REGISTRY = [
   },
   {
     id: "mathinnovations",
-    title: "Math Innovations",
-    benchmark: "ELA.10.R.2.1",
+    title: "The Source of Mathematical Innovations",
+    benchmark: "ELA.10.R.2.2",
     benchmarkLabel: "Text Structure",
     benchmarkCategory: "R.2 Informational",
-    description: "Analyzing text structure, organization, and central idea in an informational article.",
-    tags: ["Informational", "Text Structure"],
+    description: "Analyzing text structure, author's craft, vocabulary, and central idea in an informational article about the history of mathematical discoveries.",
+    tags: ["Informational", "Text Structure", "Mathematics History"],
     days: 4,
     accentColor: "#4a7aad",
     path: "units/mathinnovations/index.html",
-    status: "coming-soon"
+    status: "live"
   },
   {
     id: "rhetoricCourt",
