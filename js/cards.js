@@ -8,6 +8,9 @@ function esc(str) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// ── Session state: track which activities are done this session ──
+window.doneActivityIds = new Set();
+
 // ── Public entry point (called by nav.js on day switch) ──
 function renderDayContent(day) {
   renderActivities(day);
@@ -51,9 +54,121 @@ function renderActivities(day) {
   }
 
   // Re-apply current state
+  updateDayProgress(day);
   applyRevealState(document.body.classList.contains('reveal-answers'));
   applyTeacherView(!document.body.classList.contains('student-view'));
   if (typeof updateProgressPanel === 'function') updateProgressPanel(day);
+}
+
+// ── Mark an activity done (called by focus.js on exit) ──
+window.markActivityDone = function markActivityDone(id) {
+  if (!id) return;
+  window.doneActivityIds.add(id);
+  const cardEl = document.querySelector(`[data-activity-id="${id}"]`);
+  if (cardEl) applyDoneState(cardEl, id);
+  updateDayProgress(window.currentDay);
+};
+
+function applyDoneState(cardEl, id) {
+  if (!cardEl.classList.contains('activity--done')) {
+    cardEl.classList.add('activity--done');
+    // Add the done summary bar with review button
+    const titleEl = cardEl.querySelector('.activity-title');
+    const title = titleEl ? titleEl.textContent : 'Activity';
+    const summaryEl = document.createElement('div');
+    summaryEl.className = 'activity-done-summary';
+    summaryEl.innerHTML = `
+      <span style="color:#4ade80;font-weight:700;">${esc(title)} — Complete</span>
+      <button class="activity-done-review-btn" data-id="${esc(id)}">Review ↓</button>`;
+    summaryEl.querySelector('.activity-done-review-btn').addEventListener('click', () => {
+      cardEl.classList.toggle('activity--done-expanded');
+      summaryEl.querySelector('.activity-done-review-btn').textContent =
+        cardEl.classList.contains('activity--done-expanded') ? 'Collapse ↑' : 'Review ↓';
+    });
+    cardEl.appendChild(summaryEl);
+  }
+}
+
+// ── Update the day progress bar and re-apply done states ──
+function updateDayProgress(day) {
+  const barEl    = document.getElementById('day-progress-bar');
+  const fillEl   = document.getElementById('day-progress-fill');
+  const segsEl   = document.getElementById('day-progress-segments');
+  const labelEl  = document.getElementById('day-progress-label');
+  const countEl  = document.getElementById('day-progress-count');
+  if (!barEl || typeof UNIT === 'undefined' || !UNIT.days) return;
+
+  const activities = buildActivities(UNIT.days[day]);
+  const total = activities.length;
+  if (total === 0) { barEl.style.display = 'none'; return; }
+  barEl.style.display = '';
+
+  // Count done activities for THIS day
+  const doneActivities = activities.filter(a => window.doneActivityIds.has(a.id));
+  const doneCount = doneActivities.length;
+
+  // Update text
+  if (labelEl) labelEl.textContent = 'Day ' + day + ' of ' + UNIT.meta.days;
+  if (countEl) countEl.textContent = doneCount + ' / ' + total + ' activities';
+
+  // Fill bar
+  const pct = total > 0 ? (doneCount / total) * 100 : 0;
+  if (fillEl) fillEl.style.width = pct + '%';
+
+  // Segments
+  if (segsEl) {
+    segsEl.innerHTML = activities.map((a, i) => {
+      const done = window.doneActivityIds.has(a.id);
+      const active = !done && i === doneCount; // first incomplete
+      const cls = done ? 'day-progress-segment--done' : active ? 'day-progress-segment--active' : '';
+      return `<div class="day-progress-segment ${cls}"></div>`;
+    }).join('');
+  }
+
+  // Re-apply done state to all cards (survives day switch and toolbar re-renders)
+  window.doneActivityIds.forEach(id => {
+    const cardEl = document.querySelector(`[data-activity-id="${id}"]`);
+    if (cardEl && !cardEl.classList.contains('activity--done')) {
+      applyDoneState(cardEl, id);
+    }
+  });
+
+  // Show day complete overlay if all done
+  if (doneCount === total) showDayCompleteOverlay(day, total);
+}
+
+function showDayCompleteOverlay(day, totalActivities) {
+  const overlay  = document.getElementById('day-complete-overlay');
+  const emoji    = document.getElementById('day-complete-emoji');
+  const title    = document.getElementById('day-complete-title');
+  const subtitle = document.getElementById('day-complete-subtitle');
+  const countEl  = document.getElementById('day-complete-count');
+  const btn      = document.getElementById('day-complete-btn');
+  if (!overlay) return;
+
+  const isLastDay = day >= UNIT.meta.days;
+  const dayData   = UNIT.days[day];
+  const dayLabel  = dayData && dayData.label ? dayData.label : '';
+
+  if (emoji)    emoji.textContent    = isLastDay ? '🏆' : '🎉';
+  if (title)    title.textContent    = isLastDay ? 'Unit Complete!' : 'Day ' + day + ' Complete';
+  if (subtitle) subtitle.textContent = isLastDay ? 'Great work this unit!' : (dayLabel || '');
+  if (countEl)  countEl.textContent  = totalActivities;
+  if (btn) {
+    btn.textContent = isLastDay ? 'Back to Day 1' : 'Day ' + (day + 1) + ' →';
+    btn.onclick = () => {
+      // Persist done day to localStorage
+      const unitId = (UNIT.meta && (UNIT.meta.id || UNIT.meta.title)) || 'default';
+      const key = 'ir-done-days-' + unitId;
+      const done = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!done.includes(day)) { done.push(day); localStorage.setItem(key, JSON.stringify(done)); }
+      overlay.classList.remove('visible');
+      if (typeof window.switchDay === 'function') {
+        window.switchDay(isLastDay ? 1 : day + 1);
+      }
+    };
+  }
+  overlay.classList.add('visible');
 }
 
 // ── Type strip labels (H1) ──
