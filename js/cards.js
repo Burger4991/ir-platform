@@ -56,6 +56,31 @@ function renderActivities(day) {
   if (typeof updateProgressPanel === 'function') updateProgressPanel(day);
 }
 
+// ── Type strip labels (H1) ──
+const ACTIVITY_TYPE_LABELS = {
+  'mc':                 '📝 Multiple Choice',
+  'vocabulary':         '📖 Vocabulary',
+  'written-response':   '✍️ Written Response',
+  'organizer-row':      '🗂 Organizer',
+  'passage-annotation': '🔍 Passage Annotation'
+};
+
+// ── Step dot counts by type+phase (H3) — mirrors focus.js STEPS ──
+const STEP_DOT_COUNTS = {
+  'mc':                            4,
+  'vocabulary':                    3,
+  'written-response':              3,
+  'organizer-row-i-do':            2,
+  'organizer-row-we-do':           4,
+  'organizer-row-you-do':          3,
+  'organizer-row-you-do-partner':  3,
+  'passage-annotation':            4
+};
+function getStepDotCount(type, grPhase) {
+  if (type === 'organizer-row') return STEP_DOT_COUNTS['organizer-row-' + grPhase] || 3;
+  return STEP_DOT_COUNTS[type] || 1;
+}
+
 // ── Activity element builder ──
 function buildActivityEl(activity) {
   const el = document.createElement('div');
@@ -67,11 +92,19 @@ function buildActivityEl(activity) {
     `<span class="activity-strategy-badge badge-${s}">${s.toUpperCase()}</span>`
   ).join('');
 
+  const typeLabel = ACTIVITY_TYPE_LABELS[activity.type] || activity.type;
+  const dotCount = getStepDotCount(activity.type, activity.grPhase);
+  const dotsHTML = Array.from({ length: dotCount }, (_, i) =>
+    `<div class="step-dot${i === 0 ? ' step-dot--active' : ''}"></div>`
+  ).join('');
+
   el.innerHTML = `
+    <div class="activity-type-strip">${esc(typeLabel)}</div>
     <div class="activity-header">
       ${badgeHTML}
       <span class="activity-title">${esc(activity.title)}</span>
       <div class="activity-strategy-badges">${stratBadges}</div>
+      <div class="activity-step-dots">${dotsHTML}</div>
       <button class="activity-focus-btn" data-id="${esc(activity.id)}" title="Focus Mode">⊡ Focus</button>
     </div>
     <div class="activity-body">
