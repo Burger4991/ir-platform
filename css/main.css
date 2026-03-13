@@ -766,6 +766,8 @@ body.stop-active .mc-stop-label { display: inline-block; }
 
 /* Organizer exemplar text (I Do model) — hidden by default, revealed by Reveal Answers or Teacher View */
 .exemplar-text { opacity: 0.15; }
+body.reveal-answers .exemplar-text,
+body.teacher-view .exemplar-text { opacity: 1; }
 
 /* RACE / CER frames in activities */
 .activity-race-frame {
