@@ -333,6 +333,36 @@ body.theme-midnight .tool-group, body.theme-violet .tool-group { background:rgba
 .sidebar-day-btn { text-align:left; padding:8px 10px; border-radius:6px; border:none; background:transparent; color:var(--text-secondary); font-size:12px; cursor:pointer; transition:background 0.15s; white-space:nowrap; }
 .sidebar-day-btn:hover { background:rgba(0,0,0,0.06); color:var(--text-primary); }
 .sidebar-day-btn.active { background:var(--accent); color:#fff; font-weight:700; }
+
+/* ── Sidebar Day Status States (H4) ── */
+.sidebar-day-btn { position: relative; display: flex; align-items: center; gap: 6px; }
+.sidebar-day-indicator { font-size: 10px; flex-shrink: 0; width: 14px; text-align: center; }
+.sidebar-day-label { flex: 1; }
+.sidebar-day-status { font-size: 9px; letter-spacing: 0.5px; margin-left: auto; opacity: 0.8; }
+
+.sidebar-day-btn.sidebar-day--active {
+  background: rgba(var(--day-accent-rgb), 0.15);
+  border: 1px solid rgba(var(--day-accent-rgb), 0.4);
+  color: var(--day-accent-text);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(var(--day-accent-rgb), 0.15);
+}
+.sidebar-day-btn.sidebar-day--active .sidebar-day-indicator {
+  color: var(--day-accent);
+  text-shadow: 0 0 6px rgba(var(--day-accent-rgb), 0.8);
+}
+.sidebar-day-btn.sidebar-day--done {
+  background: rgba(16,185,129,0.08);
+  color: #4ade80;
+}
+.sidebar-day-btn.sidebar-day--done .sidebar-day-indicator { color: #4ade80; }
+.sidebar-day-btn.sidebar-day--upcoming {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+/* NOTE: .sidebar-day-btn.active override is intentionally NOT added here — it moves to Task 8
+   where the JS that sets .sidebar-day--active is also wired, preventing a broken interim state. */
+
 .sidebar-card-links { padding:8px; border-top:1px solid var(--border); margin-top:8px; }
 .sidebar-card-link { font-size:10px; color:var(--text-muted); padding:4px 10px; border-radius:4px; cursor:pointer; display:block; transition:background 0.1s; }
 .sidebar-card-link:hover { background:rgba(0,0,0,0.05); color:var(--text-primary); }
@@ -708,6 +738,54 @@ body.line-numbers .passage-para::before { counter-increment:line-num; content:co
 .activity-body {
   padding: 14px 16px;
 }
+
+/* ── Activity Type Strip (H1) ── */
+.activity-type-strip {
+  padding: 5px 14px;
+  background: var(--day-accent-bg);
+  border-bottom: 1px solid rgba(var(--day-accent-rgb), 0.2);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--day-accent-text);
+}
+
+/* ── Instruction Labels (H2) ── */
+.activity-instruction {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--day-accent-text);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  margin-top: 10px;
+}
+.activity-instruction:first-child { margin-top: 0; }
+
+/* ── Step Dots (H3) ── */
+.activity-step-dots {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  align-items: center;
+}
+.step-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.12);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.step-dot--active {
+  background: var(--day-accent);
+  box-shadow: 0 0 6px rgba(var(--day-accent-rgb), 0.8);
+}
+.step-dot--done {
+  background: #4ade80;
+}
+/* Hide step dots on completed cards */
+.activity--done .activity-step-dots { display: none; }
 
 /* Teacher notes block */
 .teacher-notes-block {
