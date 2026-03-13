@@ -32,12 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
     p.addEventListener('click', e => e.stopPropagation());
   });
   // Close popovers on outside click or Escape
-  document.addEventListener('click', () => {
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-popover]')) return;
     document.querySelectorAll('.toolbar-popover').forEach(p => p.classList.remove('popover--open'));
     document.querySelectorAll('[data-popover]').forEach(b => b.classList.remove('popover-open'));
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && !e.defaultPrevented) {
       document.querySelectorAll('.toolbar-popover').forEach(p => p.classList.remove('popover--open'));
       document.querySelectorAll('[data-popover]').forEach(b => b.classList.remove('popover-open'));
     }
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const on = document.body.classList.toggle('cer-active');
     btnCer.classList.toggle('active', on);
     // Re-render to update frame labels
-    if (typeof renderDayContent === 'function') renderDayContent(window.currentDay);
+    if (typeof renderDayContent === 'function') renderDayContent(window.currentDay || 1);
   });
 
   // ── CUBES toggle (inside Strategies popover) ──
