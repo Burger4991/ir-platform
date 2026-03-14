@@ -11,6 +11,7 @@
 
   // ── Init: called after page renders ──
   function init() {
+    if (document.querySelector('.cubes-toolbar')) return;
     toolbarEl = createToolbar();
     document.body.appendChild(toolbarEl);
     document.addEventListener('mouseup', onMouseUp);
@@ -69,7 +70,7 @@
 
       activeRange = range.cloneRange();
       var rect = range.getBoundingClientRect();
-      showToolbar(rect.left + window.scrollX + rect.width / 2 - 80, rect.top + window.scrollY);
+      showToolbar(rect.left + rect.width / 2 - 80, rect.top);
     }, 10);
   }
 
@@ -120,7 +121,7 @@
       if (sel) sel.removeAllRanges();
     } else if (type === 'E' || type === 'S') {
       // Paragraph-level annotation: insert marker at end of the containing .passage-para
-      var paraEl = findParagraph(activeRange.commonAncestorContainer);
+      var paraEl = findParagraph(activeRange.startContainer);
       if (paraEl) {
         if (type === 'E') {
           insertExclamation(paraEl);
@@ -229,7 +230,7 @@
     var passageEl = document.getElementById('passage-text');
     if (passageEl) {
       passageEl.innerHTML = (UNIT.passage || []).map(function(p) {
-        return '<p class="passage-para"><span class="para-num">[' + p.number + ']</span>' + esc(p.text) + '</p>';
+        return '<p class="passage-para"><span class="para-num">[' + p.number + ']</span> ' + esc(p.text) + '</p>';
       }).join('');
     }
   };

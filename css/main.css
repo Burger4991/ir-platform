@@ -1520,7 +1520,7 @@ body.focus-mode .focus-nav { display: flex; }
 
 /* ── CUBES Annotation Engine ── */
 .cubes-toolbar {
-  position: absolute;
+  position: fixed;
   z-index: 9500;
   display: flex;
   gap: 4px;
