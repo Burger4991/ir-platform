@@ -830,7 +830,6 @@ body.line-numbers .passage-para::before { counter-increment:line-num; content:co
 .mc-option-btn.mc-selected { border-color: var(--accent); background: var(--accent-light); color: var(--text-primary); font-weight: 600; }
 .mc-option-btn.mc-correct { border-color: #22c55e; background: rgba(34,197,94,0.1); color: #16a34a; }
 .mc-option-btn.mc-eliminated { opacity: 0.35; text-decoration: line-through; pointer-events: none; }
-.mc-letter { font-weight: 800; min-width: 18px; flex-shrink: 0; }
 .mc-stop-label {
   display: none;
   font-size: 8px;
@@ -1450,6 +1449,8 @@ body.focus-mode .focus-nav { display: flex; }
   font-weight: 700;
   color: var(--text-primary);
   margin-right: 4px;
+  min-width: 18px;
+  flex-shrink: 0;
 }
 .mc-stop-elim-btns {
   display: flex;

@@ -300,7 +300,7 @@ function stopFullLabel(letter) {
 }
 
 function stopShortLabel(label) {
-  return { 'Proven':'P — Proven', 'Silly':'S — Silly', 'Tricky':'T — Tricky', 'Opposite':'O — Opposite' }[label] || label;
+  return { 'Proven':'P — Proven', 'Silly':'S — Silly', 'Tricky':'T — Tricky', 'Opposite':'O — Opposite' }[label] || '';
 }
 
 function stopLabelClass(label) {
@@ -309,6 +309,9 @@ function stopLabelClass(label) {
 }
 
 function wireMcElimination(list) {
+  if (list.dataset.wired === 'true') return;
+  list.dataset.wired = 'true';
+
   function getState()      { return list.dataset.state; }
   function setElimCount(n) { list.dataset.elimCount = n; }
   function getElimCount()  { return parseInt(list.dataset.elimCount || '0'); }
@@ -535,19 +538,29 @@ function applyRevealState(reveal) {
   document.querySelectorAll('.written-model').forEach(el => {
     el.style.display = reveal ? 'block' : 'none';
   });
-  // MC reveal: in reveal mode, skip elimination — show all STOP badges immediately
+  // MC reveal: in reveal mode, skip elimination — show all STOP badges immediately.
+  // Hide justification wrap (textarea + submit) when reveal is active — student may have
+  // reached 'justifying' state before teacher toggled reveal, so we must hide explicitly.
+  // When reveal is turned off, reset STOP elimination state so students can still interact.
   document.querySelectorAll('.mc-options-list').forEach(list => {
     if (reveal) {
       list.dataset.state = 'confirmed';
       list.querySelectorAll('.mc-stop-badge').forEach(b => b.classList.remove('mc-stop-badge--hidden'));
-    }
-  });
-  // Hide justification wrap (textarea + submit) when reveal is active — student may have
-  // reached 'justifying' state before teacher toggled reveal, so we must hide explicitly.
-  document.querySelectorAll('.mc-options-list').forEach(list => {
-    if (reveal) {
       const justifyWrap = list.closest('.activity-body') && list.closest('.activity-body').querySelector('.mc-justify-wrap');
       if (justifyWrap) justifyWrap.style.display = 'none';
+    } else {
+      // Reset STOP elimination state so students can still interact
+      list.dataset.state = 'eliminating';
+      list.dataset.elimCount = '0';
+      // Re-hide all STOP badges
+      list.querySelectorAll('.mc-stop-badge').forEach(b => b.classList.add('mc-stop-badge--hidden'));
+      // Remove eliminated/selected states from all option wraps
+      list.querySelectorAll('.mc-option-wrap').forEach(w => {
+        w.classList.remove('mc-option-wrap--eliminated', 'mc-option-wrap--selected');
+        w.querySelectorAll('.mc-stop-elim-btn').forEach(btn => btn.classList.remove('mc-stop-elim-btn--active'));
+      });
+      // Hide justify wrap
+      list.querySelectorAll('.mc-justify-wrap').forEach(w => { w.style.display = 'none'; });
     }
   });
 }
