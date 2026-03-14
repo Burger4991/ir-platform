@@ -237,6 +237,9 @@ function buildActivityEl(activity) {
     if (typeof enterFocusMode === 'function') enterFocusMode(activity.id);
   });
 
+  // Wire STOP elimination mechanic on all MC option lists in this card
+  el.querySelectorAll('.mc-options-list').forEach(list => wireMcElimination(list));
+
   return el;
 }
 
@@ -260,32 +263,106 @@ function buildActivityBody(activity) {
 
 // ── MC ──
 function buildMcBody(data) {
-  const optionsHTML = data.options.map(o => `
-    <button class="mc-option-btn${o.correct ? ' mc-answer-correct' : ''}"
-            data-correct="${o.correct ? 'true' : 'false'}"
-            data-stop-label="${esc(o.stopLabel || '')}">
-      <span class="mc-letter">${esc(o.letter)}.</span>
-      <span class="mc-text">${esc(o.text)}</span>
-      <span class="mc-stop-label ${stopLabelClass(o.stopLabel)}">${esc(o.stopLabel || '')}</span>
-    </button>`).join('');
+  const optionsHTML = data.options.map((o, idx) => {
+    const stopBtns = ['S', 'T', 'O'].map(letter =>
+      `<button class="mc-stop-elim-btn" data-stop="${letter}" data-idx="${idx}" title="${stopFullLabel(letter)}">${letter}</button>`
+    ).join('');
+
+    return `
+      <div class="mc-option-wrap" data-idx="${idx}" data-correct="${o.correct ? 'true' : 'false'}" data-stop-label="${esc(o.stopLabel || '')}">
+        <div class="mc-stop-elim-btns">${stopBtns}</div>
+        <div class="mc-option-text">
+          <span class="mc-letter">${esc(o.letter)}.</span>
+          <span class="mc-text">${esc(o.text)}</span>
+        </div>
+        <span class="mc-stop-badge ${stopLabelClass(o.stopLabel)} mc-stop-badge--hidden">${esc(stopShortLabel(o.stopLabel || ''))}</span>
+      </div>`;
+  }).join('');
 
   const writtenHTML = data.writtenPrompt ? `
-    <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
-      <strong>Written:</strong> ${esc(data.writtenPrompt)}
-    </div>
     <div class="written-model" style="display:none;margin-top:6px;font-size:12px;color:var(--accent);font-style:italic;">${esc(data.writtenModel || '')}</div>` : '';
 
   return `
-    <div class="activity-instruction">👀 Read the passage stem carefully</div>
-    <p class="bellringer-passage">${esc(data.stem)}</p>
-    <div class="activity-instruction">✏️ Which answer is supported by the text?</div>
-    <div class="mc-options-list" style="display:flex;flex-direction:column;gap:0;">${optionsHTML}</div>
+    <div class="activity-instruction">👀 Read the question stem carefully. Use CUBES to annotate.</div>
+    <p class="bellringer-passage mc-annotatable-stem cubes-annotatable">${esc(data.stem)}</p>
+    <div class="activity-instruction">✂️ Eliminate 2 answer choices (S=Silly, T=Tricky, O=Opposite), then select the Proven answer.</div>
+    <div class="mc-options-list" data-elim-count="0" data-state="eliminating">${optionsHTML}</div>
+    <div class="mc-justify-wrap" style="display:none;">
+      <div class="activity-instruction">✍️ Why is this the proven answer? Cite the text.</div>
+      <textarea class="mc-justify-input" rows="3" placeholder="This is the proven answer because the text says..."></textarea>
+      <button class="mc-submit-btn">Submit ✓</button>
+    </div>
     ${writtenHTML}`;
+}
+
+function stopFullLabel(letter) {
+  return { S: 'Silly — obviously wrong', T: 'Tricky — partially true', O: 'Opposite — contradicts text' }[letter] || letter;
+}
+
+function stopShortLabel(label) {
+  return { 'Proven':'P — Proven', 'Silly':'S — Silly', 'Tricky':'T — Tricky', 'Opposite':'O — Opposite' }[label] || label;
 }
 
 function stopLabelClass(label) {
   const map = { 'Proven':'stop-proven', 'Opposite':'stop-opposite', 'Silly':'stop-silly', 'Tricky':'stop-tricky' };
   return map[label] || '';
+}
+
+function wireMcElimination(list) {
+  function getState()      { return list.dataset.state; }
+  function setElimCount(n) { list.dataset.elimCount = n; }
+  function getElimCount()  { return parseInt(list.dataset.elimCount || '0'); }
+
+  // Elimination button clicks
+  list.querySelectorAll('.mc-stop-elim-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      if (getState() !== 'eliminating') return;
+      const wrap = btn.closest('.mc-option-wrap');
+      if (wrap.classList.contains('mc-option--eliminated')) return; // already eliminated
+
+      // Mark the chosen STOP letter active
+      btn.closest('.mc-stop-elim-btns').querySelectorAll('.mc-stop-elim-btn').forEach(b => b.classList.remove('mc-stop-elim-btn--active'));
+      btn.classList.add('mc-stop-elim-btn--active');
+      wrap.classList.add('mc-option--eliminated');
+      wrap.dataset.assignedStop = btn.dataset.stop;
+      setElimCount(getElimCount() + 1);
+
+      if (getElimCount() >= 2) {
+        list.dataset.state = 'selecting';
+        // Unlock remaining (non-eliminated) choices
+        list.querySelectorAll('.mc-option-wrap:not(.mc-option--eliminated)').forEach(w => {
+          w.classList.add('mc-option--selectable');
+          w.addEventListener('click', function onSelect() {
+            if (list.dataset.state !== 'selecting') return;
+            list.dataset.state = 'justifying';
+            w.classList.add('mc-option--selected');
+            list.querySelectorAll('.mc-option--selectable').forEach(s => s.classList.remove('mc-option--selectable'));
+            // Show justification
+            const justifyWrap = list.closest('.activity-body').querySelector('.mc-justify-wrap');
+            if (justifyWrap) justifyWrap.style.display = '';
+            w.removeEventListener('click', onSelect);
+          });
+        });
+      }
+    });
+  });
+
+  // Submit button
+  const submitBtn = list.closest('.activity-body').querySelector('.mc-submit-btn');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', function() {
+      if (list.dataset.state !== 'justifying') return;
+      list.dataset.state = 'confirmed';
+      // Reveal all correct STOP badges
+      list.querySelectorAll('.mc-option-wrap').forEach(w => {
+        w.querySelector('.mc-stop-badge').classList.remove('mc-stop-badge--hidden');
+      });
+      // Reveal written model if present
+      list.closest('.activity-body').querySelectorAll('.written-model').forEach(m => m.style.display = 'block');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitted ✓';
+    });
+  }
 }
 
 // ── Organizer Row ──
@@ -450,13 +527,20 @@ function buildPassageAnnotationBody(data) {
 // ── State: Reveal Answers ──
 // CSS handles exemplar-text opacity via body.reveal-answers .exemplar-text { opacity: 1 }
 function applyRevealState(reveal) {
-  // MC: show correct answer styling
+  // MC: show correct answer styling (legacy — no-ops on new markup)
   document.querySelectorAll('.mc-answer-correct').forEach(el => {
     el.classList.toggle('mc-correct', reveal);
   });
   // Written model answers
   document.querySelectorAll('.written-model').forEach(el => {
     el.style.display = reveal ? 'block' : 'none';
+  });
+  // MC reveal: in reveal mode, skip elimination — show all STOP badges immediately
+  document.querySelectorAll('.mc-options-list').forEach(list => {
+    if (reveal) {
+      list.dataset.state = 'confirmed';
+      list.querySelectorAll('.mc-stop-badge').forEach(b => b.classList.remove('mc-stop-badge--hidden'));
+    }
   });
 }
 
