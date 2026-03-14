@@ -542,6 +542,14 @@ function applyRevealState(reveal) {
       list.querySelectorAll('.mc-stop-badge').forEach(b => b.classList.remove('mc-stop-badge--hidden'));
     }
   });
+  // Hide justification wrap (textarea + submit) when reveal is active — student may have
+  // reached 'justifying' state before teacher toggled reveal, so we must hide explicitly.
+  document.querySelectorAll('.mc-options-list').forEach(list => {
+    if (reveal) {
+      const justifyWrap = list.closest('.activity-body') && list.closest('.activity-body').querySelector('.mc-justify-wrap');
+      if (justifyWrap) justifyWrap.style.display = 'none';
+    }
+  });
 }
 
 // ── State: Teacher View ──
