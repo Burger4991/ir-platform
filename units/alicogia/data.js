@@ -421,7 +421,7 @@ const UNIT = {
             options: [
               { letter: 'A', text: 'The author shows that a sense of duty was intrinsic to the culture as evidenced by the journey to Mecca that was the expected "duty of a good Mussulman"', correct: true, stopLabel: 'Proven' },
               { letter: 'B', text: 'The author focuses on the cultural value of sharing when Ali Cogia takes the jar of olives to his friend', correct: false, stopLabel: 'Tricky' },
-              { letter: 'C', text: 'The author emphasizes the importance of honest business dealings when Ali Cogia trades merchandise', correct: false, stopLabel: 'Tricky' },
+              { letter: 'C', text: 'The author emphasizes the importance of honest business dealings when Ali Cogia trades merchandise', correct: false, stopLabel: 'Opposite' },
               { letter: 'D', text: 'The author highlights the society\'s emphasis on accepting wise counsel from elders', correct: false, stopLabel: 'Silly' }
             ]
           },
@@ -546,10 +546,10 @@ const UNIT = {
         label: 'Q11 — Part A',
         stem: 'What can readers infer about Ali Cogia based upon his actions?',
         options: [
-          { letter: 'A', text: 'His decision to make a trip to Mecca after having a dream shows that he is a devout Muslim.', correct: true, stop: 'P' },
-          { letter: 'B', text: 'His decision to let a friend look after his money shows that he is overly trusting of other people.', correct: false, stop: 'T' },
-          { letter: 'C', text: 'His choice to sell his wares on the way to Mecca shows that he is not serious about his religious life.', correct: false, stop: 'O' },
-          { letter: 'D', text: 'His choice to delay his journey home for many years shows that he is neglectful of his family obligations.', correct: false, stop: 'T' }
+          { letter: 'A', text: 'His decision to make a trip to Mecca after having a dream shows that he is a devout Muslim.', correct: true, stopLabel: 'Proven' },
+          { letter: 'B', text: 'His decision to let a friend look after his money shows that he is overly trusting of other people.', correct: false, stopLabel: 'Tricky' },
+          { letter: 'C', text: 'His choice to sell his wares on the way to Mecca shows that he is not serious about his religious life.', correct: false, stopLabel: 'Opposite' },
+          { letter: 'D', text: 'His choice to delay his journey home for many years shows that he is neglectful of his family obligations.', correct: false, stopLabel: 'Tricky' }
         ],
         explanation: 'A = PROVEN — "the dream seemed to him a direct warning, and he resolved to put the journey off no longer" (¶2) demonstrates religious devotion. B = TRICKY — close but the inference is about devotion, not over-trusting. C = OPPOSITE — selling wares was practical; he was serious. D = TRICKY — no evidence he neglected family obligations.'
       },
@@ -558,10 +558,10 @@ const UNIT = {
         label: 'Q11 — Part B',
         stem: 'Which sentence best provides evidence for the inference about Ali Cogia in Part A?',
         options: [
-          { letter: 'A', text: '"Ali Cogia was much troubled by this dream, as he was unwilling to give up his shop..." (¶2)', correct: false, stop: 'T' },
-          { letter: 'B', text: '"...but the dream seemed to him a direct warning, and he resolved to put the journey off no longer." (¶2)', correct: true, stop: 'P' },
-          { letter: 'C', text: '"He took a large vase, and placing the money in the bottom of it, filled up the rest with olives." (¶4)', correct: false, stop: 'S' },
-          { letter: 'D', text: '"...Ali Cogia mounted the camel that he had laden with merchandise, joined the caravan..." (¶7)', correct: false, stop: 'T' }
+          { letter: 'A', text: '"Ali Cogia was much troubled by this dream, as he was unwilling to give up his shop..." (¶2)', correct: false, stopLabel: 'Tricky' },
+          { letter: 'B', text: '"...but the dream seemed to him a direct warning, and he resolved to put the journey off no longer." (¶2)', correct: true, stopLabel: 'Proven' },
+          { letter: 'C', text: '"He took a large vase, and placing the money in the bottom of it, filled up the rest with olives." (¶4)', correct: false, stopLabel: 'Silly' },
+          { letter: 'D', text: '"...Ali Cogia mounted the camel that he had laden with merchandise, joined the caravan..." (¶7)', correct: false, stopLabel: 'Tricky' }
         ],
         explanation: 'B = PROVEN — directly states Ali\'s resolve to obey the dream as a religious calling. This is the strongest evidence of his devotion.'
       },
@@ -570,10 +570,10 @@ const UNIT = {
         label: 'Q12',
         stem: 'How does the author use dialogue to develop the character of Ali Cogia\'s friend\'s wife?',
         options: [
-          { letter: 'A', text: 'The dialogue establishes that the wife is obedient and does not challenge her husband.', correct: false, stop: 'O' },
-          { letter: 'B', text: 'The dialogue shows that the wife provides her husband with thoughtful advice.', correct: true, stop: 'P' },
-          { letter: 'C', text: 'The dialogue establishes that the wife is in control of her husband\'s actions.', correct: false, stop: 'T' },
-          { letter: 'D', text: 'The dialogue shows that the wife places business above friendship.', correct: false, stop: 'S' }
+          { letter: 'A', text: 'The dialogue establishes that the wife is obedient and does not challenge her husband.', correct: false, stopLabel: 'Opposite' },
+          { letter: 'B', text: 'The dialogue shows that the wife provides her husband with thoughtful advice.', correct: true, stopLabel: 'Proven' },
+          { letter: 'C', text: 'The dialogue establishes that the wife is in control of her husband\'s actions.', correct: false, stopLabel: 'Tricky' },
+          { letter: 'D', text: 'The dialogue shows that the wife places business above friendship.', correct: false, stopLabel: 'Silly' }
         ],
         explanation: 'B = PROVEN — "Beware, I pray, of your doing anything so base!" (¶12) shows thoughtful, moral advice. A = OPPOSITE — she clearly challenges him. C = TRICKY — she advises but cannot control him; he ignores her. D = SILLY — no text support.'
       },
@@ -582,10 +582,10 @@ const UNIT = {
         label: 'Q13',
         stem: 'How does the author use the historical and cultural setting to reinforce the universal theme of social responsibility?',
         options: [
-          { letter: 'A', text: 'The author shows that a sense of duty was intrinsic to the culture as evidenced by the journey to Mecca that was the expected "duty of a good Mussulman."', correct: true, stop: 'P' },
-          { letter: 'B', text: 'The author focuses on the cultural value of sharing when Ali Cogia takes the jar of olives to his friend.', correct: false, stop: 'T' },
-          { letter: 'C', text: 'The author emphasizes the importance of honest business dealings to the society when Ali Cogia "set out his goods to the best advantage."', correct: false, stop: 'T' },
-          { letter: 'D', text: 'The author highlights the society\'s emphasis on the importance of accepting wise counsel when Ali Cogia goes to Cairo.', correct: false, stop: 'S' }
+          { letter: 'A', text: 'The author shows that a sense of duty was intrinsic to the culture as evidenced by the journey to Mecca that was the expected "duty of a good Mussulman."', correct: true, stopLabel: 'Proven' },
+          { letter: 'B', text: 'The author focuses on the cultural value of sharing when Ali Cogia takes the jar of olives to his friend.', correct: false, stopLabel: 'Tricky' },
+          { letter: 'C', text: 'The author emphasizes the importance of honest business dealings to the society when Ali Cogia "set out his goods to the best advantage."', correct: false, stopLabel: 'Opposite' },
+          { letter: 'D', text: 'The author highlights the society\'s emphasis on the importance of accepting wise counsel when Ali Cogia goes to Cairo.', correct: false, stopLabel: 'Silly' }
         ],
         explanation: 'A = PROVEN — the cultural setting establishes religious duty (pilgrimage) as a social expectation, making the merchant\'s betrayal a violation of shared cultural values.'
       },
@@ -594,10 +594,10 @@ const UNIT = {
         label: 'Q14',
         stem: 'Ali Cogia\'s jar of olives serves as both a plot point and a motif. What does the author most clearly use the jar of olives to symbolize?',
         options: [
-          { letter: 'A', text: 'loss', correct: false, stop: 'T' },
-          { letter: 'B', text: 'hope', correct: false, stop: 'T' },
-          { letter: 'C', text: 'greed', correct: false, stop: 'T' },
-          { letter: 'D', text: 'trust', correct: true, stop: 'P' }
+          { letter: 'A', text: 'loss', correct: false, stopLabel: 'Tricky' },
+          { letter: 'B', text: 'hope', correct: false, stopLabel: 'Tricky' },
+          { letter: 'C', text: 'greed', correct: false, stopLabel: 'Tricky' },
+          { letter: 'D', text: 'trust', correct: true, stopLabel: 'Proven' }
         ],
         explanation: 'D = PROVEN — Ali Cogia entrusted his gold (hidden in the jar) to his friend. The jar IS the trust between them. When the merchant violates the jar, he violates the trust. The jar symbolizes trust most clearly because it is the physical object through which the friendship and betrayal are expressed.'
       },
@@ -606,10 +606,10 @@ const UNIT = {
         label: 'Q15',
         stem: 'What connection can readers make between the folktale and a moral dilemma people in modern society might face?',
         options: [
-          { letter: 'A', text: '"Should I follow my dreams even if it means causing harm to others?"', correct: false, stop: 'T' },
-          { letter: 'B', text: '"Should I help a friend even if I believe my friend is making a mistake?"', correct: false, stop: 'T' },
-          { letter: 'C', text: '"Should I do the right thing even if I think I won\'t get caught?"', correct: true, stop: 'P' },
-          { letter: 'D', text: '"Should I follow the advice of my spouse even if it is morally wrong?"', correct: false, stop: 'O' }
+          { letter: 'A', text: '"Should I follow my dreams even if it means causing harm to others?"', correct: false, stopLabel: 'Tricky' },
+          { letter: 'B', text: '"Should I help a friend even if I believe my friend is making a mistake?"', correct: false, stopLabel: 'Tricky' },
+          { letter: 'C', text: '"Should I do the right thing even if I think I won\'t get caught?"', correct: true, stopLabel: 'Proven' },
+          { letter: 'D', text: '"Should I follow the advice of my spouse even if it is morally wrong?"', correct: false, stopLabel: 'Opposite' }
         ],
         explanation: 'C = PROVEN — the merchant believed Ali Cogia would never return and never know. He chose greed believing he was safe from consequences. This parallels the modern dilemma of integrity when no one is watching.'
       }
