@@ -520,7 +520,7 @@ function buildPassageAnnotationBody(data) {
 
   return `
     <div class="activity-instruction">👀 Read and annotate the passage</div>
-    <div id="passage-text">${parasHTML}</div>
+    <div id="passage-text" class="cubes-annotatable">${parasHTML}</div>
     ${cubesHTML ? `<div class="cubes-guide" style="margin-top:14px;">
       <div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">CUBES Guide</div>
       ${cubesHTML}

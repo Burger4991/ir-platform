@@ -1518,6 +1518,104 @@ body.focus-mode .focus-nav { display: flex; }
 .mc-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .mc-annotatable-stem { cursor: text; user-select: text; }
 
+/* ── CUBES Annotation Engine ── */
+.cubes-toolbar {
+  position: absolute;
+  z-index: 9500;
+  display: flex;
+  gap: 4px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 5px 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  pointer-events: all;
+}
+.cubes-btn {
+  font-size: 11px;
+  font-weight: 800;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, color 0.1s;
+}
+.cubes-btn:hover { background: #1e293b; color: #f1f5f9; }
+.cubes-btn[data-cubes="C"]     { color: #fbbf24; }
+.cubes-btn[data-cubes="U"]     { color: #60a5fa; }
+.cubes-btn[data-cubes="B"]     { color: #34d399; }
+.cubes-btn[data-cubes="E"]     { color: #fb923c; }
+.cubes-btn[data-cubes="S"]     { color: #c084fc; }
+.cubes-btn--clear              { color: #f87171; }
+
+/* Inline annotation marks */
+mark.cubes-c {
+  background: transparent;
+  border: 2px solid #fbbf24;
+  border-radius: 50%;
+  padding: 0 3px;
+  color: inherit;
+}
+mark.cubes-u {
+  background: transparent;
+  text-decoration: underline;
+  text-decoration-color: #60a5fa;
+  text-decoration-thickness: 2px;
+  color: inherit;
+}
+mark.cubes-b {
+  background: transparent;
+  border: 2px solid #34d399;
+  border-radius: 3px;
+  padding: 0 2px;
+  color: inherit;
+}
+
+/* Paragraph-level markers */
+.cubes-e-marker { color: #fb923c; font-weight: 800; font-size: 13px; }
+.cubes-s-marker { color: #c084fc; font-weight: 800; font-size: 13px; }
+
+/* Annotation note rows */
+.cubes-e-note,
+.cubes-s-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 14px;
+  margin: -2px 0 4px;
+  background: rgba(255,255,255,0.02);
+  border-left: 3px solid transparent;
+  border-radius: 0 4px 4px 0;
+}
+.cubes-e-note { border-left-color: #fb923c; }
+.cubes-s-note { border-left-color: #c084fc; }
+.cubes-note-label {
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.cubes-e-note .cubes-note-label { color: #fb923c; }
+.cubes-s-note .cubes-note-label { color: #c084fc; }
+.cubes-note-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed #334155;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-style: italic;
+  padding: 2px 4px;
+  outline: none;
+  font-family: inherit;
+}
+.cubes-note-input::placeholder { color: var(--text-muted); }
+
 /* ── Accessibility: reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
