@@ -12,8 +12,39 @@ const UNIT = {
     tags: ['One Thousand and One Nights', 'ESOL Ready'],
     description: 'Character, setting, conflict, and symbolism in a classic Arabian Nights tale about trust, temptation, and betrayal.'
   },
+
+  passage: [
+    { number: 1, text: 'In the reign of Haroun-al-Raschid, there lived in Bagdad a merchant named Ali Cogia, who, having neither wife nor child, contented himself with the modest profits produced by his trade. He had lived quite happily in this way for a long time, when one night he dreamed that an old man appeared to him, and reproached him for having neglected the duty of a good Mussulman, in delaying so long his pilgrimage to Mecca.' },
+    { number: 2, text: 'Ali Cogia was much troubled by this dream, as he was unwilling to give up his shop and his business, and put himself to the expense of so long a journey. He tried to think that the dream was nothing but an invention of his own brain; but when the same dream was repeated a second and a third time, he felt that he could not neglect it any longer. But the dream seemed to him a direct warning, and he resolved to put the journey off no longer.' },
+    { number: 3, text: 'He arranged his affairs, and having sold his goods, he prepared for his departure. The one thing that troubled him greatly was how to dispose of the thousand gold pieces which were the fruit of his labors, and which he did not care to take with him on such a long journey.' },
+    { number: 4, text: 'He took a large vase, and placing the money in the bottom of it, filled up the rest with olives. He then put the cover on, and carried the vase to the house of a merchant friend of his.' },
+    { number: 5, text: '"Friend," said he, "you know I am going to set out on the pilgrimage to Mecca. I have here a vase full of olives which I beg you to keep for me until I return. Give me the key to your shop, and I will leave it there in safety."' },
+    { number: 6, text: 'The merchant replied readily, "Look, this is the key of my shop; take it, and put your vase wherever you please. I promise that you shall find it in the same place on your return."' },
+    { number: 7, text: 'Some days after, Ali Cogia mounted the camel that he had laden with merchandise, joined the caravan, and began his journey.' },
+    { number: 8, text: 'He reached Mecca, and visited the holy temple which the faithful are bound to make a circuit of. After performing all the ceremonies prescribed by his religion, he sold his goods to great advantage, and then went on to other cities, where he did further business.' },
+    { number: 9, text: 'Several years went by, and Ali Cogia was still away from Baghdad, though his long absence was not of his own choice.' },
+    { number: 10, text: 'At the end of seven years, Ali Cogia resolved to return to Baghdad. Around the same time, the merchant\'s wife wanted to dress a salad. She sent her husband to the shop to get some olives. "Take what you want from the vase Ali Cogia left with us," he said.' },
+    { number: 11, text: 'When the merchant opened the vase to take out the olives, he was astonished to see gold coins at the bottom. He put his hand down and then looked carefully. He could hardly believe his eyes. He put back the cover carefully and went home.' },
+    { number: 12, text: '"Wife," said he, "I have found, at the bottom of the vase belonging to Ali Cogia, a great many gold pieces. What do you think I ought to do with them?" "Beware," replied his wife, "I pray, of your doing anything so base! How shameful it would be to have to confess that you had betrayed your trust! She has a presentiment that Ali Cogia will return, and he will certainly ask for his vase."' },
+    { number: 13, text: 'The merchant refused to listen to her advice, sensible though it was. He could not resist the temptation. He took out all the gold and replaced it with olives. Then he recorked the vase as carefully as he could, so that it appeared not to have been touched.' },
+    { number: 14, text: '"If you will be so obstinate," said the wife, "I cannot help it; but do not blame me for what may happen." The merchant did not reply, and seemed to give no thought to the matter.' },
+    { number: 15, text: 'Some time after this, Ali Cogia reached Baghdad and went immediately to the merchant\'s shop to recover his vase. The merchant greeted him with great joy, and willingly went with him to the shop.' },
+    { number: 16, text: 'The sight of the money had roused all the merchant\'s greed. He looked into the vase, and saw that all the bottom was filled with gold. He was now glad that he had yielded to the temptation, and thought Ali Cogia would never be able to prove it was gone.' },
+    { number: 17, text: 'The merchant, having satisfied himself that every trace of his fraud was concealed, had recorked the vase so carefully that Ali Cogia could not possibly tell it had been touched.' },
+    { number: 18, text: 'But when Ali Cogia opened the vase, he found only olives at the bottom — not a single gold piece remained. Shocked and grieved at the betrayal, he went directly to the cadi to seek justice, and told his story plainly, as a man of honor ought to do.' }
+  ],
+
+  cubesGuide: [
+    { letter: 'C', symbol: 'circle',    action: 'Circle unknown words',                       example: 'contented, Mussulman' },
+    { letter: 'U', symbol: 'underline', action: 'Underline key phrases (character, conflict)', example: '"contented himself with modest profits"' },
+    { letter: 'B', symbol: 'box',       action: 'Box turning points or important moments',     example: 'The merchant opens the vase' },
+    { letter: 'E', symbol: 'exclaim',   action: 'Exclamation (!) for surprising details',      example: 'The same dream repeated 3 times' },
+    { letter: 'S', symbol: 'star',      action: 'Star (★) passages that reveal theme',         example: '"He could not resist the temptation"' }
+  ],
+
   days: {
     1: {
+      label: 'First Read — Foundation',
       bellringer: {
         words: ['contented', 'reproached', 'resolved'],
         questions: [
@@ -46,30 +77,45 @@ const UNIT = {
         { word: 'reproached', partOfSpeech: 'verb', definition: 'expressed disapproval or disappointment toward someone; criticized', exampleSentence: 'His neighbor reproached him for neglecting his religious duty.' },
         { word: 'resolved', partOfSpeech: 'verb', definition: 'made a firm decision; determined to do something', exampleSentence: 'After three vivid dreams, Ali Cogia resolved to put his journey off no longer.' }
       ],
-      organizer: {
-        benchmarkFocus: 'Literary Elements — Character',
-        columns: ['Literary Element', 'Evidence from Text'],
-        rows: [
-          { label: 'I Do', cells: ['Character — Ali Cogia', 'Ali Cogia is described as a merchant who "contented himself with the modest profits produced by his trade" (¶1). He is not greedy and lives honorably.'], isPreFilled: true },
-          { label: 'We Do', cells: ['Setting', ''], isPreFilled: false },
-          { label: 'You Do w/ Partner', cells: ['Conflict', ''], isPreFilled: false },
-          { label: 'You Do', cells: ['Symbol', ''], isPreFilled: false }
-        ]
-      },
-      teacherNotes: 'Day 1: Introduce literary elements (character, setting, conflict, symbolism, theme). Model I Do row with think-aloud: "I notice the author describes Ali Cogia as contented and prosperous — that tells me he is NOT motivated by greed. This characterization sets up the conflict." Model CUBES annotation with paragraphs 1-3. Release to We Do for setting after modeling. Students read paragraphs 1-9 independently with CUBES.',
-      textPassage: {
-        paragraphs: [
-          { number: 1, text: 'In the reign of Haroun-al-Raschid, there lived in Bagdad a merchant named Ali Cogia, who, having neither wife nor child, contented himself with the modest profits produced by his trade. He had lived quite happily in this way for a long time, when one night he dreamed that an old man appeared to him, and reproached him for having neglected the duty of a good Mussulman, in delaying so long his pilgrimage to Mecca.' },
-          { number: 2, text: 'Ali Cogia was much troubled by this dream, as he was unwilling to give up his shop and his business, and put himself to the expense of so long a journey. He tried to think that the dream was nothing but an invention of his own brain; but when the same dream was repeated a second and a third time, he felt that he could not neglect it any longer. But the dream seemed to him a direct warning, and he resolved to put the journey off no longer.' },
-          { number: 3, text: 'He arranged his affairs, and having sold his goods, he prepared for his departure. The one thing that troubled him greatly was how to dispose of the thousand gold pieces which were the fruit of his labors, and which he did not care to take with him on such a long journey.' },
-          { number: 4, text: 'He took a large vase, and placing the money in the bottom of it, filled up the rest with olives. He then put the cover on, and carried the vase to the house of a merchant friend of his.' }
-        ],
-        cubesGuide: [
-          { letter: 'C', action: 'Circle unknown vocabulary words', example: 'contented, Mussulman, reproached' },
-          { letter: 'U', action: 'Underline character descriptions and actions', example: '"contented himself with modest profits"' },
-          { letter: 'B', action: 'Box setting clues (time, place, culture)', example: '"In the reign of Haroun-al-Raschid," "Bagdad"' },
-          { letter: 'E', action: 'Exclaim (!) surprising or important details', example: 'The same dream repeated three times' },
-          { letter: 'S', action: 'Summarize each section in the margin', example: 'Ali Cogia decides to make pilgrimage after recurring dream' }
+      comprehensionMC: {
+        title: 'Comprehension Check',
+        questions: [
+          {
+            stem: 'Why does Ali Cogia decide to make the pilgrimage to Mecca?',
+            options: [
+              { letter: 'A', text: 'He wants to escape his boring life in Baghdad', correct: false, stopLabel: 'Silly' },
+              { letter: 'B', text: 'A recurring dream from an old man convinces him it is his religious duty', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'His shop is not making enough profit', correct: false, stopLabel: 'Opposite' },
+              { letter: 'D', text: 'His friend suggests it would be good for business', correct: false, stopLabel: 'Tricky' }
+            ]
+          },
+          {
+            stem: 'What is Ali Cogia\'s main problem at the beginning of the story?',
+            options: [
+              { letter: 'A', text: 'He needs to buy more goods to trade', correct: false, stopLabel: 'Silly' },
+              { letter: 'B', text: 'He is not sure where to find a good tenant', correct: false, stopLabel: 'Tricky' },
+              { letter: 'C', text: 'He is worried about where to safely leave his thousand gold pieces', correct: true, stopLabel: 'Proven' },
+              { letter: 'D', text: 'He does not have enough money for the journey', correct: false, stopLabel: 'Opposite' }
+            ]
+          },
+          {
+            stem: 'Based on paragraphs 1–9, what kind of person is Ali Cogia?',
+            options: [
+              { letter: 'A', text: 'Greedy and dishonest', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'Trustworthy and willing to follow his conscience', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'Lazy and unambitious', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'Angry and bitter', correct: false, stopLabel: 'Silly' }
+            ]
+          },
+          {
+            stem: 'What does the recurring dream suggest about Ali Cogia\'s society?',
+            options: [
+              { letter: 'A', text: 'Dreams are always truthful', correct: false, stopLabel: 'Tricky' },
+              { letter: 'B', text: 'Religious duty is highly valued', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'Merchants are not respected', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'Pilgrimage is forbidden', correct: false, stopLabel: 'Opposite' }
+            ]
+          }
         ]
       },
       esol: {
@@ -90,32 +136,11 @@ const UNIT = {
             'Through the characterization of ___, the author establishes ___ which foreshadows ___.'
           ]
         }
-      },
-      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
-      exitTicket: {
-        prompt: 'What literary element does the author use to develop Ali Cogia as a character in today\'s passage, and what does it reveal about him?',
-        frame: 'The author uses ___ to develop Ali Cogia by...'
-      },
-      raceFrames: {
-        task: 'Write a RACE response: How does the author use characterization in the opening paragraphs to develop Ali Cogia as a principled character?',
-        restate: 'The author uses characterization to develop Ali Cogia as a principled character.',
-        answer: 'Specifically, the author reveals that Ali Cogia is ___ when he...',
-        cite: 'For example, in paragraph ___, the text states, "..."',
-        explain: 'This evidence shows that Ali Cogia is principled because...'
-      },
-      engageActivities: [
-        { type: 'poll', question: 'What literary element does the author use most in today\'s passage?', choices: ['A. Characterization', 'B. Setting', 'C. Conflict', 'D. Symbolism'], correct: 'A' },
-        { type: 'tps', prompt: 'What does the opening of the story reveal about Ali Cogia as a character?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
-      ],
-      progressItems: [
-        'Bellringer complete (4 min)',
-        'Literary elements introduced (character, setting, conflict, symbolism, theme)',
-        'I Do row modeled with think-aloud',
-        'Paragraphs 1-9 read with CUBES annotation',
-        'Exit ticket complete'
-      ]
+      }
     },
+
     2: {
+      label: 'Complete Reading',
       bellringer: {
         words: ['custody', 'readily', 'laden'],
         questions: [
@@ -148,31 +173,45 @@ const UNIT = {
         { word: 'readily', partOfSpeech: 'adverb', definition: 'quickly and willingly; without hesitation', exampleSentence: 'The friend readily agreed to keep the vase safe while Ali Cogia traveled.' },
         { word: 'laden', partOfSpeech: 'adjective', definition: 'heavily loaded; carrying a great weight or burden', exampleSentence: 'Ali Cogia mounted the camel that he had laden with merchandise before joining the caravan.' }
       ],
-      organizer: {
-        benchmarkFocus: 'Literary Elements — Setting',
-        columns: ['Literary Element', 'Evidence from Text'],
-        rows: [
-          { label: 'I Do', cells: ['Setting', '"In the reign of Haroun-al-Raschid, there lived in Bagdad" (¶1). Baghdad during the Islamic Golden Age establishes a culture where religious duty and trust between people are sacred values.'], isPreFilled: true },
-          { label: 'We Do', cells: ['Characterization — The Wife', ''], isPreFilled: false },
-          { label: 'You Do w/ Partner', cells: ['Conflict', ''], isPreFilled: false },
-          { label: 'You Do', cells: ['Symbolism — Jar of Olives', ''], isPreFilled: false }
-        ]
-      },
-      teacherNotes: 'Day 2: Begin with bellringer (4 min). Introduce CUBES for questions and STOP strategy for MC. Model STOP with a sample question — label each choice S, T, O, or P before selecting. Students read paragraphs 10-18 independently with margin questions. Model setting as I Do row: "Baghdad during Haroun-al-Raschid era tells us the culture values religious duty and honor." Guide We Do (Wife characterization) together.',
-      textPassage: {
-        paragraphs: [
-          { number: 5, text: '"Friend," said he, "you know I am going to set out on the pilgrimage to Mecca. I have here a vase full of olives which I beg you to keep for me until I return. Give me the key to your shop, and I will leave it there in safety."' },
-          { number: 6, text: 'The merchant replied readily, "Look, this is the key of my shop; take it, and put your vase wherever you please. I promise that you shall find it in the same place on your return."' },
-          { number: 7, text: 'Some days after, Ali Cogia mounted the camel that he had laden with merchandise, joined the caravan, and began his journey.' },
-          { number: 8, text: 'He reached Mecca, and visited the holy temple which the faithful are bound to make a circuit of. After performing all the ceremonies prescribed by his religion, he sold his goods to great advantage, and then went on to other cities, where he did further business.' },
-          { number: 9, text: 'Several years went by, and Ali Cogia was still away from Baghdad, though his long absence was not of his own choice.' }
-        ],
-        cubesGuide: [
-          { letter: 'C', action: 'Circle vocabulary used in dialogue', example: 'custody, readily, laden' },
-          { letter: 'U', action: 'Underline what the merchant promises Ali Cogia', example: '"you shall find it in the same place"' },
-          { letter: 'B', action: 'Box the evidence of the setting (where Ali Cogia travels)', example: 'Mecca, caravan, holy temple' },
-          { letter: 'E', action: 'Exclaim (!) the most important promise made', example: 'The merchant promises the vase will be safe' },
-          { letter: 'S', action: 'Summarize: what is at stake if the promise is broken?', example: 'Ali Cogia\'s savings and trust' }
+      comprehensionMC: {
+        title: 'Comprehension Check — ¶10–18',
+        questions: [
+          {
+            stem: 'After seven years in Mecca and Cairo, what does Ali Cogia decide to do?',
+            options: [
+              { letter: 'A', text: 'Stay in Cairo permanently', correct: false, stopLabel: 'Silly' },
+              { letter: 'B', text: 'Return to Baghdad to retrieve his gold', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'Sell his remaining merchandise in Mecca', correct: false, stopLabel: 'Tricky' },
+              { letter: 'D', text: 'Write a letter to his friend about the vase', correct: false, stopLabel: 'Silly' }
+            ]
+          },
+          {
+            stem: 'What does the merchant\'s wife advise him NOT to do, and why?',
+            options: [
+              { letter: 'A', text: 'She tells him not to open the vase because the olives are spoiled', correct: false, stopLabel: 'Tricky' },
+              { letter: 'B', text: 'She tells him not to keep the gold because Ali Cogia might return at any time', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'She tells him not to sell his shop while Ali Cogia is away', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'She tells him not to trust anyone with money', correct: false, stopLabel: 'Opposite' }
+            ]
+          },
+          {
+            stem: 'Why does the merchant finally open the vase despite his wife\'s warning?',
+            options: [
+              { letter: 'A', text: 'He wants to check if the olives are still fresh', correct: false, stopLabel: 'Silly' },
+              { letter: 'B', text: 'His wife asks him to get olives for a salad', correct: false, stopLabel: 'Tricky' },
+              { letter: 'C', text: 'He cannot resist the temptation of the gold', correct: true, stopLabel: 'Proven' },
+              { letter: 'D', text: 'He plans to return the gold to Ali Cogia', correct: false, stopLabel: 'Opposite' }
+            ]
+          },
+          {
+            stem: 'What does the merchant do after taking the gold from the vase?',
+            options: [
+              { letter: 'A', text: 'He refills the vase with olives and recorks it to hide the theft', correct: true, stopLabel: 'Proven' },
+              { letter: 'B', text: 'He confesses to his wife and agrees to return the gold', correct: false, stopLabel: 'Opposite' },
+              { letter: 'C', text: 'He gives the gold to charity', correct: false, stopLabel: 'Silly' },
+              { letter: 'D', text: 'He hides the vase in a different location', correct: false, stopLabel: 'Tricky' }
+            ]
+          }
         ]
       },
       esol: {
@@ -193,32 +232,11 @@ const UNIT = {
             'By situating the story in ___ during the era of ___, the author reinforces the cultural values of ___, which heightens the significance of ___.'
           ]
         }
-      },
-      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
-      exitTicket: {
-        prompt: 'How does the conflict in today\'s passage reveal Ali Cogia\'s character?',
-        frame: 'The conflict reveals that Ali Cogia is ___ because the author shows...'
-      },
-      raceFrames: {
-        task: 'Write a RACE response: How does the conflict in the passage reveal Ali Cogia\'s character?',
-        restate: 'The conflict in this passage reveals that Ali Cogia is ___.',
-        answer: 'Specifically, when faced with ___, Ali Cogia responds by...',
-        cite: 'For example, in paragraph ___, the text states, "..."',
-        explain: 'This response to conflict reveals that Ali Cogia is ___ because...'
-      },
-      engageActivities: [
-        { type: 'poll', question: 'What type of conflict does Ali Cogia face in today\'s reading?', choices: ['A. Man vs. Nature', 'B. Man vs. Man', 'C. Man vs. Self', 'D. Man vs. Society'], correct: 'B' },
-        { type: 'tps', prompt: 'How does the conflict in today\'s passage reveal Ali Cogia\'s values?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
-      ],
-      progressItems: [
-        'Bellringer complete (4 min)',
-        'STOP strategy introduced and modeled',
-        'Paragraphs 10-18 read with margin questions',
-        'Setting I Do row complete',
-        'Exit ticket: name the main conflict in one sentence'
-      ]
+      }
     },
+
     3: {
+      label: 'Organizer — I Do & We Do',
       bellringer: {
         words: ['gladdened', 'presentiment', 'base'],
         questions: [
@@ -252,28 +270,19 @@ const UNIT = {
         { word: 'base', partOfSpeech: 'adjective', definition: 'morally low; dishonorable; without integrity', exampleSentence: '"Beware of doing anything so base!" the wife warned her husband.' }
       ],
       organizer: {
-        benchmarkFocus: 'Literary Elements — Characterization (The Wife) and Conflict',
+        benchmarkFocus: 'Literary Elements — Character & Setting',
         columns: ['Literary Element', 'Evidence from Text'],
         rows: [
-          { label: 'I Do', cells: ['Setting', '"In the reign of Haroun-al-Raschid, there lived in Bagdad" (¶1). The cultural setting of the Islamic Golden Age establishes that religious duty and trust are the highest values.'], isPreFilled: true },
-          { label: 'We Do', cells: ['Characterization — The Wife', '"Beware, I pray, of your doing anything so base! How shameful it would be to have to confess that you had betrayed your trust!" (¶12). The wife represents the moral conscience of the story — wise, direct, and principled.'], isPreFilled: true },
-          { label: 'You Do w/ Partner', cells: ['Conflict', ''], isPreFilled: false },
-          { label: 'You Do', cells: ['Symbolism — Jar of Olives', ''], isPreFilled: false }
-        ]
-      },
-      teacherNotes: 'Day 3: Organizer I Do / We Do / You Do day. Model Setting row (I Do) with think-aloud. Reveal We Do (Wife characterization) together — analyze her word choices: "beware," "base," "shameful," "betrayed your trust." Guide discussion: she has no name but her dialogue tells us everything. Partner work for Conflict row. Independent for Symbolism row. Key question: What does the jar of olives represent?',
-      textPassage: {
-        paragraphs: [
-          { number: 10, text: 'At the end of seven years, Ali Cogia resolved to return to Baghdad. Around the same time, the merchant\'s wife wanted to dress a salad. She sent her husband to the shop to get some olives. "Take what you want from the vase Ali Cogia left with us," he said.' },
-          { number: 11, text: 'When the merchant opened the vase to take out the olives, he was astonished to see gold coins at the bottom. He put his hand down and then looked carefully. He could hardly believe his eyes. He put back the cover carefully and went home.' },
-          { number: 12, text: '"Wife," said he, "I have found, at the bottom of the vase belonging to Ali Cogia, a great many gold pieces. What do you think I ought to do with them?" "Beware," replied his wife, "I pray, of your doing anything so base! How shameful it would be to have to confess that you had betrayed your trust! She has a presentiment that Ali Cogia will return, and he will certainly ask for his vase."' }
-        ],
-        cubesGuide: [
-          { letter: 'C', action: 'Circle words that show moral judgment', example: 'base, shameful, betrayed' },
-          { letter: 'U', action: 'Underline the wife\'s warning — her exact words', example: '"Beware of doing anything so base!"' },
-          { letter: 'B', action: 'Box the turning point — when temptation begins', example: 'merchant discovers the gold (¶11)' },
-          { letter: 'E', action: 'Exclaim (!) the moment that changes everything', example: 'He sees the gold coins' },
-          { letter: 'S', action: 'Summarize: what choice does the merchant now face?', example: 'Honor his promise OR take the gold' }
+          {
+            label: 'I Do',
+            cells: ['Character — Ali Cogia', 'Ali Cogia is described as a merchant who "contented himself with the modest profits produced by his trade" (¶1). He is not greedy and lives honorably.'],
+            isPreFilled: true
+          },
+          {
+            label: 'We Do',
+            cells: ['Setting', ''],
+            isPreFilled: false
+          }
         ]
       },
       esol: {
@@ -294,32 +303,11 @@ const UNIT = {
             'Through the characterization of the merchant\'s wife — revealed entirely through dialogue since she is unnamed — the author establishes ___ as a foil to the merchant\'s ___.'
           ]
         }
-      },
-      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
-      exitTicket: {
-        prompt: 'How does the author use contrast between Ali Cogia and the merchant to develop Ali Cogia\'s character?',
-        frame: 'The author contrasts ___ and ___ to show that Ali Cogia...'
-      },
-      raceFrames: {
-        task: 'Write a RACE response: How does the author use contrast to individualize Ali Cogia\'s response to betrayal?',
-        restate: 'The author uses contrast to individualize how Ali Cogia responds to betrayal.',
-        answer: 'Specifically, while the merchant ___, Ali Cogia...',
-        cite: 'For example, in paragraph ___, the text states, "..."',
-        explain: 'This contrast shows that Ali Cogia is unique because...'
-      },
-      engageActivities: [
-        { type: 'poll', question: 'What does the merchant\'s behavior reveal about his character?', choices: ['A. He is greedy and dishonest', 'B. He is fearful of Ali Cogia', 'C. He is ignorant of his crime', 'D. He is remorseful for his actions'], correct: 'A' },
-        { type: 'tps', prompt: 'How is Ali Cogia\'s response to betrayal different from what you might expect?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
-      ],
-      progressItems: [
-        'Bellringer complete (4 min)',
-        'I Do row reviewed (Setting)',
-        'We Do row complete (Wife characterization)',
-        'You Do w/ Partner complete (Conflict)',
-        'You Do complete (Symbolism — Jar of Olives)'
-      ]
+      }
     },
+
     4: {
+      label: 'Organizer — You Do',
       bellringer: {
         words: ['obstinate', 'sensible', 'idle'],
         questions: [
@@ -353,29 +341,11 @@ const UNIT = {
         { word: 'idle', partOfSpeech: 'adjective', definition: 'without purpose or worth; here used to dismiss something as unimportant', exampleSentence: '"Pay no attention to my idle words," he said, though his words were anything but idle.' }
       ],
       organizer: {
-        benchmarkFocus: 'Literary Elements — Conflict and Plot (Close Reading)',
+        benchmarkFocus: 'Literary Elements — Conflict & Symbol',
         columns: ['Literary Element', 'Evidence from Text'],
         rows: [
-          { label: 'I Do', cells: ['Setting', '"In the reign of Haroun-al-Raschid, there lived in Bagdad" (¶1). The cultural setting emphasizes religious duty and trust as sacred values.'], isPreFilled: true },
-          { label: 'We Do', cells: ['Characterization — The Wife', '"Beware, I pray, of your doing anything so base! How shameful it would be to have to confess that you had betrayed your trust!" (¶12). She is the moral conscience — principled and direct.'], isPreFilled: true },
-          { label: 'You Do w/ Partner', cells: ['Conflict', 'The merchant faces external conflict (person vs. person: Ali Cogia vs. merchant) and internal conflict (greed vs. honor). "The sight of the money roused all the merchant\'s greed" (¶16) shows greed winning.'], isPreFilled: true },
-          { label: 'You Do', cells: ['Symbolism — Jar of Olives', ''], isPreFilled: false }
-        ]
-      },
-      teacherNotes: 'Day 4: Organizer completion and close reading day. Begin with bellringer (4 min). Students finish any incomplete organizer rows. Close reading of two key quotes: (1) "The merchant refused to listen to her advice, sensible though it was" — what does this sentence structure tell us? (2) "The sight of the money roused all the merchant\'s greed" — analyze the chain reaction: sight → roused → greed. Quote analysis writing practice using ACE framework.',
-      textPassage: {
-        paragraphs: [
-          { number: 13, text: 'The merchant refused to listen to her advice, sensible though it was. He could not resist the temptation. He took out all the gold and replaced it with olives. Then he recorked the vase as carefully as he could, so that it appeared not to have been touched.' },
-          { number: 14, text: '"If you will be so obstinate," said the wife, "I cannot help it; but do not blame me for what may happen." The merchant did not reply, and seemed to give no thought to the matter.' },
-          { number: 15, text: 'Some time after this, Ali Cogia reached Baghdad and went immediately to the merchant\'s shop to recover his vase. The merchant greeted him with great joy, and willingly went with him to the shop.' },
-          { number: 16, text: 'The sight of the money had roused all the merchant\'s greed. He looked into the vase, and saw that all the bottom was filled with gold. He was now glad that he had yielded to the temptation, and thought Ali Cogia would never be able to prove it was gone.' }
-        ],
-        cubesGuide: [
-          { letter: 'C', action: 'Circle words that show the merchant\'s internal battle', example: 'obstinate, refused, temptation, greed' },
-          { letter: 'U', action: 'Underline the cause-and-effect chain of betrayal', example: '"sight of the money roused all the merchant\'s greed"' },
-          { letter: 'B', action: 'Box the moment the merchant makes his final choice', example: '"He took out all the gold" (¶13)' },
-          { letter: 'E', action: 'Exclaim (!) the irony of the merchant\'s confident thinking', example: 'He thinks Ali Cogia can never prove it — but he is wrong' },
-          { letter: 'S', action: 'Summarize: how does greed overcome honor in this passage?', example: 'The merchant saw the gold, was roused by greed, and chose betrayal' }
+          { label: 'You Do w/ Partner', cells: ['Conflict', ''], isPreFilled: false },
+          { label: 'You Do',            cells: ['Symbol',   ''], isPreFilled: false }
         ]
       },
       esol: {
@@ -396,32 +366,11 @@ const UNIT = {
             'The external conflict between Ali Cogia and the merchant is driven by an internal conflict within the merchant — the struggle between ___ and ___. The author reveals this through the language "___," which suggests ___.'
           ]
         }
-      },
-      pacingGuide: { bellringer: 5, vocab: 5, organizer: 15, teacher: 10, passage: 10 },
-      exitTicket: {
-        prompt: 'How does the resolution of the conflict reveal what the author wants readers to understand about Ali Cogia?',
-        frame: 'The resolution shows that Ali Cogia is ___ because...'
-      },
-      raceFrames: {
-        task: 'Write a RACE response: How does the resolution of the conflict reveal the author\'s message about justice and character?',
-        restate: 'The resolution of the conflict reveals the author\'s message about justice and character.',
-        answer: 'Specifically, when ___ happens, the reader understands that...',
-        cite: 'For example, in paragraph ___, the text states, "..."',
-        explain: 'This resolution shows that the author believes ___ because...'
-      },
-      engageActivities: [
-        { type: 'poll', question: 'Which best describes the resolution of Ali Cogia\'s conflict?', choices: ['A. Ali Cogia forgives the merchant', 'B. The caliph restores justice through wisdom', 'C. Ali Cogia gives up on recovering his money', 'D. The merchant returns the gold voluntarily'], correct: 'B' },
-        { type: 'tps', prompt: 'What message does the author send about justice through the resolution of this conflict?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
-      ],
-      progressItems: [
-        'Bellringer complete (4 min)',
-        'All organizer rows complete',
-        'Close reading: "sensible though it was" analyzed',
-        'Close reading: "sight of the money roused all the merchant\'s greed" analyzed',
-        'ACE writing practice complete'
-      ]
+      }
     },
+
     5: {
+      label: 'Assessment — STOP Protocol',
       bellringer: {
         words: ['entreat', 'roused', 'shameful'],
         questions: [
@@ -454,17 +403,49 @@ const UNIT = {
         { word: 'roused', partOfSpeech: 'verb', definition: 'stirred up; awakened; caused a strong feeling to emerge', exampleSentence: 'The sight of the gold roused all the merchant\'s greed, overcoming his sense of honor.' },
         { word: 'shameful', partOfSpeech: 'adjective', definition: 'deserving shame; dishonorable; causing feelings of embarrassment or disgrace', exampleSentence: '"How shameful it would be to have betrayed your trust!" the wife warned.' }
       ],
-      organizer: {
-        benchmarkFocus: 'Literary Elements — All Elements Review for Assessment',
-        columns: ['Literary Element', 'Evidence from Text'],
-        rows: [
-          { label: 'I Do', cells: ['Setting', '"In the reign of Haroun-al-Raschid, there lived in Bagdad" (¶1). Cultural setting establishes values of religious duty and trust.'], isPreFilled: true },
-          { label: 'We Do', cells: ['Characterization', '"Beware, I pray, of your doing anything so base!" (¶12) — Wife as moral conscience; "The sight of the money roused all the merchant\'s greed" (¶16) — Merchant as embodiment of temptation.'], isPreFilled: true },
-          { label: 'You Do w/ Partner', cells: ['Conflict', 'External: Ali Cogia vs. merchant (person vs. person); Internal: greed vs. honor within the merchant. "The sight of the money roused all the merchant\'s greed" (¶16).'], isPreFilled: true },
-          { label: 'You Do', cells: ['Symbolism', 'The jar of olives symbolizes trust — it is the vessel that holds both Ali Cogia\'s gold and his faith in his friend. When opened and violated, it represents broken trust.'], isPreFilled: true }
+      assessmentMC: {
+        title: 'Literary Elements Assessment',
+        questions: [
+          {
+            stem: 'How does the author use dialogue in paragraph 12 to develop the character of the merchant\'s wife?',
+            options: [
+              { letter: 'A', text: 'The dialogue establishes that the wife is obedient and does not challenge her husband', correct: false, stopLabel: 'Opposite' },
+              { letter: 'B', text: 'The dialogue shows that the wife provides her husband with thoughtful moral advice', correct: true, stopLabel: 'Proven' },
+              { letter: 'C', text: 'The dialogue establishes that the wife is in control of her husband\'s actions', correct: false, stopLabel: 'Tricky' },
+              { letter: 'D', text: 'The dialogue shows that the wife places business above friendship', correct: false, stopLabel: 'Silly' }
+            ],
+            writtenPrompt: 'How does the wife\'s dialogue reveal her character? Cite a specific line.'
+          },
+          {
+            stem: 'How does the author use the historical and cultural setting to reinforce a universal theme of social responsibility?',
+            options: [
+              { letter: 'A', text: 'The author shows that a sense of duty was intrinsic to the culture as evidenced by the journey to Mecca that was the expected "duty of a good Mussulman"', correct: true, stopLabel: 'Proven' },
+              { letter: 'B', text: 'The author focuses on the cultural value of sharing when Ali Cogia takes the jar of olives to his friend', correct: false, stopLabel: 'Tricky' },
+              { letter: 'C', text: 'The author emphasizes the importance of honest business dealings when Ali Cogia trades merchandise', correct: false, stopLabel: 'Tricky' },
+              { letter: 'D', text: 'The author highlights the society\'s emphasis on accepting wise counsel from elders', correct: false, stopLabel: 'Silly' }
+            ]
+          },
+          {
+            stem: 'Ali Cogia\'s jar of olives serves as both a plot point and a motif. What does the author most clearly use the jar of olives to symbolize?',
+            options: [
+              { letter: 'A', text: 'Loss', correct: false, stopLabel: 'Tricky' },
+              { letter: 'B', text: 'Hope', correct: false, stopLabel: 'Silly' },
+              { letter: 'C', text: 'Greed', correct: false, stopLabel: 'Tricky' },
+              { letter: 'D', text: 'Trust', correct: true, stopLabel: 'Proven' }
+            ],
+            writtenPrompt: 'Explain how the jar of olives symbolizes trust. Use evidence from the text.'
+          },
+          {
+            stem: 'What connection can readers make between this folktale and a moral dilemma people in modern society might face?',
+            options: [
+              { letter: 'A', text: 'People today may face the dilemma: "Should I follow my dreams even if it means causing harm to others?"', correct: false, stopLabel: 'Silly' },
+              { letter: 'B', text: 'People today may face the dilemma: "Should I help a friend even if I believe my friend is making a mistake?"', correct: false, stopLabel: 'Tricky' },
+              { letter: 'C', text: 'People today may face the dilemma: "Should I do the right thing even if I think I won\'t get caught?"', correct: true, stopLabel: 'Proven' },
+              { letter: 'D', text: 'People today may face the dilemma: "Should I follow the advice of my spouse even if it is morally wrong?"', correct: false, stopLabel: 'Opposite' }
+            ]
+          }
         ]
       },
-      teacherNotes: 'Day 5: Mini-assessment day with STOP protocol. Begin with bellringer (4 min) then STOP strategy review. Students take mini-assessment (Q11-Q15, district-aligned) using STOP on ALL questions — label each choice S, T, O, or P before selecting. Monitor and support. Debrief answers using think-aloud. Exit ticket: which STOP category was hardest and why?',
       esol: {
         l12: {
           frames: [
@@ -483,32 +464,11 @@ const UNIT = {
             'Using the STOP strategy, I can eliminate ___ (Silly/Opposite) and ___ (Tricky) because ___; the Proven answer is ___ because "___."'
           ]
         }
-      },
-      pacingGuide: { bellringer: 5, vocab: 5, organizer: 20, teacher: 10, passage: 0 },
-      exitTicket: {
-        prompt: 'Identify the strongest piece of evidence you used in your RACE response and explain why it supports your claim.',
-        frame: 'The strongest evidence I used was "..." because it shows...'
-      },
-      raceFrames: {
-        task: 'Write a RACE response: How does the author use literary elements and devices throughout the story to individualize Ali Cogia\'s response to conflict?',
-        restate: 'The author uses literary elements and devices to individualize Ali Cogia\'s response to conflict.',
-        answer: 'Specifically, the author uses ___ to show that Ali Cogia is ___ when...',
-        cite: 'For example, in paragraph ___, the text states, "..."',
-        explain: 'This evidence shows that Ali Cogia is uniquely ___ because...'
-      },
-      engageActivities: [
-        { type: 'poll', question: 'Which RACE component is the hardest to write well?', choices: ['A. Restate', 'B. Answer', 'C. Cite', 'D. Explain'], correct: 'D' },
-        { type: 'tps', prompt: 'Share one piece of evidence from the text that best supports your claim about Ali Cogia.', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
-      ],
-      progressItems: [
-        'Bellringer complete (4 min)',
-        'STOP strategy reviewed',
-        'Q11-Q15 mini-assessment complete (STOP labels on every choice)',
-        'Assessment debriefed with class',
-        'Exit ticket: hardest STOP category identified'
-      ]
+      }
     },
+
     6: {
+      label: 'Written Response',
       bellringer: {
         words: ['betrayed', 'greed', 'pilgrimage'],
         questions: [
@@ -541,17 +501,13 @@ const UNIT = {
         { word: 'greed', partOfSpeech: 'noun', definition: 'intense and selfish desire for more wealth, power, or possessions than one needs', exampleSentence: 'The sight of the gold roused all the merchant\'s greed, overcoming his sense of honor.' },
         { word: 'pilgrimage', partOfSpeech: 'noun', definition: 'a journey to a sacred or significant place, often for religious reasons', exampleSentence: 'Ali Cogia made a pilgrimage to Mecca, as his dream had instructed him to do.' }
       ],
-      organizer: {
-        benchmarkFocus: 'Literary Elements — Theme (ACE Writing Focus)',
-        columns: ['Literary Element', 'Evidence from Text'],
-        rows: [
-          { label: 'I Do', cells: ['Theme 1: Trust & Betrayal', '"I promise that you shall find it in the same place on your return" (¶6) → "The sight of the money roused all the merchant\'s greed" (¶16). Breaking trust destroys relationships and reveals true character.'], isPreFilled: true },
-          { label: 'We Do', cells: ['Theme 2: Greed as Destruction', '"The sight of the money roused all the merchant\'s greed" (¶16). The merchant ignores sensible advice — greed corrupts moral judgment and leads to ruin.'], isPreFilled: true },
-          { label: 'You Do w/ Partner', cells: ['Theme 3: Social Responsibility / Duty', ''], isPreFilled: false },
-          { label: 'You Do', cells: ['Universal Connection', ''], isPreFilled: false }
-        ]
+      raceFrames: {
+        task: 'Write a RACE response: How does the author use literary elements and devices throughout the story to individualize Ali Cogia\'s response to conflict?',
+        restate: 'The author uses literary elements and devices to individualize Ali Cogia\'s response to conflict.',
+        answer: 'Specifically, the author uses ___ to show that Ali Cogia is ___ when...',
+        cite: 'For example, in paragraph ___, the text states, "..."',
+        explain: 'This evidence shows that Ali Cogia is uniquely ___ because...'
       },
-      teacherNotes: 'Day 6: ACE writing and self-assessment day. Begin with bellringer (4 min). Review ACE structure (Answer → Cite → Explain). Model with the prompt: "How does the author use characterization and conflict to develop the universal theme of trust and betrayal?" Write sample ACE response together. Students draft independently, then peer review using ACE checklist. Self-assessment exit ticket: rate your response 1-5 and identify what would move you up one level.',
       esol: {
         l12: {
           frames: [
@@ -570,32 +526,10 @@ const UNIT = {
             'The author uses ___ and ___ (literary elements) to develop the universal theme that ___. As shown in "___" (¶___), this conveys that when ___, the result is ___.'
           ]
         }
-      },
-      pacingGuide: { bellringer: 5, vocab: 5, organizer: 20, teacher: 10, passage: 0 },
-      exitTicket: {
-        prompt: 'What is the most important thing you learned about how authors use literary elements to develop character?',
-        frame: 'Authors use literary elements to develop character by...'
-      },
-      raceFrames: {
-        task: 'Write a RACE response: How does the author use literary elements and devices throughout the story to individualize Ali Cogia\'s response to conflict?',
-        restate: 'The author uses literary elements and devices to individualize Ali Cogia\'s response to conflict.',
-        answer: 'Specifically, the author uses ___ to show that Ali Cogia is ___ when...',
-        cite: 'For example, in paragraph ___, the text states, "..."',
-        explain: 'This evidence shows that Ali Cogia is uniquely ___ because...'
-      },
-      engageActivities: [
-        { type: 'poll', question: 'Which literary element most defines Ali Cogia as a character?', choices: ['A. Setting', 'B. Conflict', 'C. Characterization', 'D. Symbolism'], correct: 'C' },
-        { type: 'tps', prompt: 'If you were Ali Cogia, would you have made the same choices? Why or why not?', thinkSeconds: 60, pairSeconds: 90, shareSeconds: 0 }
-      ],
-      progressItems: [
-        'Bellringer complete (4 min)',
-        'ACE structure reviewed',
-        'ACE draft written (characterization + conflict → theme)',
-        'Peer review complete using ACE checklist',
-        'Self-assessment exit ticket complete'
-      ]
+      }
     }
   },
+
   assessment: {
     stopProtocol: {
       description: 'Use STOP to analyze each MC answer choice before selecting.',
@@ -694,6 +628,7 @@ const UNIT = {
       { level: 5, label: 'Mastery', descriptor: 'Evaluates the author\'s deliberate craft choices — including literary elements and devices — and their cumulative effect on how Ali Cogia is developed as a uniquely motivated, principled character.' }
     ]
   },
+
   downloads: [
     { label: 'Teacher Lesson Plan', filename: 'AliCogia_D1-6_TeacherPlan_20260308.docx' },
     { label: 'Student Packet', filename: 'AliCogia_D1-6_StudentPacket_20260308.docx' },
