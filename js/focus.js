@@ -278,7 +278,10 @@
   function stepMcRead(el) {
     el.querySelectorAll('.mc-annotatable-stem').forEach(function(s) { s.style.outline = ''; s.style.outlineOffset = ''; });
     el.querySelectorAll('.mc-stop-badge').forEach(function(l) { l.classList.add('mc-stop-badge--hidden'); });
-    el.querySelectorAll('.mc-option-wrap').forEach(function(b) { b.classList.remove('mc-option--selected'); });
+    el.querySelectorAll('.mc-option-wrap').forEach(function(b) {
+      b.classList.remove('mc-option--selected', 'mc-option--eliminated', 'mc-option--selectable');
+      b.querySelectorAll('.mc-stop-elim-btn').forEach(function(btn) { btn.classList.remove('mc-stop-elim-btn--active'); });
+    });
   }
   function stepMcCubes(el) {
     el.querySelectorAll('.mc-annotatable-stem').forEach(function(s) {
@@ -301,18 +304,17 @@
     var list = el.querySelector('.mc-options-list');
     var state = list ? list.dataset.state : '';
     var justWrap = el.querySelector('.mc-justify-wrap');
+    var instruction = el.querySelector('.activity-instruction');
     if (justWrap && (state === 'justifying' || state === 'confirmed')) {
       justWrap.style.display = '';
       var inp = justWrap.querySelector('.mc-justify-input');
       if (inp && state === 'justifying') inp.focus();
-      var instruction = el.querySelector('.activity-instruction');
       if (instruction && instruction.dataset.originalText) {
         instruction.textContent = instruction.dataset.originalText;
         instruction.style.color = '';
         delete instruction.dataset.originalText;
       }
     } else if (justWrap) {
-      var instruction = el.querySelector('.activity-instruction');
       if (instruction) {
         if (!instruction.dataset.originalText) {
           instruction.dataset.originalText = instruction.textContent;

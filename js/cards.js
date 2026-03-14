@@ -176,29 +176,23 @@ const ACTIVITY_TYPE_LABELS = {
   'mc':                 '📝 Multiple Choice',
   'vocabulary':         '📖 Vocabulary',
   'written-response':   '✍️ Written Response',
-  'organizer-row':      '🗂 Organizer',
   'organizer':          '🗂 Graphic Organizer',
   'passage-annotation': '🔍 Passage Annotation'
 };
 
 // ── Step dot counts by type+phase (H3) — mirrors focus.js STEPS ──
 const STEP_DOT_COUNTS = {
-  'mc':                            5,
-  'vocabulary':                    3,
-  'written-response':              3,
-  'organizer-row-i-do':            2,
-  'organizer-row-we-do':           4,
-  'organizer-row-you-do':          3,
-  'organizer-row-you-do-partner':  3,
-  'organizer':                     3,
-  'passage-annotation':            3
+  'mc':                  5,
+  'vocabulary':          3,
+  'written-response':    3,
+  'organizer':           3,
+  'passage-annotation':  3
 };
 function getStepDotCount(type, grPhase, data) {
   if (type === 'organizer') {
     // 1 step per row + 1 confirm step
     return data && data.rows ? data.rows.length + 1 : 3;
   }
-  if (type === 'organizer-row') return STEP_DOT_COUNTS['organizer-row-' + grPhase] || 3;
   return STEP_DOT_COUNTS[type] || 1;
 }
 
@@ -252,7 +246,6 @@ function grPhaseLabel(phase) {
 function buildActivityBody(activity) {
   switch (activity.type) {
     case 'mc':                return buildMcBody(activity.data);
-    case 'organizer-row':     return buildOrganizerRowBody(activity.data);
     case 'organizer':         return buildOrganizerBody(activity.data);
     case 'vocabulary':        return buildVocabBody(activity.data);
     case 'written-response':  return buildWrittenResponseBody(activity.data);
@@ -279,8 +272,8 @@ function buildMcBody(data) {
       </div>`;
   }).join('');
 
-  const writtenHTML = data.writtenPrompt ? `
-    <div class="written-model" style="display:none;margin-top:6px;font-size:12px;color:var(--accent);font-style:italic;">${esc(data.writtenModel || '')}</div>` : '';
+  const writtenHTML = (data.writtenPrompt && data.writtenModel && data.writtenModel.trim()) ?
+    `<div class="written-model" style="display:none;margin-top:6px;font-size:12px;color:var(--accent);font-style:italic;">${esc(data.writtenModel)}</div>` : '';
 
   return `
     <div class="activity-instruction">👀 Read the question stem carefully. Use CUBES to annotate.</div>
@@ -366,30 +359,6 @@ function wireMcElimination(list) {
       submitBtn.textContent = 'Submitted ✓';
     });
   }
-}
-
-// ── Organizer Row ──
-function buildOrganizerRowBody(data) {
-  const phaseColors = { 'I Do':'#4a7c59', 'We Do':'#7aaa89', 'You Do w/ Partner':'#9c7e5a', 'You Do':'#888' };
-  const color = phaseColors[data.label] || '#888';
-  const cellsHTML = data.columns.slice(1).map((col, i) => {
-    const content = data.cells[i] || '';
-    if (data.isPreFilled && content) {
-      return `<div class="org-cell-content exemplar-text">${esc(content)}</div>`;
-    }
-    return `<div class="org-cell-placeholder">${esc(content) || 'Students respond…'}</div>`;
-  }).join('');
-
-  return `
-    <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;">${esc(data.benchmarkFocus)}</div>
-    <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:grid;grid-template-columns:80px 1fr 1fr;gap:6px;margin-bottom:4px;">
-      <div></div>${data.columns.slice(1).map(c => `<div>${esc(c)}</div>`).join('')}
-    </div>
-    <div class="activity-instruction">✏️ Fill in your row</div>
-    <div class="activity-org-row">
-      <div class="org-cell-badge" style="background:${esc(color)}">${esc(data.label)}</div>
-      ${cellsHTML}
-    </div>`;
 }
 
 // ── Consolidated Organizer Card (all GR rows in one card) ──
@@ -556,7 +525,7 @@ function applyRevealState(reveal) {
       list.querySelectorAll('.mc-stop-badge').forEach(b => b.classList.add('mc-stop-badge--hidden'));
       // Remove eliminated/selected states from all option wraps
       list.querySelectorAll('.mc-option-wrap').forEach(w => {
-        w.classList.remove('mc-option-wrap--eliminated', 'mc-option-wrap--selected');
+        w.classList.remove('mc-option--eliminated', 'mc-option--selected');
         w.querySelectorAll('.mc-stop-elim-btn').forEach(btn => btn.classList.remove('mc-stop-elim-btn--active'));
       });
       // Hide justify wrap
