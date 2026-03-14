@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IR Platform · Mr. Burger</title>
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="theme-edtech">
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">IR TEACHING SYSTEM</a>
+    <div class="nav-links">
+      <a href="#units">Units</a>
+      <a href="#about">About</a>
+      <div class="theme-switcher">
+        <button class="theme-btn active" data-theme="edtech" aria-label="EdTech theme" aria-pressed="true">EdTech</button>
+        <button class="theme-btn" data-theme="midnight" aria-label="Midnight theme" aria-pressed="false">Midnight</button>
+        <button class="theme-btn" data-theme="ocean" aria-label="Ocean theme" aria-pressed="false">Ocean</button>
+        <button class="theme-btn" data-theme="slate" aria-label="Slate theme" aria-pressed="false">Slate</button>
+        <button class="theme-btn" data-theme="violet" aria-label="Violet theme" aria-pressed="false">Violet</button>
+        <button class="theme-btn" data-theme="azure" aria-label="Azure theme" aria-pressed="false">Azure</button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-label">10th Grade Intensive Reading · Florida BEST ELA</div>
+    <h1>IR Teaching System</h1>
+    <p class="hero-sub">A complete classroom system for 10th grade Intensive Reading — benchmark-aligned units, daily tools, and ESOL scaffolds built in.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="document.getElementById('units').scrollIntoView({behavior:'smooth'})">Browse Units</button>
+      <button class="btn-secondary" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">About the System</button>
+    </div>
+  </section>
+
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-category="all">All</button>
+    <button class="filter-btn" data-category="R.1 Literary">R.1 Literary</button>
+    <button class="filter-btn" data-category="R.2 Informational">R.2 Informational</button>
+    <button class="filter-btn" data-category="R.3 Figurative">R.3 Figurative</button>
+    <button class="filter-btn" data-category="Test Prep">Test Prep</button>
+    <button class="filter-btn" data-category="Project">Project</button>
+    <input class="search-input" id="unit-search" type="text" placeholder="Search units…">
+  </div>
+
+  <div class="units-grid" id="units"></div>
+
+  <section class="about" id="about">
+    <div class="about-label">About This System</div>
+    <h2>Built on the IR Teaching Framework</h2>
+    <p class="about-desc">Every unit follows Florida's BEST ELA standards using a 6-day rotation cycle — benchmark-first instruction, gradual release of responsibility, and built-in ESOL scaffolds for all learners.</p>
+    <div class="about-stats">
+      <div><div class="stat-num">24</div><div class="stat-label">Units</div></div>
+      <div><div class="stat-num">6</div><div class="stat-label">Days Per Unit</div></div>
+      <div><div class="stat-num">6</div><div class="stat-label">Themes</div></div>
+      <div><div class="stat-num">GitHub Pages</div><div class="stat-label">Deployable</div></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-text">IR Platform · Mr. Burger · Miami-Dade County Public Schools</span>
+    <span class="footer-text">Built with the IR Teaching System</span>
+  </footer>
+
+  <script src="units-registry.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
