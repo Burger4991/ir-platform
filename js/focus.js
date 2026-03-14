@@ -9,6 +9,7 @@
   let focusId = null;
   let currentStep = 0;
   let stepDefs = [];
+  let anchorKey = '';
 
   // ── Step definitions by activity type ──
   const STEPS = {
@@ -54,6 +55,18 @@
       { label: 'CUBES Guide',     action: stepPassageCubes },
       { label: 'Annotate',        action: stepPassageAnnotate }
     ]
+  };
+
+  // ── Attention anchor text per step (I3) ──
+  const STEP_ANCHORS = {
+    'mc':                           ['Read the Passage',      'Apply Your Strategy',  'Pick Your Answer',    'Check Your Answer'],
+    'vocabulary':                   ['Read the Word',         'Read the Definition',  'Write an Example'],
+    'written-response':             ['Read the Prompt',       'Build Your Response',  'Check the Model'],
+    'organizer-row-i-do':           ['Read the Example',      'Watch the Model'],
+    'organizer-row-we-do':          ['Read the Example',      'See the I Do',         'Fill In Your Row',    'Check Your Answer'],
+    'organizer-row-you-do':         ['Read the Example',      'Fill In Your Row',     'Check Your Answer'],
+    'organizer-row-you-do-partner': ['Read the Example',      'Fill In Your Row',     'Check Your Answer'],
+    'passage-annotation':           ['Read Paragraphs 1–3',   'Read Paragraphs 4–6',  'Review CUBES Guide',  'Annotate the Passage']
   };
 
   // ── Public API ──
@@ -123,6 +136,17 @@
     const type = getActivityType(activityEl);
     stepDefs = getStepDefs(activityEl, type);
 
+    // Compute anchor key for STEP_ANCHORS lookup
+    if (type === 'organizer-row') {
+      const grClass = Array.from(activityEl.classList).find(c =>
+        ['activity--i-do','activity--we-do','activity--you-do-partner','activity--you-do'].includes(c)
+      );
+      const grKey = grClass ? grClass.replace('activity--', '') : 'we-do';
+      anchorKey = 'organizer-row-' + grKey;
+    } else {
+      anchorKey = type || '';
+    }
+
     // Dim all others
     document.querySelectorAll('.activity').forEach(el => {
       if (el.dataset.activityId !== id) el.classList.add('activity-dimmed');
@@ -135,15 +159,25 @@
   }
 
   function exitFocusMode() {
+    const completedId = focusId;   // capture BEFORE reset
     focusId = null;
     currentStep = 0;
     stepDefs = [];
+    anchorKey = '';
 
     document.querySelectorAll('.activity').forEach(el => {
       el.classList.remove('activity-dimmed', 'activity-focused');
     });
     document.body.classList.remove('focus-mode');
-    // CSS body.focus-mode removal hides .focus-header and .focus-nav automatically
+
+    // Clear attention anchor
+    const anchorEl = document.getElementById('focus-attention-anchor');
+    if (anchorEl) anchorEl.textContent = '';
+
+    // Mark completed activity done
+    if (completedId && typeof window.markActivityDone === 'function') {
+      window.markActivityDone(completedId);
+    }
   }
 
   // ── Step navigation ──
@@ -180,6 +214,24 @@
       dotsEl.innerHTML = Array.from({ length: total }, (_, i) =>
         `<div class="focus-dot${i < stepIndex ? ' done' : i === stepIndex ? ' active' : ''}"></div>`
       ).join('');
+    }
+
+    // Attention anchor (I3)
+    const anchorEl = document.getElementById('focus-attention-anchor');
+    if (anchorEl) {
+      const anchors = STEP_ANCHORS[anchorKey] || [];
+      anchorEl.textContent = anchors[stepIndex] || stepDefs[stepIndex].label;
+    }
+
+    // Card step dots (H3)
+    if (focusId) {
+      const cardEl = document.querySelector(`[data-activity-id="${focusId}"]`);
+      if (cardEl) {
+        cardEl.querySelectorAll('.step-dot').forEach((dot, i) => {
+          dot.classList.toggle('step-dot--active', i === stepIndex);
+          dot.classList.toggle('step-dot--done',   i < stepIndex);
+        });
+      }
     }
 
     // Prev/Next buttons
