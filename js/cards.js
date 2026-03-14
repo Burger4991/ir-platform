@@ -177,6 +177,7 @@ const ACTIVITY_TYPE_LABELS = {
   'vocabulary':         '📖 Vocabulary',
   'written-response':   '✍️ Written Response',
   'organizer-row':      '🗂 Organizer',
+  'organizer':          '🗂 Graphic Organizer',
   'passage-annotation': '🔍 Passage Annotation'
 };
 
@@ -189,9 +190,14 @@ const STEP_DOT_COUNTS = {
   'organizer-row-we-do':           4,
   'organizer-row-you-do':          3,
   'organizer-row-you-do-partner':  3,
+  'organizer':                     3,
   'passage-annotation':            4
 };
-function getStepDotCount(type, grPhase) {
+function getStepDotCount(type, grPhase, data) {
+  if (type === 'organizer') {
+    // 1 step per row + 1 confirm step
+    return data && data.rows ? data.rows.length + 1 : 3;
+  }
   if (type === 'organizer-row') return STEP_DOT_COUNTS['organizer-row-' + grPhase] || 3;
   return STEP_DOT_COUNTS[type] || 1;
 }
@@ -208,7 +214,7 @@ function buildActivityEl(activity) {
   ).join('');
 
   const typeLabel = ACTIVITY_TYPE_LABELS[activity.type] || activity.type;
-  const dotCount = getStepDotCount(activity.type, activity.grPhase);
+  const dotCount = getStepDotCount(activity.type, activity.grPhase, activity.data);
   const dotsHTML = Array.from({ length: dotCount }, (_, i) =>
     `<div class="step-dot${i === 0 ? ' step-dot--active' : ''}"></div>`
   ).join('');
@@ -244,6 +250,7 @@ function buildActivityBody(activity) {
   switch (activity.type) {
     case 'mc':                return buildMcBody(activity.data);
     case 'organizer-row':     return buildOrganizerRowBody(activity.data);
+    case 'organizer':         return buildOrganizerBody(activity.data);
     case 'vocabulary':        return buildVocabBody(activity.data);
     case 'written-response':  return buildWrittenResponseBody(activity.data);
     case 'passage-annotation':return buildPassageAnnotationBody(activity.data);
@@ -302,6 +309,53 @@ function buildOrganizerRowBody(data) {
     <div class="activity-org-row">
       <div class="org-cell-badge" style="background:${esc(color)}">${esc(data.label)}</div>
       ${cellsHTML}
+    </div>`;
+}
+
+// ── Consolidated Organizer Card (all GR rows in one card) ──
+function buildOrganizerBody(data) {
+  const GR_COLORS = {
+    'I Do':              '#4a7c59',
+    'We Do':             '#7aaa89',
+    'You Do w/ Partner': '#9c7e5a',
+    'You Do':            '#64748b'
+  };
+
+  const colHeaders = data.columns.slice(1).map(c =>
+    `<div class="org-card-col-header">${esc(c)}</div>`
+  ).join('');
+
+  const rowsHTML = data.rows.map((row, i) => {
+    const color  = GR_COLORS[row.label] || '#64748b';
+    const isDone = row.isPreFilled;
+    const cells  = data.columns.slice(1).map((col, ci) => {
+      const content = (row.cells || [])[ci] || '';
+      if (isDone && content) {
+        return `<div class="org-card-cell org-card-cell--prefilled">${esc(content)}</div>`;
+      }
+      // First data column shows element label as hint if present and not pre-filled
+      if (ci === 0 && content) {
+        return `<div class="org-card-cell org-card-cell--hint">${esc(content)}</div>`;
+      }
+      return `<div class="org-card-cell org-card-cell--blank">Students respond…</div>`;
+    }).join('');
+
+    const rowClass = isDone ? 'org-card-row org-card-row--prefilled' : 'org-card-row';
+    return `
+      <div class="${rowClass}" data-org-row-index="${i}">
+        <div class="org-card-phase-badge" style="background:${esc(color)};">${esc(row.label)}</div>
+        ${cells}
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="activity-instruction">📖 Use the passage to analyze ${esc(data.benchmarkFocus)}</div>
+    <div class="org-card-table">
+      <div class="org-card-header">
+        <div></div>
+        ${colHeaders}
+      </div>
+      ${rowsHTML}
     </div>`;
 }
 

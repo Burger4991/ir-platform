@@ -1344,6 +1344,78 @@ body.focus-mode .focus-nav { display: flex; }
 /* Neutralise old .active sidebar rule — new .sidebar-day--active handles this (Task 8) */
 .sidebar-day-btn.active { background: transparent; color: inherit; font-weight: normal; }
 
+/* ── Consolidated Organizer Card ── */
+.org-card-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.org-card-header,
+.org-card-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr;
+  gap: 0;
+}
+.org-card-header {
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+  padding: 5px 10px;
+}
+.org-card-col-header {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 8px;
+}
+.org-card-row {
+  border-bottom: 1px solid var(--border);
+  padding: 6px 10px;
+  align-items: start;
+  gap: 6px;
+  transition: background 0.2s;
+}
+.org-card-row:last-child { border-bottom: none; }
+.org-card-row--prefilled { background: rgba(74,222,128,0.05); }
+.org-card-row--focused   { outline: 2px solid var(--day-accent); outline-offset: -2px; }
+.org-card-phase-badge {
+  font-size: 7px;
+  font-weight: 800;
+  color: #fff;
+  padding: 3px 7px;
+  border-radius: 3px;
+  white-space: nowrap;
+  align-self: start;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.org-card-cell {
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 5px 8px;
+  border-radius: 4px;
+}
+.org-card-cell--prefilled {
+  background: var(--bg-surface);
+  color: #4ade80;
+  font-style: italic;
+}
+.org-card-cell--hint {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+.org-card-cell--blank {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 /* ── Accessibility: reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
