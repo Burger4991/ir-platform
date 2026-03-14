@@ -183,7 +183,7 @@ const ACTIVITY_TYPE_LABELS = {
 
 // ── Step dot counts by type+phase (H3) — mirrors focus.js STEPS ──
 const STEP_DOT_COUNTS = {
-  'mc':                            4,
+  'mc':                            5,
   'vocabulary':                    3,
   'written-response':              3,
   'organizer-row-i-do':            2,
@@ -191,7 +191,7 @@ const STEP_DOT_COUNTS = {
   'organizer-row-you-do':          3,
   'organizer-row-you-do-partner':  3,
   'organizer':                     3,
-  'passage-annotation':            4
+  'passage-annotation':            3
 };
 function getStepDotCount(type, grPhase, data) {
   if (type === 'organizer') {
