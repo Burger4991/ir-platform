@@ -330,13 +330,15 @@ function buildOrganizerBody(data) {
     const isDone = row.isPreFilled;
     const cells  = data.columns.slice(1).map((col, ci) => {
       const content = (row.cells || [])[ci] || '';
-      if (isDone && content) {
+      if (isDone) {
+        // Pre-filled row: always use prefilled class, show content or leave blank
         return `<div class="org-card-cell org-card-cell--prefilled">${esc(content)}</div>`;
       }
-      // First data column shows element label as hint if present and not pre-filled
+      // Non-prefilled: first column shows the element label as a hint
       if (ci === 0 && content) {
         return `<div class="org-card-cell org-card-cell--hint">${esc(content)}</div>`;
       }
+      // Non-prefilled: remaining columns are student workspace
       return `<div class="org-card-cell org-card-cell--blank">Students respond…</div>`;
     }).join('');
 
