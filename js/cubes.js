@@ -203,17 +203,31 @@
       if (stem) {
         var id = card.dataset.activityId;
         var savedStem = sessionStorage.getItem(STORAGE_KEY + '-stem-' + id);
-        if (savedStem) stem.innerHTML = savedStem;
+        if (savedStem) {
+          stem.innerHTML = savedStem;
+          stem.querySelectorAll('.cubes-note-input').forEach(function(inp) {
+            inp.addEventListener('change', saveAnnotations);
+          });
+        }
       }
     });
   }
 
   // ── Expose clear function for Reset button (optional) ──
   window.clearCubesAnnotations = function() {
-    sessionStorage.removeItem(STORAGE_KEY);
+    // Remove passage key
+    sessionStorage.removeItem(STORAGE_KEY + '-passage');
+    // Remove all stem keys
+    var stemPrefix = STORAGE_KEY + '-stem-';
+    var keysToRemove = [];
+    for (var i = 0; i < sessionStorage.length; i++) {
+      var k = sessionStorage.key(i);
+      if (k && k.indexOf(stemPrefix) === 0) keysToRemove.push(k);
+    }
+    keysToRemove.forEach(function(k) { sessionStorage.removeItem(k); });
+    // Reset DOM
     var passageEl = document.getElementById('passage-text');
     if (passageEl) {
-      // Rebuild from UNIT.passage
       passageEl.innerHTML = (UNIT.passage || []).map(function(p) {
         return '<p class="passage-para"><span class="para-num">[' + p.number + ']</span>' + esc(p.text) + '</p>';
       }).join('');
