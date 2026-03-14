@@ -10,6 +10,7 @@
   let currentStep = 0;
   let stepDefs = [];
   let anchorKey = '';
+  var sessionAnchors = null;
 
   // ── Step definitions by activity type ──
   const STEPS = {
@@ -21,26 +22,6 @@
       { label: 'Justify',       action: stepMcJustify   }
     ],
     'organizer': 'dynamic',  // handled by getStepDefs → buildOrganizerSteps
-    'organizer-row-i-do': [
-      { label: 'Read',            action: stepOrgRead },
-      { label: 'Teacher Models',  action: stepOrgIDoModel }
-    ],
-    'organizer-row-we-do': [
-      { label: 'Read',            action: stepOrgRead },
-      { label: 'I Do Example',    action: stepOrgIDoModel },
-      { label: 'Student Responds',action: stepOrgStudentFill },
-      { label: 'Confirm',         action: stepOrgConfirm }
-    ],
-    'organizer-row-you-do': [
-      { label: 'Read',            action: stepOrgRead },
-      { label: 'Student Responds',action: stepOrgStudentFill },
-      { label: 'Confirm',         action: stepOrgConfirm }
-    ],
-    'organizer-row-you-do-partner': [
-      { label: 'Read',            action: stepOrgRead },
-      { label: 'Partner Practice',action: stepOrgStudentFill },
-      { label: 'Confirm',         action: stepOrgConfirm }
-    ],
     'vocabulary': [
       { label: 'Word',            action: stepVocabWord },
       { label: 'Definition',      action: stepVocabDef },
@@ -63,10 +44,6 @@
     'mc':                           ['Read the Stem', 'Annotate with CUBES', 'Eliminate 2 Choices', 'Select Your Answer', 'Justify Your Choice'],
     'vocabulary':                   ['Read the Word',         'Read the Definition',  'Write an Example'],
     'written-response':             ['Read the Prompt',       'Build Your Response',  'Check the Model'],
-    'organizer-row-i-do':           ['Read the Example',      'Watch the Model'],
-    'organizer-row-we-do':          ['Read the Example',      'See the I Do',         'Fill In Your Row',    'Check Your Answer'],
-    'organizer-row-you-do':         ['Read the Example',      'Fill In Your Row',     'Check Your Answer'],
-    'organizer-row-you-do-partner': ['Read the Example',      'Fill In Your Row',     'Check Your Answer'],
     'passage-annotation':           ['Read the Passage', 'Review CUBES Guide', 'Annotate the Passage'],
     'organizer':                    []  // built dynamically in enterFocusMode
   };
@@ -147,7 +124,7 @@
         dynamicAnchors.push(badge ? badge.textContent.trim() : 'Current Row');
       });
       dynamicAnchors.push('Confirm Your Responses');
-      STEP_ANCHORS['organizer'] = dynamicAnchors;
+      sessionAnchors = dynamicAnchors;
     }
 
     // Compute anchor key for STEP_ANCHORS lookup
@@ -180,6 +157,7 @@
     currentStep = 0;
     stepDefs = [];
     anchorKey = '';
+    sessionAnchors = null;
 
     document.querySelectorAll('.activity').forEach(el => {
       el.classList.remove('activity-dimmed', 'activity-focused');
@@ -189,6 +167,16 @@
     // Clear attention anchor
     const anchorEl = document.getElementById('focus-attention-anchor');
     if (anchorEl) anchorEl.textContent = '';
+
+    // Clear MC stem CUBES outline
+    document.querySelectorAll('.mc-annotatable-stem').forEach(function(s) { s.style.outline = ''; s.style.outlineOffset = ''; });
+
+    // Restore any mutated instruction elements
+    document.querySelectorAll('.activity-instruction[data-original-text]').forEach(function(el) {
+      el.textContent = el.dataset.originalText;
+      el.style.color = '';
+      delete el.dataset.originalText;
+    });
 
     // Mark completed activity done
     if (completedId && typeof window.markActivityDone === 'function') {
@@ -235,7 +223,7 @@
     // Attention anchor (I3)
     const anchorEl = document.getElementById('focus-attention-anchor');
     if (anchorEl) {
-      const anchors = STEP_ANCHORS[anchorKey] || [];
+      const anchors = (sessionAnchors && anchorKey === 'organizer') ? sessionAnchors : (STEP_ANCHORS[anchorKey] || []);
       anchorEl.textContent = anchors[stepIndex] || stepDefs[stepIndex].label;
     }
 
@@ -269,13 +257,6 @@
 
   function getStepDefs(el, type) {
     if (!type) return [{ label: 'View', action: function() {} }];
-    if (type === 'organizer-row') {
-      var grClass = Array.from(el.classList).find(function(c) {
-        return ['activity--i-do','activity--we-do','activity--you-do-partner','activity--you-do'].includes(c);
-      });
-      var grKey = grClass ? grClass.replace('activity--', '') : 'we-do';
-      return STEPS['organizer-row-' + grKey] || STEPS['organizer-row-we-do'];
-    }
     if (type === 'organizer') {
       return buildOrganizerSteps(el);
     }
@@ -301,6 +282,7 @@
 
   // MC steps
   function stepMcRead(el) {
+    el.querySelectorAll('.mc-annotatable-stem').forEach(function(s) { s.style.outline = ''; s.style.outlineOffset = ''; });
     el.querySelectorAll('.mc-stop-badge').forEach(function(l) { l.classList.add('mc-stop-badge--hidden'); });
     el.querySelectorAll('.mc-option-wrap').forEach(function(b) { b.classList.remove('mc-option--selected'); });
   }
@@ -329,31 +311,21 @@
       justWrap.style.display = '';
       var inp = justWrap.querySelector('.mc-justify-input');
       if (inp && state === 'justifying') inp.focus();
+      var instruction = el.querySelector('.activity-instruction');
+      if (instruction && instruction.dataset.originalText) {
+        instruction.textContent = instruction.dataset.originalText;
+        instruction.style.color = '';
+      }
     } else if (justWrap) {
       var instruction = el.querySelector('.activity-instruction');
       if (instruction) {
+        if (!instruction.dataset.originalText) {
+          instruction.dataset.originalText = instruction.textContent;
+        }
         instruction.style.color = '#fbbf24';
         instruction.textContent = '⚠️ Eliminate 2 choices and select your Proven answer first.';
       }
     }
-  }
-
-  // Organizer steps (organizer-row type — single row cards)
-  function stepOrgRead(el) {
-    el.querySelectorAll('.org-cell-content, .org-cell-placeholder').forEach(c => c.style.outline = '');
-  }
-  function stepOrgIDoModel(el) {
-    el.querySelectorAll('.exemplar-text').forEach(c => c.style.opacity = '1');
-  }
-  function stepOrgStudentFill(el) {
-    el.querySelectorAll('.org-cell-placeholder').forEach(c => {
-      c.style.outline = '2px dashed var(--accent)';
-      c.style.outlineOffset = '2px';
-    });
-  }
-  function stepOrgConfirm(el) {
-    el.querySelectorAll('.exemplar-text').forEach(c => c.style.opacity = '1');
-    el.querySelectorAll('.org-cell-placeholder').forEach(c => c.style.outline = '');
   }
 
   // Organizer steps (consolidated organizer card — all GR rows)
