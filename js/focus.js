@@ -128,13 +128,7 @@
     }
 
     // Compute anchor key for STEP_ANCHORS lookup
-    if (type === 'organizer-row') {
-      const grClass = Array.from(activityEl.classList).find(c =>
-        ['activity--i-do','activity--we-do','activity--you-do-partner','activity--you-do'].includes(c)
-      );
-      const grKey = grClass ? grClass.replace('activity--', '') : 'we-do';
-      anchorKey = 'organizer-row-' + grKey;
-    } else if (type === 'organizer') {
+    if (type === 'organizer') {
       anchorKey = 'organizer';
     } else {
       anchorKey = type || '';
@@ -315,6 +309,7 @@
       if (instruction && instruction.dataset.originalText) {
         instruction.textContent = instruction.dataset.originalText;
         instruction.style.color = '';
+        delete instruction.dataset.originalText;
       }
     } else if (justWrap) {
       var instruction = el.querySelector('.activity-instruction');
