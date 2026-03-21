@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corsets, Bloomers &amp; Blue Jeans · IR Platform</title>
+  <link rel="stylesheet" href="../../css/platform.css">
+</head>
+<body>
+
+  <header class="unit-topbar">
+    <a href="../../" class="tb-back">← IR Platform</a>
+    <span class="tb-divider"></span>
+    <span class="tb-title">Corsets, Bloomers &amp; Blue Jeans</span>
+    <div class="tb-tools">
+      <div style="display:flex;align-items:center;gap:0.25rem;background:var(--surface-2);border-radius:8px;padding:0.25rem 0.5rem;">
+        <span class="timer-display"><span id="timer-value">4:00</span></span>
+        <button class="btn btn-ghost" id="btn-timer-play" style="min-width:32px;padding:0.25rem 0.5rem;" title="Play/Pause">▶</button>
+        <button class="btn btn-ghost" id="btn-timer-reset" style="min-width:32px;padding:0.25rem 0.5rem;" title="Reset">↺</button>
+        <select id="timer-presets" style="background:var(--surface-2);color:var(--muted);border:none;font-size:0.75rem;cursor:pointer;">
+          <option value="">⚡</option>
+          <option value="120">2 min</option>
+          <option value="180">3 min</option>
+          <option value="300">5 min</option>
+          <option value="480">8 min</option>
+          <option value="720">12 min</option>
+        </select>
+      </div>
+      <button class="btn btn-ghost" id="btn-stop" title="STOP Strategy">🛑 STOP</button>
+      <button class="btn btn-ghost" id="btn-esol" title="ESOL Level">🌐 ESOL Off</button>
+      <button class="btn btn-ghost" id="btn-gr-phase" title="GR Phase">📋 GR</button>
+      <button class="btn btn-ghost" id="btn-reveal" title="Reveal Answers">💡 Reveal</button>
+      <button class="btn btn-ghost" id="btn-exit-ticket" title="Exit Ticket">🎟 Exit</button>
+      <button class="btn btn-ghost" id="btn-light" title="Toggle Light Mode">☀</button>
+    </div>
+  </header>
+
+  <div class="unit-app" style="height:calc(100vh - 56px);">
+    <div class="unit-body">
+      <nav class="day-sidebar" id="day-sidebar">
+        <button class="sidebar-toggle" id="sidebar-toggle">‹</button>
+      </nav>
+      <main class="content-area" id="content-area"></main>
+    </div>
+  </div>
+
+  <div class="gr-badge" id="gr-badge" style="display:none"></div>
+
+  <div class="day-complete-overlay" id="day-complete-overlay">
+    <div class="day-complete-card">
+      <div class="day-complete-emoji">🎉</div>
+      <div class="day-complete-title" id="dc-title"></div>
+      <div class="day-complete-sub" id="dc-sub"></div>
+      <button class="btn btn-primary" id="dc-btn" style="margin-top:1.5rem;width:100%;justify-content:center;"></button>
+    </div>
+  </div>
+
+  <div class="exit-ticket-overlay" id="exit-ticket-overlay">
+    <div class="exit-ticket-card">
+      <div class="exit-ticket-label">🎟 Exit Ticket</div>
+      <div class="exit-ticket-prompt" id="et-prompt"></div>
+      <div class="exit-ticket-frame" id="et-frame"></div>
+      <button class="btn btn-ghost" id="btn-exit-ticket-close" style="margin-top:1rem;">Close</button>
+    </div>
+  </div>
+
+  <div class="focus-overlay" id="focus-overlay">
+    <div class="focus-header">
+      <button class="btn btn-ghost" id="btn-focus-back" style="font-size:0.8rem;">← Back</button>
+      <div class="focus-anchor" id="focus-anchor"></div>
+      <div class="focus-step-dots" id="focus-dots"></div>
+    </div>
+    <div class="focus-body" id="focus-body"></div>
+    <div class="focus-nav">
+      <button class="btn btn-ghost" id="btn-focus-prev">← Back</button>
+      <span id="focus-step-info" style="font-size:0.8rem;color:var(--muted)"></span>
+      <button class="btn btn-primary" id="btn-focus-next">Next →</button>
+    </div>
+  </div>
+
+  <script>
+  const UNIT = {
+    id: 'bloomers',
+    title: 'Corsets, Bloomers & Blue Jeans',
+    benchmark: 'ELA.10.R.2.1',
+    benchmarkLabel: 'Central Idea',
+    benchmarkDescription: 'Determine two or more central ideas and analyze how the details and structure of the text develop the central idea(s).',
+    meta: { days: 4 },
+
+    cubesGuide: [
+      { letter: 'C', action: 'Circle central ideas, key details, important facts', color: '#ef4444' },
+      { letter: 'B', action: 'Box paragraph numbers, dates, time references', color: '#22c55e' },
+      { letter: 'U', action: 'Underline unfamiliar words and confusing parts', color: '#3b82f6' },
+    ],
+
+    passage: [
+      { n: 1, text: 'The clothing that women wear in any given society tells a great deal about that society\'s values. For about 400 years—from the 1500s to the early 1900s—women in Western society were expected to wear corsets, tight-fitting undergarments that compressed the waist and shaped the figure. How could fashion choices reflect changing societal values? The history of women\'s clothing offers a fascinating answer.' },
+      { n: 2, text: 'Corsets first became fashionable in the 1500s, when European women began wearing them to achieve the ideal figure of the era. These early corsets were made of stiffened fabric and designed to create a narrow, conical silhouette. By the 1600s and 1700s, corsets had become an essential part of a woman\'s wardrobe, worn from girlhood until old age.' },
+      { n: 3, text: 'In the early 1800s, women stopped wearing corsets temporarily. The French Revolution had just ended, and people were consciously renouncing the symbols of the aristocracy. Simple, loosely draped gowns replaced the elaborate fashions of the nobility.' },
+      { n: 4, text: 'However, corsets returned by the mid-1800s, and this new corset accentuated them—it emphasized the curves of the female figure more dramatically than ever. The ideal figure required an impossibly small waist, sometimes achieved only through tight lacing that could cause serious health problems.' },
+      { n: 5, text: 'By the early 1900s, objections to the corset came from three different sources: physicians, religious leaders, and feminists. Doctors argued that tight lacing damaged internal organs. Religious figures suggested that the extreme focus on the body was immodest. And feminists argued that corsets were a symbol of women\'s oppression. By the 1920s, women had gained new freedoms—including the right to vote—and fashion reflected this change: corsets disappeared.' },
+      { n: 6, text: 'Bloomers eventually fell out of fashion, but the avant-garde idea that women could wear pants instead of dresses and skirts had been introduced and would soon be accepted. In the late 1800s, women\'s rights reformer Amelia Bloomer began wearing and promoting a new style of dress: a short skirt worn over loose trousers. Although controversial and widely mocked, the style was named "bloomers" after her because she championed it in her newspaper and her speeches advocating for women\'s rights and temperance reform.' },
+      { n: 7, text: 'Like the corset, blue jeans also entered fashion as a result of social change. In the mid-1800s, thousands of people traveled west during the California Gold Rush, and miners faced a difficult problem: their demanding work required durable clothing, but available pants simply weren\'t strong enough for the job.' },
+      { n: 8, text: 'Miners struggled to find pants strong enough for their demanding work. In 1853, Levi Strauss, a merchant who had emigrated to San Francisco, began selling canvas work pants to miners. In 1873, he and his partner Jacob Davis received a patent for adding copper rivets to the stress points of the pants, making them far more durable. These practical work pants would eventually become one of the most popular clothing items in the world.' },
+      { n: 9, text: 'Today, jeans are worn by both men and women in virtually every country in the world. While they were invented to fill a practical need, jeans have come to represent a society that values freedom and equality. Just as corsets once reflected a society in which women had little freedom of movement or choice, blue jeans reflect a society that has moved—though not without struggle—toward greater equality.' },
+    ],
+
+    days: {
+      1: {
+        label: 'First Read + CBU Annotation',
+        grPhase: 'I Do',
+        vocab: [
+          {
+            word: 'avant-garde',
+            pos: 'adjective',
+            definition: 'ahead of its time; innovative and original',
+            sentence: '"...the avant-garde idea that women could wear pants instead of dresses and skirts had been introduced and would soon be accepted." (¶6)'
+          },
+          {
+            word: 'accentuated',
+            pos: 'verb',
+            definition: 'emphasized or made more noticeable',
+            sentence: '"...this new corset accentuated them..." (¶4)'
+          },
+          {
+            word: 'renouncing',
+            pos: 'verb',
+            definition: 'formally rejecting or giving up',
+            sentence: '"...people were consciously renouncing the symbols of the aristocracy." (¶3)'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '1. The designer\'s __________ collection featured clothes that seemed to come from the future.',
+            choices: [
+              { letter: 'A', text: 'old-fashioned', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'avant-garde', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'affordable', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'comfortable', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: '2. The bright colors __________ the beauty of the sunset.',
+            choices: [
+              { letter: 'A', text: 'hid', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'ruined', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'accentuated', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'ignored', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: '3. After the revolution, citizens began __________ the old traditions.',
+            choices: [
+              { letter: 'A', text: 'celebrating', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'copying', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'renouncing', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'remembering', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'CIRCLE the thesis/central idea. Which paragraph contains it? What does it claim about fashion and society?',
+            evidence: '"The clothing that women wear in any given society tells a great deal about that society\'s values." (¶1)',
+            analysis: 'The thesis is in paragraph 1. It claims that fashion reflects social values — setting up the author\'s entire argument. The question at the end of ¶1 frames what the text will prove.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'BOX at least 5 dates or time periods in the passage. List them and the fashion change at each time.',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'UNDERLINE the vocabulary words in the passage. Using context clues, explain what "consciously renouncing" (¶3) suggests about WHY fashion changed in the early 1800s.',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'What TEXT STRUCTURE does the author use? How does this structure support the thesis about changing societal values?',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: 'The author organized this text in __________ order because __________.',
+          frame: 'The author uses __________ structure because I notice __________. This supports the thesis by __________.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'The word __________ means __________.',
+              'Fashion changed in the __________ because __________.',
+              'The text is organized in __________ order.'
+            ],
+            wordBank: ['avant-garde', 'accentuated', 'renouncing', 'time', 'chronological', 'fashion', 'values', 'society']
+          },
+          l34: {
+            frames: [
+              'The word __________ is used to show that __________.',
+              'The text structure is __________ because the author __________.',
+              'This structure supports the thesis by __________.'
+            ],
+            wordBank: ['chronological', 'ahead of its time', 'emphasized', 'rejecting', 'thesis', 'values']
+          },
+          l5: {
+            frames: [
+              'The author\'s use of __________ structure is significant because it __________.',
+              'The thesis in ¶1 is developed throughout the text by __________.'
+            ]
+          }
+        }
+      },
+
+      2: {
+        label: 'Question Stem Analysis',
+        grPhase: 'We Do',
+        vocab: [
+          {
+            word: 'aristocracy',
+            pos: 'noun',
+            definition: 'the wealthy upper class; nobility',
+            sentence: '"...people were consciously renouncing the symbols of the aristocracy." (¶3)'
+          },
+          {
+            word: 'consciously',
+            pos: 'adverb',
+            definition: 'deliberately and with full awareness; on purpose',
+            sentence: '"...people were consciously renouncing the symbols of the aristocracy." (¶3)'
+          },
+          {
+            word: 'avant-garde',
+            pos: 'adjective',
+            definition: 'ahead of its time; introducing new ideas before they are widely accepted',
+            sentence: '"...the avant-garde idea that women could wear pants instead of dresses and skirts had been introduced and would soon be accepted." (¶6)'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '"In the early 1800s, women stopped wearing corsets temporarily. The French Revolution had just ended, and people were consciously renouncing the symbols of the aristocracy." In this context, "aristocracy" most likely refers to—',
+            choices: [
+              { letter: 'A', text: 'poor people', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'wealthy upper class', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'artists', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'soldiers', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: 'The word "consciously" suggests people were—',
+            choices: [
+              { letter: 'A', text: 'asleep while doing it', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: 'forced by the government', stopLabel: 'Opposite', correct: false },
+              { letter: 'C', text: 'deliberately aware of their choice', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'confused about the situation', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Q27 — UNDERLINE: "text structure" and "relate to the thesis." This asks: How does the WAY the text is organized SUPPORT the main idea? Categorize each answer choice.',
+            evidence: 'Thesis in ¶1: "how could fashion choices reflect changing societal values?" Time progression: 1500s (¶2) → early 1800s (¶3) → early 1900s (¶5) → today (¶9)',
+            analysis: 'Correct: D — Chronological order shows how fashion AND values evolved together. A is Tricky (some comparison exists but no "superiority" judgment). B and C are Silly (no Q&A pattern, no advantages/disadvantages structure).'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Q28 — UNDERLINE: "foreign loanword" and "context clues." Find "avant-garde" in ¶6. What do the surrounding words tell you about its meaning? Test each answer in the sentence.',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'Q29 — UNDERLINE: "best supports the key idea that blue jeans were invented to fill a NEED rather than to make a fashion statement." BOX where evidence about jeans would be found. What\'s the difference between a need and a fashion statement?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Q31 (Part A/B) — UNDERLINE Part A question first. Answer Part A. THEN find Part B evidence that PROVES your Part A answer. If Part B options don\'t support your Part A, reconsider Part A.',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: 'For Part A/Part B questions, why is it important to answer Part A first?',
+          frame: 'Part A/B questions are connected because Part B asks for __________ that supports __________. I need to answer Part A first so that __________.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'This question is asking me to find __________.',
+              'I should look at paragraph __________ because __________.',
+              'The answer is __________ because the text says "__________."'
+            ],
+            wordBank: ['text structure', 'chronological', 'time order', 'thesis', 'avant-garde', 'context clues', 'evidence', 'need']
+          },
+          l34: {
+            frames: [
+              'The question asks about __________, so I need to find __________.',
+              'Context clues for "avant-garde" include: __________.',
+              'Part B must __________ my Part A answer.'
+            ],
+            wordBank: []
+          },
+          l5: {
+            frames: [
+              'The question uses the term "__________," which signals I should look for __________ in the text.',
+              'The structure of Q31 (Part A/B) requires that I __________.'
+            ]
+          }
+        }
+      },
+
+      3: {
+        label: 'MC Justification with RACE',
+        grPhase: 'You Do w/ Partner',
+        vocab: [
+          {
+            word: 'avant-garde',
+            pos: 'adjective',
+            definition: 'ahead of its time; innovative and original',
+            sentence: 'Her avant-garde ideas were considered revolutionary and ahead of their time.'
+          },
+          {
+            word: 'accentuated',
+            pos: 'verb',
+            definition: 'emphasized or made more noticeable',
+            sentence: 'The dark makeup accentuated her eyes, making them stand out.'
+          },
+          {
+            word: 'renouncing',
+            pos: 'verb',
+            definition: 'formally rejecting or giving up',
+            sentence: 'After the revolution, citizens were consciously renouncing the symbols of the old regime.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: 'AVANT-GARDE — Choose the sentence that uses the word CORRECTLY.',
+            choices: [
+              { letter: 'A', text: 'The avant-garde technology was invented 100 years ago.', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Her avant-garde ideas were considered revolutionary and ahead of their time.', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'The avant-garde painting was a copy of an old masterpiece.', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'He wore avant-garde clothes from his grandfather\'s closet.', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: 'ACCENTUATED — Choose the sentence that uses the word CORRECTLY.',
+            choices: [
+              { letter: 'A', text: 'The dark makeup accentuated her eyes, making them stand out.', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'The quiet music accentuated the loud noise.', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'She accentuated her mistake by hiding it.', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'The plain walls accentuated the emptiness.', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          }
+        ],
+        assessmentMC: [
+          {
+            stem: 'Q27 — In what way does the text structure of the essay relate to the thesis it supports?',
+            choices: [
+              { letter: 'A', text: 'The author uses compare-and-contrast structure to show the superiority of modern fashion over historical fashion', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'The author uses a question-and-answer structure to suggest that fashion choices are questionable', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'The author presents advantages and disadvantages of wearing corsets', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'The author uses chronological order to show how fashion choices and societal values evolved over time', stopLabel: 'Proven', correct: true }
+            ]
+          },
+          {
+            stem: 'Q28 — Based on the context, what is the most likely meaning of the foreign loanword avant-garde?',
+            choices: [
+              { letter: 'A', text: 'Old-fashioned or traditional in style', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Related to the French military', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'Popular with the general public at the time', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'Ahead of its time; introducing new ideas before they are widely accepted', stopLabel: 'Proven', correct: true }
+            ]
+          },
+          {
+            stem: 'Q29 — Which sentence best supports the key idea that blue jeans were invented to fill a need rather than to make a fashion statement?',
+            choices: [
+              { letter: 'A', text: 'Miners struggled to find pants strong enough for their demanding work.', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'Levi Strauss was a merchant who had emigrated to San Francisco.', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'In 1873, copper rivets were added to the stress points of the pants.', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'Today, jeans are worn by both men and women in virtually every country.', stopLabel: 'Silly', correct: false }
+            ]
+          },
+          {
+            stem: 'Q30 — The author\'s inclusion of the photo after paragraph 6 is effective for the purpose of—',
+            choices: [
+              { letter: 'A', text: 'providing a visual example of the bloomer costume described in the text', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'showing that bloomers were more popular than corsets among women', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'proving that women in the 1800s cared deeply about fashion trends', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'demonstrating that Amelia Bloomer became a famous celebrity', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: 'Q31 Part A — Which sentence best describes a main reason that corsets eventually fell out of fashion?',
+            choices: [
+              { letter: 'A', text: 'Women wanted to wear pants like bloomers instead of corsets', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'Fashion designers in Europe stopped making corsets in the 1800s', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'Corsets became too expensive for most women to afford', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'Leading voices from multiple fields came to oppose the corset for a variety of reasons', stopLabel: 'Proven', correct: true }
+            ]
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'RACE model for Q27 — RESTATE + ANSWER + CITE + EXPLAIN creates a complete justification.',
+            evidence: 'RESTATE: The text structure relates to the thesis by showing change over time. ANSWER: D — chronological order. CITE: Thesis in ¶1 ("how could fashion choices reflect changing societal values?") + time sequence: 1500s (¶2), early 1800s (¶3), early 1900s (¶5), today (¶9).',
+            analysis: 'EXPLAIN: The time order DIRECTLY proves the thesis because each era\'s fashion reflects that era\'s values. Readers can SEE the evolution. Choices A/B/C are eliminated: no "superiority" judgment, no Q&A pattern, no advantages/disadvantages.'
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'Partners: Write a RACE justification for Q29. RESTATE the question. ANSWER with the letter. CITE the exact sentence from the text. EXPLAIN why it proves jeans were invented for NEED, not fashion.',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: 'Q31 Part A: What is the correct answer? Which Part B quote PROVES it?',
+          frame: 'Part A answer is _____ because __________. For Part B, I chose _____ because the quote "__________" directly proves my Part A answer.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'The answer to Q___ is _____ because the text says "__________."',
+              'I eliminated _____ because __________.',
+              'RACE: R = __________, A = __________, C = __________, E = __________.'
+            ],
+            wordBank: ['chronological', 'proves', 'evidence', 'support', 'eliminate', 'context', 'fashion', 'need']
+          },
+          l34: {
+            frames: [
+              'The correct answer is _____ because the evidence in ¶___ shows __________.',
+              'Part A answer is _____ because __________. Part B must show __________.'
+            ],
+            wordBank: []
+          },
+          l5: {
+            frames: [
+              'Using STOP: _____ is Opposite, _____ is Silly, _____ is Tricky, and _____ is Proven because __________.',
+              'My RACE justification for Q___ shows that the correct answer is Proven because __________.'
+            ]
+          }
+        }
+      },
+
+      4: {
+        label: 'RACE Extended Response + Self-Assessment',
+        grPhase: 'You Do',
+        vocab: [
+          {
+            word: 'avant-garde',
+            pos: 'adjective',
+            definition: 'ahead of its time; innovative and original',
+            sentence: 'Bloomers were the avant-garde idea of their time — women in pants, before anyone accepted it.'
+          },
+          {
+            word: 'accentuated',
+            pos: 'verb',
+            definition: 'emphasized or made more noticeable',
+            sentence: 'The new corset design accentuated the waist even more dramatically than before.'
+          },
+          {
+            word: 'renouncing',
+            pos: 'verb',
+            definition: 'formally rejecting or giving up',
+            sentence: 'By renouncing corsets, women were also rejecting old ideas about their role in society.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: 'VOCABULARY QUIZ — What does "avant-garde" mean?',
+            choices: [
+              { letter: 'A', text: 'old-fashioned', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'ahead of its time', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'colorful', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'expensive', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: 'VOCABULARY QUIZ — What does "accentuated" mean?',
+            choices: [
+              { letter: 'A', text: 'hid', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'ignored', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'emphasized', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'created', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: 'VOCABULARY QUIZ — What does "renouncing" mean?',
+            choices: [
+              { letter: 'A', text: 'celebrating', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'keeping', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'rejecting', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'copying', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          }
+        ],
+        writtenResponse: {
+          title: 'RACE Extended Response',
+          prompt: 'How does the author use evidence to support the idea that changes in women\'s fashion reflect changes in society\'s values? Use at least TWO pieces of specific evidence from the text.',
+          frame: 'R — The author of "Corsets, Bloomers, and Blue Jeans" uses evidence to support the idea that __________. A — Specifically, the author provides multiple historical examples showing __________. C — In paragraph ____, the author explains "____________________." Later, in paragraph ____, the author describes "____________________." E — These examples prove the central idea because each fashion change happened BECAUSE of social change...',
+          modelResponse: '<strong>RESTATE:</strong> The author of "Corsets, Bloomers, and Blue Jeans" uses specific evidence to support the idea that changes in women\'s fashion reflect changes in society\'s values.<br><br><strong>ANSWER:</strong> The author provides multiple historical examples showing how each fashion change connected to broader social movements and changing attitudes toward women.<br><br><strong>CITE:</strong> In paragraph 3, the author explains that "In the early 1800s, women stopped wearing corsets temporarily" because "people were consciously renouncing the symbols of the aristocracy." Later, in paragraph 6, the author describes how bloomers were named after Amelia Bloomer, a reformer and feminist who championed women\'s rights.<br><br><strong>EXPLAIN:</strong> These examples prove the central idea because each fashion change happened BECAUSE of social change. When people rejected aristocracy, they rejected aristocratic clothing. When women fought for rights, they adopted clothing that gave them physical freedom. The author\'s evidence shows a cause-and-effect relationship: society\'s values change first, and fashion follows. This pattern continues to blue jeans, which paragraph 9 says reflect "a society that values freedom and equality."'
+        },
+        exitTicket: {
+          prompt: 'How is RACE different from CER? When would you use each?',
+          frame: 'RACE is used for __________ texts because it __________. CER is used for __________ texts because it __________. The key difference is __________.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'RACE means: R = __________, A = __________, C = __________, E = __________.',
+              'My claim is that the author shows fashion reflects __________ values.',
+              'My evidence is in paragraph ____, where it says "__________."'
+            ],
+            wordBank: ['Restate', 'Answer', 'Cite', 'Explain', 'societal', 'fashion', 'values', 'proof', 'paragraph']
+          },
+          l34: {
+            frames: [
+              'I will RESTATE by writing: "The author of \'Corsets, Bloomers, and Blue Jeans\' uses evidence to show __________."',
+              'My two pieces of evidence come from paragraphs _____ and _____ to show __________.'
+            ],
+            wordBank: []
+          },
+          l5: {
+            frames: [
+              'My RACE response should connect evidence from at least _____ paragraphs to prove that __________.',
+              'The strongest evidence for this claim is in ¶___ because __________.'
+            ]
+          }
+        }
+      }
+    }
+  };
+  </script>
+  <script src="../../js/unit.js"></script>
+</body>
+</html>

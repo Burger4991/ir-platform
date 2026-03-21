@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Story of Ali Cogia · IR Platform</title>
+  <link rel="stylesheet" href="../../css/platform.css">
+</head>
+<body>
+
+  <header class="unit-topbar">
+    <a href="../../" class="tb-back">← IR Platform</a>
+    <span class="tb-divider"></span>
+    <span class="tb-title">The Story of Ali Cogia, Merchant of Baghdad</span>
+    <div class="tb-tools">
+      <div style="display:flex;align-items:center;gap:0.25rem;background:var(--surface-2);border-radius:8px;padding:0.25rem 0.5rem;">
+        <span class="timer-display"><span id="timer-value">4:00</span></span>
+        <button class="btn btn-ghost" id="btn-timer-play" style="min-width:32px;padding:0.25rem 0.5rem;" title="Play/Pause">▶</button>
+        <button class="btn btn-ghost" id="btn-timer-reset" style="min-width:32px;padding:0.25rem 0.5rem;" title="Reset">↺</button>
+        <select id="timer-presets" style="background:var(--surface-2);color:var(--muted);border:none;font-size:0.75rem;cursor:pointer;">
+          <option value="">⚡</option>
+          <option value="120">2 min</option>
+          <option value="180">3 min</option>
+          <option value="300">5 min</option>
+          <option value="480">8 min</option>
+          <option value="720">12 min</option>
+        </select>
+      </div>
+      <button class="btn btn-ghost" id="btn-stop" title="STOP Strategy">🛑 STOP</button>
+      <button class="btn btn-ghost" id="btn-esol" title="ESOL Level">🌐 ESOL Off</button>
+      <button class="btn btn-ghost" id="btn-gr-phase" title="GR Phase">📋 GR</button>
+      <button class="btn btn-ghost" id="btn-reveal" title="Reveal Answers">💡 Reveal</button>
+      <button class="btn btn-ghost" id="btn-exit-ticket" title="Exit Ticket">🎟 Exit</button>
+      <button class="btn btn-ghost" id="btn-light" title="Toggle Light Mode">☀</button>
+    </div>
+  </header>
+
+  <div class="unit-app" style="height:calc(100vh - 56px);">
+    <div class="unit-body">
+      <nav class="day-sidebar" id="day-sidebar">
+        <button class="sidebar-toggle" id="sidebar-toggle">‹</button>
+      </nav>
+      <main class="content-area" id="content-area"></main>
+    </div>
+  </div>
+
+  <div class="gr-badge" id="gr-badge" style="display:none"></div>
+
+  <div class="day-complete-overlay" id="day-complete-overlay">
+    <div class="day-complete-card">
+      <div class="day-complete-emoji">🎉</div>
+      <div class="day-complete-title" id="dc-title"></div>
+      <div class="day-complete-sub" id="dc-sub"></div>
+      <button class="btn btn-primary" id="dc-btn" style="margin-top:1.5rem;width:100%;justify-content:center;"></button>
+    </div>
+  </div>
+
+  <div class="exit-ticket-overlay" id="exit-ticket-overlay">
+    <div class="exit-ticket-card">
+      <div class="exit-ticket-label">🎟 Exit Ticket</div>
+      <div class="exit-ticket-prompt" id="et-prompt"></div>
+      <div class="exit-ticket-frame" id="et-frame"></div>
+      <button class="btn btn-ghost" id="btn-exit-ticket-close" style="margin-top:1rem;">Close</button>
+    </div>
+  </div>
+
+  <div class="focus-overlay" id="focus-overlay">
+    <div class="focus-header">
+      <button class="btn btn-ghost" id="btn-focus-back" style="font-size:0.8rem;">← Back</button>
+      <div class="focus-anchor" id="focus-anchor"></div>
+      <div class="focus-step-dots" id="focus-dots"></div>
+    </div>
+    <div class="focus-body" id="focus-body"></div>
+    <div class="focus-nav">
+      <button class="btn btn-ghost" id="btn-focus-prev">← Back</button>
+      <span id="focus-step-info" style="font-size:0.8rem;color:var(--muted)"></span>
+      <button class="btn btn-primary" id="btn-focus-next">Next →</button>
+    </div>
+  </div>
+
+  <script>
+  const UNIT = {
+    id: 'alicogia',
+    title: 'The Story of Ali Cogia, Merchant of Baghdad',
+    benchmark: 'ELA.10.R.1.1',
+    benchmarkLabel: 'Literary Elements',
+    meta: { days: 6 },
+
+    passage: [
+      { n: 1,  text: 'In the reign of Haroun-al-Raschid, a merchant of Bagdad, named Ali Cogia, was contented with his situation, but one day he reproached himself for his indolence, and resolved to travel to Mecca and visit the holy shrine.' },
+      { n: 2,  text: 'He was much troubled by this dream, as he was unwilling to give up his shop and his customers, and lose the profits he had been making for so many years; but the dream seemed to him a direct warning, and he resolved to put the journey off no longer.' },
+      { n: 3,  text: 'He accordingly made the necessary preparations, and set sail from Bagdad, with the intention of taking the route that would convey him across the desert to the holy city. Before starting, he deposited with a merchant, who was an intimate friend, a jar of olives of great value, together with a sum of money, which was to be faithfully kept until his return.' },
+      { n: 4,  text: 'He took a large vase, and placing the money in the bottom of it, filled up the rest with olives, then covered it and sealed it carefully with his own seal, and took it to his friend.' },
+      { n: 5,  text: '"My dear friend," said he, "I am about to make the pilgrimage to Mecca, and I must beg of you to take charge of a vase of olives which I am leaving with you for safekeeping. I shall be absent for some time, and I hope you will take care of it until my return."' },
+      { n: 6,  text: 'The merchant replied readily, "Look, this is the key of my shop; take it, and put the vase wherever you please. I promise that you shall find it in the same place on your return." Ali Cogia expressed his gratitude, and having made all his other arrangements, departed.' },
+      { n: 7,  text: 'Ali Cogia mounted the camel that he had laden with merchandise, joined the caravan, and, with many other pilgrims, arrived safely at Mecca, where he visited the holy shrine and performed all the rites of pilgrimage.' },
+      { n: 8,  text: 'After completing the pilgrimage, he went on to Egypt, and having sold some of his merchandise there to great advantage, he then continued his journey to other eastern countries, selling his goods as he traveled.' },
+      { n: 9,  text: 'Seven years passed in this manner, and Ali Cogia had not yet returned to Bagdad, though he continued to think of his home and of the vase of olives he had left with his friend.' },
+      { n: 10, text: 'At last Ali Cogia determined to return to Bagdad. He made his preparations, and after a long journey arrived safely at his native city, having been absent for more than seven years.' },
+      { n: 11, text: 'Before going to his own house, he went to call on his friend the merchant, to whom he had entrusted the jar of olives, and was received by him with all the demonstrations of friendship that could be wished.' },
+      { n: 12, text: 'The merchant\'s wife, who had long had a presentiment that Ali Cogia would return, said to her husband: "I have a presentiment that Ali Cogia will return ere long. I entreat you, give him back his gold and do nothing that would be base. Beware of doing anything so base! Take care that Ali Cogia has no cause to complain of you."' },
+      { n: 13, text: 'The merchant refused to listen to her advice, sensible though it was. "Let him come when he likes," said he, "and he will find his vase just as he left it." But he added, "Pay no attention to my idle words; I shall do what is right."' },
+      { n: 14, text: '"If you will be so obstinate," replied his wife, "I cannot help it; but I fear you will repent it." Despite her warnings, the merchant persisted in his determination.' },
+      { n: 15, text: 'Some time after this, when the merchant happened to want some olives, he told his wife he would go and take some out of Ali Cogia\'s vase, as he supposed the olives in it would be much better than the others.' },
+      { n: 16, text: 'The sight of the money roused all the merchant\'s greed. He said nothing to his wife of what he had found, but took out all the gold, and after having put fresh olives on top, sealed up the vase again exactly as he had found it.' },
+      { n: 17, text: 'He then told his wife that he had replaced the cover, that the olives seemed good, and that he hoped Ali Cogia would not find any great change in them, having been kept so long.' },
+      { n: 18, text: 'Ali Cogia, meanwhile, having arrived at Bagdad, went to visit his friend, and claimed the return of the vase of olives he had placed in his keeping. When he opened the vase and found only olives, without any gold, he was struck dumb with surprise and grief at his friend\'s treachery.' }
+    ],
+
+    days: {
+      1: {
+        label: 'First Read — Foundation',
+        grPhase: 'I Do',
+        vocab: [
+          {
+            word: 'contented',
+            pos: 'adjective',
+            definition: 'Satisfied and at peace with one\'s situation; not wanting more',
+            sentence: 'Ali Cogia was contented with his situation, but one day he reproached himself for his indolence.'
+          },
+          {
+            word: 'reproached',
+            pos: 'verb',
+            definition: 'Criticized or scolded, especially oneself for a fault or failure',
+            sentence: 'He reproached himself for having neglected the duty of a good Mussulman.'
+          },
+          {
+            word: 'resolved',
+            pos: 'verb',
+            definition: 'Firmly decided; made a determination to do something',
+            sentence: 'The dream seemed to him a direct warning, and he resolved to put the journey off no longer.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '"In the reign of Haroun-al-Raschid, there lived in Bagdad a merchant named Ali Cogia, who, having neither wife nor child, contented himself with the modest profits produced by his trade." What does CONTENTED most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Troubled or worried', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Satisfied or happy', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'Lonely or isolated', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'Financially successful', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: '"...he reproached him for having neglected the duty of a good Mussulman..." What does REPROACHED most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Praised or encouraged', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Criticized or scolded', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'Ignored or dismissed', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'Questioned or doubted', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: '"...the dream seemed to him a direct warning, and he resolved to put the journey off no longer." Use RESOLVED in your own sentence.',
+            modelResponse: 'After failing the test twice, she resolved to study every night and not let herself fall behind again.'
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Setting — Where and when does the story take place? How does the setting shape the story\'s meaning?',
+            evidence: '"In the reign of Haroun-al-Raschid, a merchant of Bagdad..." (¶1). Baghdad is described as a center of commerce during the Islamic Golden Age.',
+            analysis: 'The Baghdad setting, known for honor and commerce, makes betrayal more serious. Trust between merchants is sacred in this culture, so violating it is a profound moral failure.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Characterization — What kind of person is Ali Cogia at the start? What character traits do his actions reveal?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'Conflict — What is the central conflict introduced in ¶1–9? Is it internal, external, or both?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Plot — What is the inciting incident that sets the plot in motion? What decision does Ali Cogia make, and why?',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: '1. List TWO literary elements you identified today. 2. What is ONE universal theme this story might explore?',
+          frame: 'One literary element I identified is __ because __. A universal theme this story might explore is __ because __.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'The word CONTENTED means ___.',
+              'Ali Cogia felt ___ about his life.',
+              'He decided to go to Mecca because ___.'
+            ],
+            wordBank: ['satisfied', 'happy', 'worried', 'Mecca', 'dream', 'duty', 'merchant', 'Baghdad']
+          },
+          l34: {
+            frames: [
+              'The author uses the word CONTENTED to show that Ali Cogia ___.',
+              'Ali REPROACHED himself, which means he ___.',
+              'He RESOLVED to make a pilgrimage because ___.'
+            ],
+            wordBank: ['criticized', 'decided', 'religious duty', 'guilty']
+          },
+          l5: {
+            frames: [
+              'The opening characterization of Ali Cogia as "contented" is significant because ___.',
+              'The shift from contentment to self-reproach signals that ___.'
+            ]
+          }
+        }
+      },
+
+      2: {
+        label: 'Complete Reading — STOP Strategy',
+        grPhase: 'We Do',
+        vocab: [
+          {
+            word: 'custody',
+            pos: 'noun',
+            definition: 'The care, protection, and safekeeping of something valuable',
+            sentence: 'The only matter he could not settle satisfactorily was the safe custody of a thousand pieces of gold.'
+          },
+          {
+            word: 'readily',
+            pos: 'adverb',
+            definition: 'Quickly and willingly, without hesitation',
+            sentence: 'The merchant replied readily, "Look, this is the key of my shop; take it, and put the vase wherever you please."'
+          },
+          {
+            word: 'laden',
+            pos: 'adjective',
+            definition: 'Loaded heavily; filled with cargo or goods',
+            sentence: 'Ali Cogia mounted the camel that he had laden with merchandise and joined the caravan.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '"The only matter he could not settle satisfactorily was the safe custody of a thousand pieces of gold..." What does CUSTODY most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Storage location', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'Care and safekeeping', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'Gold treasure', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'A business agreement', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: '"The merchant replied readily, \'Look, this is the key of my shop...\'" What does READILY most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Slowly and carefully', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Angrily and rudely', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'Quickly and willingly', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'After much thought', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: '"Ali Cogia mounted the camel that he had laden with merchandise..." Use LADEN in your own sentence.',
+            modelResponse: 'The delivery truck was so laden with packages that it could barely move through the neighborhood streets.'
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Symbolism — What does the jar of olives represent? How does this symbol develop the theme?',
+            evidence: '"He took a large vase, and placing the money in the bottom of it, filled up the rest with olives, then covered it and sealed it carefully." (¶4)',
+            analysis: 'The sealed jar represents Ali\'s trust — his most valued possession entrusted to a friend. As long as the jar is sealed and intact, the bond between the two men remains whole. When the seal is broken, so is the trust.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Characterization — How does the merchant\'s wife\'s dialogue reveal her character? What does she represent in the story?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'Conflict — What external conflict does Ali Cogia face when he returns? What internal conflict does the merchant face?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Plot — What is the turning point of the story? What decision sets the betrayal in motion?',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: '1. Which CUBES annotation step was most helpful? Circle: C U B E S. Explain why. 2. In one sentence, what is the main conflict?',
+          frame: 'The CUBES step that helped me most was __ because __. The main conflict is when __ because __.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'CUSTODY means ___.',
+              'The merchant took care of the ___.',
+              'Ali Cogia returned after ___ years.'
+            ],
+            wordBank: ['gold', 'jar', 'olives', 'seven', 'safekeeping', 'trust', 'friend', 'return']
+          },
+          l34: {
+            frames: [
+              'The merchant accepted the jar readily, which means he ___.',
+              'The merchant\'s wife warned him NOT to ___ because ___.',
+              'The conflict begins when the merchant sees ___.'
+            ],
+            wordBank: ['steal', 'the gold', 'Ali will return', 'agreed quickly']
+          },
+          l5: {
+            frames: [
+              'The author uses the wife\'s dialogue in ¶12 to develop her character as ___.',
+              'The merchant\'s decision to open the jar despite his wife\'s warning reveals that ___.'
+            ]
+          }
+        }
+      },
+
+      3: {
+        label: 'Literary Elements Organizer',
+        grPhase: 'We Do',
+        vocab: [
+          {
+            word: 'gladdened',
+            pos: 'verb',
+            definition: 'Made happy or filled with joy',
+            sentence: 'The results of the journey gladdened his heart and he was eager to return home.'
+          },
+          {
+            word: 'presentiment',
+            pos: 'noun',
+            definition: 'A strong feeling or premonition that something will happen in the future',
+            sentence: '"I have a presentiment that Ali Cogia will return," said the merchant\'s wife.'
+          },
+          {
+            word: 'base',
+            pos: 'adjective',
+            definition: 'Morally low or shameful; without honor or integrity',
+            sentence: '"Beware of doing anything so base!" the wife warned her husband.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '"gladdened" (Made happy. "Results gladdened his heart") What does GLADDENED most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Worried', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Made happy', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'Confused', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'Hardened', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: '"presentiment" (Strong feeling. "I have presentiment Ali will return") What does PRESENTIMENT most likely mean?',
+            choices: [
+              { letter: 'A', text: 'A memory', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'A strong feeling about the future', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'A message', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'A desire for revenge', stopLabel: 'Silly', correct: false }
+            ],
+            writtenPrompt: '"base" (Shameful. "Beware of doing anything so base") Use BASE in your own sentence about the merchant\'s actions.',
+            modelResponse: 'Stealing from a close friend who trusted you with everything is one of the most base things a person can do.'
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Setting — How does the setting of Baghdad during Haroun-al-Raschid\'s reign develop the universal theme of social responsibility?',
+            evidence: '"In the reign of Haroun-al-Raschid, a merchant of Bagdad..." (¶1). Baghdad is a center of honor, commerce, and faith during the Islamic Golden Age.',
+            analysis: 'The setting establishes a culture where duty, trust, and honor are sacred. When the merchant breaks his word in this setting, he violates not just a friendship but the values of his entire civilization. The setting makes the betrayal more significant.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Characterization — The Merchant\'s Wife: What does she say and do? What does this reveal about her character?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'Conflict — What internal or external conflicts exist in the story? How do they connect to the theme?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Plot — When is the turning point? What decision does the merchant make, and what are the consequences?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Symbolism — The Jar of Olives: What does it symbolize? How does this symbol develop the theme of trust and betrayal?',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: '1. How does the SETTING add layers of meaning to this story? 2. How many organizer rows did you complete? What was most challenging?',
+          frame: 'The setting adds meaning because __. I completed ___ rows. The most challenging part was ___.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'PRESENTIMENT means ___.',
+              'The wife felt that Ali would ___.',
+              'The wife\'s advice was ___.'
+            ],
+            wordBank: ['return', 'a feeling', 'good advice', 'ignored', 'merchant', 'gold', 'steal', 'base']
+          },
+          l34: {
+            frames: [
+              'The wife\'s PRESENTIMENT shows that she is ___ because ___.',
+              'The word BASE describes the merchant\'s actions as ___ because ___.',
+              'The setting of Baghdad is important to the theme because ___.'
+            ],
+            wordBank: ['morally wise', 'shameful', 'honor', 'trust', 'culture', 'sacred duty']
+          },
+          l5: {
+            frames: [
+              'The author develops the wife\'s character through dialogue to show that ___.',
+              'The setting reinforces the theme of social responsibility by establishing ___.'
+            ]
+          }
+        }
+      },
+
+      4: {
+        label: 'Close Reading — Quote Analysis',
+        grPhase: 'You Do w/ Partner',
+        vocab: [
+          {
+            word: 'sensible',
+            pos: 'adjective',
+            definition: 'Reasonable and wise; showing good judgment',
+            sentence: 'The merchant refused to listen to her advice, sensible though it was.'
+          },
+          {
+            word: 'obstinate',
+            pos: 'adjective',
+            definition: 'Stubbornly refusing to change one\'s opinion or course of action',
+            sentence: '"If you will be so obstinate," replied his wife, "I cannot help it."'
+          },
+          {
+            word: 'idle',
+            pos: 'adjective',
+            definition: 'Having no real purpose or value; worthless',
+            sentence: '"Pay no attention to my idle words," said the merchant, dismissing his wife\'s warning.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '"sensible" (Wise and reasonable. "Her advice, sensible though it was") What does SENSIBLE most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Emotional', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'Confusing', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'Reasonable and wise', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'Selfish', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: '"obstinate" (Stubbornly refusing. "If you will be so obstinate") What does OBSTINATE most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Generous', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: 'Honest', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'Careful', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'Stubbornly refusing to change', stopLabel: 'Proven', correct: true }
+            ],
+            writtenPrompt: '"idle" (Worthless. "Pay no attention to my idle words") Use IDLE in your own sentence about things that are not important.',
+            modelResponse: 'He waved away her concerns as idle talk, but later realized she had been right all along.'
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Theme — How do the wife\'s words ("Beware of doing anything so base!") and the merchant\'s decision work together to develop the theme of betrayal?',
+            evidence: '"Beware, I pray, of your doing anything so base!" (¶12) vs. "The sight of the money roused all the merchant\'s greed." (¶16)',
+            analysis: 'The wife\'s speech represents moral conscience — she voices honor, fear of God, and shame. The merchant\'s greed overpowers these moral arguments. The contrast between her wisdom and his obstinacy reveals the author\'s theme: greed can corrupt even people trusted with sacred responsibility.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Characterization — How does the merchant change from ¶6 to ¶16? What causes this change?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'Quote Analysis — "But the dream seemed to him a direct warning, and he resolved to put the journey off no longer." What does this reveal about Ali Cogia\'s character and values?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Quote Analysis — "She has a presentiment that Ali Cogia will return." Why is the wife\'s presentiment important to the plot and theme?',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: '1. What does the jar of olives SYMBOLIZE? Explain with evidence. 2. Rate your organizer quality (1–5). What would you need to move up one level?',
+          frame: 'The jar of olives symbolizes ___ because in ¶___ the author shows ___. I rate my organizer a ___ because ___.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'SENSIBLE means ___.',
+              'OBSTINATE means ___.',
+              'The merchant was OBSTINATE because he ___.'
+            ],
+            wordBank: ['wise', 'stubborn', 'refused', 'gold', 'wife', 'warning', 'ignored', 'reasonable']
+          },
+          l34: {
+            frames: [
+              'The wife\'s advice was SENSIBLE because ___.',
+              'The merchant was OBSTINATE because he ___.',
+              'The contrast between the wife and the merchant shows that ___.'
+            ],
+            wordBank: ['moral', 'greed', 'honor', 'warned him', 'chose gold', 'betrayal']
+          },
+          l5: {
+            frames: [
+              'The author uses the contrast between the wife\'s sensible advice and the merchant\'s obstinate refusal to develop the theme that ___.',
+              'The use of the word IDLE to describe the wife\'s warnings is ironic because ___.'
+            ]
+          }
+        }
+      },
+
+      5: {
+        label: 'Mini-Assessment — STOP Protocol',
+        grPhase: 'You Do',
+        vocab: [
+          {
+            word: 'entreat',
+            pos: 'verb',
+            definition: 'To beg or plead earnestly with someone',
+            sentence: '"Give it up, I entreat you!" the wife begged her husband, seeing how greed had overtaken him.'
+          },
+          {
+            word: 'roused',
+            pos: 'verb',
+            definition: 'Stirred up or awakened; provoked into action or feeling',
+            sentence: 'The sight of the money roused all the merchant\'s greed.'
+          },
+          {
+            word: 'shameful',
+            pos: 'adjective',
+            definition: 'Worthy of shame; dishonorable and morally disgraceful',
+            sentence: 'It is shameful to betray the trust of a friend who has done nothing wrong.'
+          }
+        ],
+        assessmentMC: [
+          {
+            stem: 'What can readers infer about Ali Cogia based upon his actions?',
+            choices: [
+              { letter: 'A', text: 'His decision to make a trip to Mecca after having a dream shows that he is a devout Muslim.', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'His decision to let a friend look after his money shows that he is overly trusting of other people.', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'His choice to sell his wares on the way to Mecca shows that he is not serious about his religious life.', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'His choice to delay his journey home for many years shows that he is neglectful of his family obligations.', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: 'Which sentence best provides evidence for the inference about Ali Cogia in Q11 Part A?',
+            choices: [
+              { letter: 'A', text: '"Ali Cogia was much troubled by this dream, as he was unwilling to give up his shop..." (¶2)', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: '"...but the dream seemed to him a direct warning, and he resolved to put the journey off no longer." (¶2)', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: '"He took a large vase, and placing the money in the bottom of it, filled up the rest with olives." (¶4)', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: '"...Ali Cogia mounted the camel that he had laden with merchandise, joined the caravan..." (¶7)', stopLabel: 'Silly', correct: false }
+            ]
+          },
+          {
+            stem: 'How does the author use dialogue to develop the character of Ali Cogia\'s friend\'s wife?',
+            choices: [
+              { letter: 'A', text: 'The dialogue establishes that the wife is obedient and does not challenge her husband.', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'The dialogue shows that the wife provides her husband with thoughtful advice.', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'The dialogue establishes that the wife is in control of her husband\'s actions.', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'The dialogue shows that the wife places business above friendship.', stopLabel: 'Silly', correct: false }
+            ]
+          },
+          {
+            stem: 'How does the author use the historical and cultural setting to reinforce the universal theme of social responsibility?',
+            choices: [
+              { letter: 'A', text: 'The author shows that a sense of duty was intrinsic to the culture as evidenced by the journey to Mecca that was the expected "duty of a good Mussulman."', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'The author focuses on the cultural value of sharing when Ali Cogia takes the jar of olives to his friend.', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'The author emphasizes the importance of honest business dealings to the society when Ali Cogia "set out his goods to the best advantage."', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'The author highlights the society\'s emphasis on the importance of accepting wise counsel when Ali Cogia goes to Cairo.', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: 'Ali Cogia\'s jar of olives serves as both a plot point and a motif. What does the author most clearly use the jar of olives to symbolize?',
+            choices: [
+              { letter: 'A', text: 'loss', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'hope', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'greed', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'trust', stopLabel: 'Proven', correct: true }
+            ]
+          },
+          {
+            stem: 'What connection can readers make between the folktale and a moral dilemma people in modern society might face?',
+            choices: [
+              { letter: 'A', text: '"Should I follow my dreams even if it means causing harm to others?"', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: '"Should I help a friend even if I believe my friend is making a mistake?"', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: '"Should I do the right thing even if I think I won\'t get caught?"', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: '"Should I follow the advice of my spouse even if it is morally wrong?"', stopLabel: 'Tricky', correct: false }
+            ]
+          }
+        ],
+        exitTicket: {
+          prompt: '1. Which STOP category was hardest to identify? Circle: S T O P. Why was it tricky? 2. How confident are you? (Very / Somewhat / Need more practice) What would help?',
+          frame: 'The hardest STOP category for me was ___ because ___. My confidence level is ___ because ___.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'ENTREAT means ___.',
+              'ROUSED means ___.',
+              'The merchant\'s GREED was ROUSED when he ___.'
+            ],
+            wordBank: ['to beg', 'awakened', 'gold', 'saw the', 'stirred up', 'greedy', 'trust', 'broke']
+          },
+          l34: {
+            frames: [
+              'The wife ENTREATED her husband, which means she ___.',
+              'The word ROUSED tells us that the merchant\'s greed was ___ by the sight of the gold.',
+              'It is SHAMEFUL for the merchant to steal because ___.'
+            ],
+            wordBank: ['begged', 'stirred up', 'broke a trust', 'friend', 'honor', 'dishonorable']
+          },
+          l5: {
+            frames: [
+              'The author\'s word choice of "ROUSED" to describe the merchant\'s greed is significant because ___.',
+              'The moral dilemma in this story is universal because ___.'
+            ]
+          }
+        }
+      },
+
+      6: {
+        label: 'ACE Writing — Synthesis',
+        grPhase: 'You Do',
+        vocab: [
+          {
+            word: 'betrayed',
+            pos: 'verb',
+            definition: 'Violated or broke the trust of someone who depended on you',
+            sentence: '"You had betrayed your trust," Ali Cogia said when he discovered the gold was gone.'
+          },
+          {
+            word: 'greed',
+            pos: 'noun',
+            definition: 'An intense, selfish desire for more wealth, power, or possessions than one needs',
+            sentence: 'The sight of the money roused all the merchant\'s greed, and he took what was not his.'
+          },
+          {
+            word: 'pilgrimage',
+            pos: 'noun',
+            definition: 'A journey to a sacred place undertaken for religious reasons',
+            sentence: 'Ali Cogia delayed his pilgrimage to Mecca for years before finally resolving to go.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '"betrayed" (Violated trust. "You had betrayed your trust") What does BETRAYED most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Protected or guarded', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Broke or violated', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'Strengthened', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'Questioned or doubted', stopLabel: 'Tricky', correct: false }
+            ],
+            writtenPrompt: null,
+            modelResponse: null
+          },
+          {
+            stem: '"greed" (Intense desire for wealth. "Money roused merchant\'s greed") What does GREED most likely mean?',
+            choices: [
+              { letter: 'A', text: 'Generosity', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Confusion', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'Fear', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'Selfish desire for more', stopLabel: 'Proven', correct: true }
+            ],
+            writtenPrompt: '"pilgrimage" (Religious journey. "Delaying pilgrimage to Mecca") Use PILGRIMAGE in your own sentence about a spiritual or important journey.',
+            modelResponse: 'Every year, millions of Muslims make the pilgrimage to Mecca as an act of faith and devotion.'
+          }
+        ],
+        writtenResponse: {
+          title: 'ACE Writing Response',
+          prompt: 'How does the author use characterization and conflict to develop the universal theme of trust and betrayal? Write a well-developed ACE response using evidence from the text.',
+          frame: 'The author uses characterization and conflict to develop the theme that ___. For example, in ¶___, the author shows ___ when ___. This develops the theme because ___. Another example is in ¶___, where ___. Together, these literary elements show that ___.',
+          modelResponse: 'The author uses characterization and conflict to develop the theme that greed destroys trust when people choose personal gain over honor. For example, in ¶12, the author characterizes the wife as the voice of moral conscience when she warns her husband: "Beware of doing anything so base!" This develops the theme because her warning shows the author believes people know when they are crossing a moral line. However, the external conflict between Ali\'s trust and the merchant\'s greed is resolved by betrayal when "the sight of the money roused all the merchant\'s greed" (¶16). Together, these elements show that trust, once broken by greed, cannot be quietly rebuilt — it demands justice.'
+        },
+        exitTicket: {
+          prompt: '1. Did your ACE response include all parts? Check: A / C / E. Which part was strongest? Which needs work? 2. What is the MOST important thing you learned about literary elements and theme?',
+          frame: 'My strongest ACE part was ___ because ___. I need to work on ___ because ___. The most important thing I learned is ___.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'BETRAYED means ___.',
+              'GREED means ___.',
+              'The merchant BETRAYED Ali because he ___.'
+            ],
+            wordBank: ['broke trust', 'selfish desire', 'stole', 'the gold', 'friend', 'honor', 'pilgrimage', 'journey']
+          },
+          l34: {
+            frames: [
+              'The merchant BETRAYED Ali Cogia when he ___.',
+              'GREED caused the merchant to ___ even though his wife ___.',
+              'The universal theme of this story is that ___.'
+            ],
+            wordBank: ['stole the gold', 'warned him', 'trust is fragile', 'greed destroys honor', 'betrayal has consequences']
+          },
+          l5: {
+            frames: [
+              'The author develops the universal theme of trust and betrayal through characterization by ___.',
+              'The conflict between the wife\'s moral counsel and the merchant\'s greed suggests that ___.'
+            ]
+          }
+        }
+      }
+    }
+  };
+  </script>
+  <script src="../../js/unit.js"></script>
+  <script>IR.init();</script>
+</body>
+</html>

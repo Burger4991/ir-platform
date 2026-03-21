@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IR Teaching System · Mr. Burger</title>
+  <link rel="stylesheet" href="css/platform.css">
+</head>
+<body>
+  <div class="unit-app" style="height:auto;overflow:visible;">
+
+    <header class="platform-topbar">
+      <a href="#" class="logo">IR <span>Teaching System</span></a>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <span style="font-size:0.75rem;color:var(--muted);">10th Grade · Florida BEST ELA · Mr. Burger</span>
+      </div>
+    </header>
+
+    <section class="home-hero">
+      <div class="hero-kicker">Intensive Reading · Promethean Board</div>
+      <h1>IR Teaching System</h1>
+      <p>Benchmark-aligned units for 10th grade Intensive Reading — built for projection, STOP strategy, ESOL scaffolds, and gradual release built in.</p>
+    </section>
+
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" data-cat="all">All Units</button>
+      <button class="filter-btn" data-cat="R.1 Literary">R.1 Literary</button>
+      <button class="filter-btn" data-cat="R.2 Informational">R.2 Informational</button>
+      <button class="filter-btn" data-cat="R.3 Figurative">R.3 Figurative</button>
+      <button class="filter-btn" data-cat="Test Prep">Test Prep</button>
+      <input class="search-input" id="search" type="text" placeholder="Search units…">
+    </div>
+
+    <div class="units-grid" id="units-grid"></div>
+
+    <footer style="padding:2rem;text-align:center;border-top:1px solid var(--border);margin-top:2rem;">
+      <span style="font-size:0.75rem;color:var(--muted);">IR Platform · Mr. Burger · Miami-Dade County Public Schools</span>
+    </footer>
+
+  </div>
+
+  <script src="units-registry.js"></script>
+  <script>
+    const grid = document.getElementById('units-grid');
+    const search = document.getElementById('search');
+    let cat = 'all';
+
+    function render() {
+      const q = search.value.toLowerCase();
+      const filtered = window.UNITS.filter(u => {
+        if (u.status !== 'live') return false;
+        if (cat !== 'all' && u.category !== cat) return false;
+        if (q && !u.title.toLowerCase().includes(q) && !u.description.toLowerCase().includes(q)) return false;
+        return true;
+      });
+
+      grid.innerHTML = '';
+      filtered.forEach(u => {
+        const card = document.createElement('div');
+        card.className = 'unit-card';
+        card.innerHTML = `
+          <div class="unit-card-header">
+            <div class="unit-card-benchmark">
+              <span class="badge ${u.accentClass}">${u.benchmark}</span>
+              &nbsp;${u.benchmarkLabel}
+            </div>
+            <div class="unit-card-title">${u.title}</div>
+          </div>
+          <div class="unit-card-body">
+            <p class="unit-card-desc">${u.description}</p>
+            <div class="unit-card-tags">${u.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+            <div class="unit-card-cta">Open Unit →</div>
+          </div>
+        `;
+        card.addEventListener('click', () => { window.location.href = u.path; });
+        grid.appendChild(card);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p style="padding:2rem;color:var(--muted);text-align:center;">No units match this filter.</p>';
+      }
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        cat = btn.dataset.cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        render();
+      });
+    });
+
+    search.addEventListener('input', render);
+    render();
+  </script>
+</body>
+</html>

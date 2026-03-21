@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shakuntala · IR Platform</title>
+  <link rel="stylesheet" href="../../css/platform.css">
+</head>
+<body>
+
+  <header class="unit-topbar">
+    <a href="../../" class="tb-back">← IR Platform</a>
+    <span class="tb-divider"></span>
+    <span class="tb-title">Shakuntala</span>
+    <div class="tb-tools">
+      <div style="display:flex;align-items:center;gap:0.25rem;background:var(--surface-2);border-radius:8px;padding:0.25rem 0.5rem;">
+        <span class="timer-display"><span id="timer-value">4:00</span></span>
+        <button class="btn btn-ghost" id="btn-timer-play" style="min-width:32px;padding:0.25rem 0.5rem;" title="Play/Pause">▶</button>
+        <button class="btn btn-ghost" id="btn-timer-reset" style="min-width:32px;padding:0.25rem 0.5rem;" title="Reset">↺</button>
+        <select id="timer-presets" style="background:var(--surface-2);color:var(--muted);border:none;font-size:0.75rem;cursor:pointer;">
+          <option value="">⚡</option>
+          <option value="120">2 min</option>
+          <option value="180">3 min</option>
+          <option value="300">5 min</option>
+          <option value="480">8 min</option>
+          <option value="720">12 min</option>
+        </select>
+      </div>
+      <button class="btn btn-ghost" id="btn-stop" title="STOP Strategy">🛑 STOP</button>
+      <button class="btn btn-ghost" id="btn-esol" title="ESOL Level">🌐 ESOL Off</button>
+      <button class="btn btn-ghost" id="btn-gr-phase" title="GR Phase">📋 GR</button>
+      <button class="btn btn-ghost" id="btn-reveal" title="Reveal Answers">💡 Reveal</button>
+      <button class="btn btn-ghost" id="btn-exit-ticket" title="Exit Ticket">🎟 Exit</button>
+      <button class="btn btn-ghost" id="btn-light" title="Toggle Light Mode">☀</button>
+    </div>
+  </header>
+
+  <div class="unit-app" style="height:calc(100vh - 56px);">
+    <div class="unit-body">
+      <nav class="day-sidebar" id="day-sidebar">
+        <button class="sidebar-toggle" id="sidebar-toggle">‹</button>
+      </nav>
+      <main class="content-area" id="content-area"></main>
+    </div>
+  </div>
+
+  <div class="gr-badge" id="gr-badge" style="display:none"></div>
+
+  <div class="day-complete-overlay" id="day-complete-overlay">
+    <div class="day-complete-card">
+      <div class="day-complete-emoji">🎉</div>
+      <div class="day-complete-title" id="dc-title"></div>
+      <div class="day-complete-sub" id="dc-sub"></div>
+      <button class="btn btn-primary" id="dc-btn" style="margin-top:1.5rem;width:100%;justify-content:center;"></button>
+    </div>
+  </div>
+
+  <div class="exit-ticket-overlay" id="exit-ticket-overlay">
+    <div class="exit-ticket-card">
+      <div class="exit-ticket-label">🎟 Exit Ticket</div>
+      <div class="exit-ticket-prompt" id="et-prompt"></div>
+      <div class="exit-ticket-frame" id="et-frame"></div>
+      <button class="btn btn-ghost" id="btn-exit-ticket-close" style="margin-top:1rem;">Close</button>
+    </div>
+  </div>
+
+  <div class="focus-overlay" id="focus-overlay">
+    <div class="focus-header">
+      <button class="btn btn-ghost" id="btn-focus-back" style="font-size:0.8rem;">← Back</button>
+      <div class="focus-anchor" id="focus-anchor"></div>
+      <div class="focus-step-dots" id="focus-dots"></div>
+    </div>
+    <div class="focus-body" id="focus-body"></div>
+    <div class="focus-nav">
+      <button class="btn btn-ghost" id="btn-focus-prev">← Back</button>
+      <span id="focus-step-info" style="font-size:0.8rem;color:var(--muted)"></span>
+      <button class="btn btn-primary" id="btn-focus-next">Next →</button>
+    </div>
+  </div>
+
+  <script>
+  const UNIT = {
+    id: 'shakuntala',
+    title: 'Shakuntala',
+    benchmark: 'ELA.10.R.1.1',
+    benchmarkLabel: 'Literary Elements',
+    meta: { days: 4 },
+
+    passage: [
+      { n: 1, text: '<strong>KANVA:</strong> <em>Shakuntala must go to-day;<br>I miss her now at heart;<br>I dare not speak a loving word<br>Or choking tears will start.<br><br>My eyes are dim with anxious thought;<br>Love strikes me to the life:<br>And yet I strove for pious peace—<br>I have no child, no wife.<br><br>What must a father feel, when come<br>The pangs of parting from his child at home?</em> [He walks about the two friends.] There, Shakuntala, we have arranged your ornaments. Now put on this beautiful silk dress. [SHAKUNTALA rises and does so.]' },
+      { n: 2, text: '<strong>GAUTAMI:</strong> My child, here is your father. The eyes with which he seems to embrace you are overflowing with tears of joy. You must greet him properly. [SHAKUNTALA makes a shamefaced reverence.]' },
+      { n: 3, text: '[Kanva and Shakuntala take part in a brief spiritual ceremony.]' },
+      { n: 4, text: '<strong>KANVA:</strong> Now you may start, my daughter. [He glances about.] Where are Sharngarava and Sharadvata? [Enter the two pupils.]' },
+      { n: 5, text: '<strong>SHARNGARAVA and SHARADVATA:</strong> We are here, Father.' },
+      { n: 6, text: '<strong>KANVA:</strong> Sharngarava, my son, lead the way for your sister.' },
+      { n: 7, text: '<strong>SHARNGARAVA:</strong> Follow me. [They all walk about.]' },
+      { n: 8, text: '<strong>KANVA:</strong> O trees of the pious grove, in which the fairies dwell,<br><em>She would not drink till she had wet<br>Your roots, a sister\'s duty,<br>Nor pluck your flowers; she loves you yet<br>Far more than selfish beauty.<br><br>\'Twas festival in her pure life<br>When budding blossoms showed;<br>And now she leaves you as a wife—<br>Oh, speed her on her road!</em>' },
+      { n: 9, text: '<strong>SHARNGARAVA:</strong> [listening to the song of koïl-birds] Father,<br><em>The trees are answering your prayer<br>In cooing cuckoo-song,<br>Bidding Shakuntala farewell,<br>Their sister for so long.</em><br><br>Invisible beings,<br><em>May lily-dotted lakes delight your eye;<br>May shade-trees bid the heat of noonday cease;<br>May soft winds blow the lotus-pollen nigh;<br>May all your path be pleasantness and peace.</em>' },
+      { n: 10, text: '[All listen in astonishment.]' },
+      { n: 11, text: '<strong>GAUTAMI:</strong> My child, the fairies of the pious grove bid you farewell. For they love the household. Pay reverence to the holy ones.' },
+      { n: 12, text: '<strong>SHAKUNTALA:</strong> [does so. Aside to PRIYAMVADA] Priyamvada, I long to see my husband, and yet my feet will hardly move. It is hard, hard to leave the hermitage.' },
+      { n: 13, text: '<strong>PRIYAMVADA:</strong> You are not the only one to feel sad at this farewell. See how the whole grove feels at parting from you.<br><em>The grass drops from the feeding doe;<br>The peahen stops her dance;<br>Pale, trembling leaves are falling slow,<br>The tears of clinging plants.</em>' },
+      { n: 14, text: '[Shakuntala bids farewell to the plants and animals of the grove. Kanva promises to care for them in her absence and asks Shakuntala to tell the King that he, Kanva, reminds the King of his religious duty to honor and respect Shakuntala as his wife. Kanva also gives Shakuntala advice about how best to act in the King\'s household, suggesting she be kind and faithful. Shakuntala reluctantly departs, and Kanva expresses his sorrow at her leaving.]' },
+      { n: 15, text: '<em>from Act V: "Shakuntala\'s Rejection"</em><br>[King Dushyanta relaxes at court. He listens to a song about lost love.]' },
+      { n: 16, text: '<strong>KING:</strong> Why am I filled with wistfulness on hearing such a song? I am not separated from one I love. And yet,<br><em>In face of sweet presentment<br>Of things long past, there clings<br>A dim, sad yearning<br>By wistful longings bound.</em>' },
+      { n: 17, text: '[Kanva\'s pupils arrive at court with Shakuntala. They present her to the King, explaining that she is his wife.]' },
+      { n: 18, text: '<strong>KING:</strong> What does this mean?' },
+      { n: 19, text: '<strong>SHAKUNTALA:</strong> [aside] Oh, oh! He does not even greet me with a look. He does not even answer them.' },
+      { n: 20, text: '<strong>SHARNGARAVA:</strong> Your Majesty promised to marry Shakuntala. You must take her as your wife.' },
+      { n: 21, text: '<strong>KING:</strong> I have no memory of this. I do not recall any marriage.' },
+      { n: 22, text: '<strong>SHAKUNTALA:</strong> My husband, why do you say such a thing?' },
+      { n: 23, text: '<strong>KING:</strong> [aside] Shall I deny my marriage, and so be stained with guilt? Or shall I confess it, and so bring shame upon my house?' },
+      { n: 24, text: '[The King continues to deny the marriage. Shakuntala is devastated. Kanva\'s pupils are outraged.]' },
+      { n: 25, text: '<strong>GAUTAMI:</strong> Shakuntala, your husband has abandoned you. Come, we must leave this place.' },
+      { n: 26, text: '<strong>KING:</strong> [gazing at SHAKUNTALA]<br><em>My mind does not recall that I did wed<br>This timid maid; and yet my heart<br>Is torn with doubt, as if perhaps<br>I did, and have forgot.</em>' },
+      { n: 27, text: '[Shakuntala leaves, heartbroken. The King is left in confusion. Later, a magical ring is found that restores his memory of Shakuntala and their marriage.]' },
+      { n: 28, text: '<strong>KING:</strong> [recovering his memory] Yes! Yes, I remember now! Shakuntala is my beloved wife. How could I have forgotten? What curse made me blind? I must find her!' }
+    ],
+
+    days: {
+      1: {
+        label: 'Cold Read — CUBES Annotation',
+        grPhase: 'I Do',
+        vocab: [
+          {
+            word: 'wistfulness',
+            pos: 'noun',
+            definition: 'a feeling of vague or regretful longing',
+            sentence: 'Looking at old yearbooks filled her with wistfulness for her high school days.'
+          },
+          {
+            word: 'reverence',
+            pos: 'noun',
+            definition: 'deep respect or honor',
+            sentence: 'The students stood in reverence as the national anthem played.'
+          },
+          {
+            word: 'presentment',
+            pos: 'noun',
+            definition: 'a feeling or intuition about something, especially a future event',
+            sentence: 'She had a strange presentment that something important would happen before the day was over.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '1. After looking at old photographs, Maria felt a sense of __________ for her childhood.',
+            choices: [
+              { letter: 'A', text: 'anger', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: 'wistfulness', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'excitement', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'confusion', stopLabel: 'Opposite', correct: false }
+            ]
+          },
+          {
+            stem: '2. The students showed __________ for the guest speaker by listening quietly.',
+            choices: [
+              { letter: 'A', text: 'reverence', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'boredom', stopLabel: 'Opposite', correct: false },
+              { letter: 'C', text: 'hostility', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'indifference', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: '3. She had a strange __________ that something important would happen today.',
+            choices: [
+              { letter: 'A', text: 'confusion', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'disappointment', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'presentment', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'memory', stopLabel: 'Opposite', correct: false }
+            ]
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'What does Kanva\'s verse in ¶1 reveal about his feelings toward Shakuntala\'s departure?',
+            evidence: '"Shakuntala must go to-day; / I miss her now at heart; / I dare not speak a loving word / Or choking tears will start." (¶1)',
+            analysis: 'The verse reveals Kanva\'s deep sadness — he loves Shakuntala like a father but must let her go. He can barely speak without crying, showing the painful conflict between duty and love.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'What does Shakuntala\'s aside in ¶12 reveal about her internal conflict?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'How does the nature imagery in ¶13 develop the mood of Shakuntala\'s departure?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'What is the difference between what happens in Act IV (¶1–14) and Act V (¶15–28)?',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: 'Based on paragraph 12, Shakuntala\'s aside reveals that she feels—',
+          frame: 'Shakuntala feels __________ because she says "__________." This shows that she is torn between __________ and __________.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'The word __________ means __________.',
+              'In the sentence, __________ fits because __________.',
+              'I know this because the sentence says "__________."'
+            ],
+            wordBank: ['wistfulness', 'reverence', 'presentment', 'longing', 'respect', 'feeling', 'photograph', 'ceremony', 'happen']
+          },
+          l34: {
+            frames: [
+              'The correct answer is __________ because the sentence is about __________.',
+              'The context clue "__________ " helped me choose this word.'
+            ],
+            wordBank: ['longing', 'sadness', 'respect', 'honor', 'intuition', 'future']
+          },
+          l5: {
+            frames: [
+              'The word __________ fits because the context suggests __________, which connects to the definition "__________."'
+            ]
+          }
+        }
+      },
+
+      2: {
+        label: 'CUBES for Questions',
+        grPhase: 'We Do',
+        vocab: [
+          {
+            word: 'wistfulness',
+            pos: 'noun',
+            definition: 'a feeling of vague or regretful longing',
+            sentence: 'The elderly man felt wistfulness watching children play, remembering his own youth.'
+          },
+          {
+            word: 'reverence',
+            pos: 'noun',
+            definition: 'deep respect or honor',
+            sentence: 'The community showed reverence for the war veterans by holding a special ceremony.'
+          },
+          {
+            word: 'presentment',
+            pos: 'noun',
+            definition: 'a feeling or intuition about something, especially a future event',
+            sentence: 'Despite having no proof, she had a strong presentment that her missing keys were in her car.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '1. The elderly man felt __________ as he watched children playing, remembering his own youth.',
+            choices: [
+              { letter: 'A', text: 'wistfulness', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'reverence', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'presentment', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'anger', stopLabel: 'Silly', correct: false }
+            ]
+          },
+          {
+            stem: '2. The community showed __________ for the war veterans by holding a special ceremony.',
+            choices: [
+              { letter: 'A', text: 'wistfulness', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'presentment', stopLabel: 'Opposite', correct: false },
+              { letter: 'C', text: 'reverence', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'confusion', stopLabel: 'Silly', correct: false }
+            ]
+          },
+          {
+            stem: '3. Despite having no proof, she had a strong __________ that her missing keys were in her car.',
+            choices: [
+              { letter: 'A', text: 'reverence', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'wistfulness', stopLabel: 'Opposite', correct: false },
+              { letter: 'C', text: 'memory', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'presentment', stopLabel: 'Proven', correct: true }
+            ]
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Q16 — Underline what the question asks. Box the paragraph reference. What context clues in ¶16 explain "wistfulness"?',
+            evidence: '"Why am I filled with wistfulness… By wistful longings bound." (¶16)',
+            analysis: 'Context clues: "longings," "dim, sad yearning," "things long past." These show wistfulness = longing or melancholy. Answer: A.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Q17 — What figurative language device appears in "father/feel" and "pangs/parting"? What mood does it create?',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Q19 — What is the primary FUNCTION of Shakuntala\'s aside in ¶12? (Hint: function = WHY the author included it)',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do-partner',
+            prompt: 'Q20A — Which statement BEST describes the conflict Shakuntala confronts in Act IV? What evidence supports this?',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        exitTicket: {
+          prompt: 'Question 19 asks "What is the primary function of this aside?" What is this question REALLY asking you to do?',
+          frame: 'This question is asking me to explain __________ because "function" means __________. I know the answer is __________ because __________.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'The question is asking me to find __________.',
+              'I should look at paragraph __________ because __________.',
+              'The answer is __________ because the text says "__________."'
+            ],
+            wordBank: ['wistfulness', 'longing', 'sadness', 'paragraph 16', 'context clues', 'function', 'aside', 'internal struggle', 'reveal']
+          },
+          l34: {
+            frames: [
+              'CUBES helps me __________ the question by underlining __________ and boxing __________.',
+              'The correct answer is __________ because the text states "__________."'
+            ],
+            wordBank: []
+          },
+          l5: {
+            frames: [
+              'Using CUBES, I identified that this question asks about __________, and the key evidence is found in ¶__________ where the text states "__________."'
+            ]
+          }
+        }
+      },
+
+      3: {
+        label: 'STOP Elimination + CER',
+        grPhase: 'You Do w/ Partner',
+        vocab: [
+          {
+            word: 'wistfulness',
+            pos: 'noun',
+            definition: 'a feeling of vague or regretful longing',
+            sentence: 'She felt wistfulness as she packed away her childhood toys.'
+          },
+          {
+            word: 'reverence',
+            pos: 'noun',
+            definition: 'deep respect or honor',
+            sentence: 'They treated the ancient temple with reverence and respect.'
+          },
+          {
+            word: 'presentment',
+            pos: 'noun',
+            definition: 'a feeling or intuition about something, especially a future event',
+            sentence: 'I had a presentment that I would ace the test, and I did.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '1. WISTFULNESS — which sentence uses it correctly?',
+            choices: [
+              { letter: 'A', text: 'The team\'s wistfulness led them to win the game.', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: 'She felt wistfulness as she packed away childhood toys.', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'His wistfulness made everyone laugh at the party.', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'The wistfulness of the room was bright and cheerful.', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: '2. REVERENCE — which sentence uses it correctly?',
+            choices: [
+              { letter: 'A', text: 'Students showed reverence by talking loudly during the ceremony.', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'They treated the ancient temple with reverence and respect.', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'His reverence for rules meant he broke them constantly.', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'The reverence of the joke made everyone upset.', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: '3. PRESENTMENT — which sentence uses it correctly?',
+            choices: [
+              { letter: 'A', text: 'I had a presentment that I would ace the test, and I did.', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'The presentment of the gift was wrapped in blue paper.', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'She gave a presentment to the class about her project.', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'His presentment at the meeting lasted twenty minutes.', stopLabel: 'Opposite', correct: false }
+            ]
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Q20A — Use STOP to eliminate wrong answers. Which statement BEST describes Shakuntala\'s conflict in Act IV?',
+            evidence: 'S = "confronts king\'s changed feelings" (Act V, not IV — ELIMINATE)\nS = "unequal treatment of women" (she\'s following duty — ELIMINATE)\nP = "struggles with leaving home to reunite with king" (¶12: "I long to see my husband, yet my feet will hardly move" — KEEP)\nT = "deciding whether to marry" (already married — ELIMINATE)',
+            analysis: 'Correct: C — Shakuntala\'s conflict is her struggle between leaving her home and reuniting with the king. Evidence: ¶12 aside. STOP proves only C is supported.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Q20B — Using your Part A answer, how does the conflict CHANGE Shakuntala? Use STOP to eliminate.',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        assessmentMC: [
+          {
+            stem: 'Q16. Which phrase best explains the meaning of "wistfulness" in paragraph 16?',
+            choices: [
+              { letter: 'A', text: 'longing or melancholy', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'anxiety or nervousness', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'outrage or condemnation', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'disappointment or frustration', stopLabel: 'Opposite', correct: false }
+            ]
+          },
+          {
+            stem: 'Q17. Read these lines from ¶1: "What must a father feel, when come / The pangs of parting from his child at home?" Which statement describes the effect of the figurative language?',
+            choices: [
+              { letter: 'A', text: 'The consonance (what/when, come/child) creates surprise and thankfulness.', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'The consonance (what/when, come/child) creates loss and confusion.', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'The alliteration (father/feel, pangs/parting) creates sadness and longing.', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'The alliteration (father/feel, pangs/parting) creates joy and pride.', stopLabel: 'Opposite', correct: false }
+            ]
+          },
+          {
+            stem: 'Q18. What is the main purpose of the scene in paragraph 26?',
+            choices: [
+              { letter: 'A', text: 'to reveal the King\'s thoughts about his role in the natural world', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'to foreshadow the nature of the King\'s future relationship with Shakuntala', stopLabel: 'Opposite', correct: false },
+              { letter: 'C', text: 'to show that the King wants to remember because he finds Shakuntala attractive', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'to explain why the King rejects Kanva\'s message and refuses to speak', stopLabel: 'Silly', correct: false }
+            ]
+          },
+          {
+            stem: 'Q19. Read ¶12: "SHAKUNTALA: [Aside to PRIYAMVADA] Priyamvada, I long to see my husband, and yet my feet will hardly move. It is hard, hard to leave the hermitage." What is the primary function of this aside?',
+            choices: [
+              { letter: 'A', text: 'It reveals Shakuntala\'s internal struggle.', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'It makes the reader feel pity for Priyamvada.', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'It shows how close Shakuntala is to Priyamvada.', stopLabel: 'Tricky', correct: false },
+              { letter: 'D', text: 'It suggests future problems in Shakuntala\'s marriage.', stopLabel: 'Opposite', correct: false }
+            ]
+          },
+          {
+            stem: 'Q20A. Which statement best describes the conflict Shakuntala confronts in Act IV?',
+            choices: [
+              { letter: 'A', text: 'Shakuntala confronts the king\'s changed feelings about her.', stopLabel: 'Opposite', correct: false },
+              { letter: 'B', text: 'Shakuntala confronts the unequal treatment of women in her culture.', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'Shakuntala struggles with leaving her home to reunite with the king.', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'Shakuntala struggles with deciding whether to marry the king or stay.', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: 'Q20B. How does the conflict in Part A change Shakuntala?',
+            choices: [
+              { letter: 'A', text: 'Shakuntala learns to challenge cultural norms.', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'Shakuntala asserts her independence from the king.', stopLabel: 'Silly', correct: false },
+              { letter: 'C', text: 'Shakuntala recognizes the importance of family and stays home.', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'Shakuntala decides to follow her heart and rejoin the king.', stopLabel: 'Proven', correct: true }
+            ]
+          },
+          {
+            stem: 'Q21. How does the predominant abab rhyme scheme in ¶16 affect the play?',
+            choices: [
+              { letter: 'A', text: 'The simple abab creates a playful pattern that undercuts sadness.', stopLabel: 'Tricky', correct: false },
+              { letter: 'B', text: 'The steady abab lends formal dignity to characters\' thoughts.', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'The fast-paced abab lets the audience know something will happen.', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'The musical abab indicates when a character switches to song.', stopLabel: 'Opposite', correct: false }
+            ]
+          },
+          {
+            stem: 'Q22. Read this adaptation: "Sharon walked in the garden with her father. He pointed out the flowers on the trees... But Jack was her husband, after all, though he seemed to find it convenient to forget that he was married when it suited him. But maybe Dad knew something she didn\'t." What conflict in the adaptation is similar to a conflict in the play?',
+            choices: [
+              { letter: 'A', text: 'the conflict between good and evil', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: 'the conflict between youth and age', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'the conflict between people and nature', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'the conflict between stasis and change', stopLabel: 'Proven', correct: true }
+            ]
+          }
+        ],
+        exitTicket: {
+          prompt: 'How many answer choices should you eliminate with STOP?',
+          frame: 'I should eliminate __________ wrong answer choices, leaving only __________ answer standing, because __________.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'S = __________ (obviously wrong because __________)',
+              'T = __________ (tricky because it sounds right but __________)',
+              'O = __________ (opposite because __________)',
+              'P = __________ (proven because the text says "__________")'
+            ],
+            wordBank: ['Silly', 'Tricky', 'Opposite', 'Proven', 'eliminate', 'wrong', 'evidence', 'passage']
+          },
+          l34: {
+            frames: [
+              'I can eliminate choice __________ because it is __________ (S/T/O/P) — the text says "__________."',
+              'The correct answer is __________ because I found evidence in ¶__________.'
+            ],
+            wordBank: []
+          },
+          l5: {
+            frames: [
+              'Using STOP, I eliminated __________ (S), __________ (T), and __________ (O) because __________. The proven answer is __________ because the text states "__________" in ¶__________.'
+            ]
+          }
+        }
+      },
+
+      4: {
+        label: 'CER Extended Response',
+        grPhase: 'You Do',
+        vocab: [
+          {
+            word: 'wistfulness',
+            pos: 'noun',
+            definition: 'a feeling of vague or regretful longing',
+            sentence: 'The alumni felt wistfulness walking through their old school — everything was the same, yet everything had changed.'
+          },
+          {
+            word: 'reverence',
+            pos: 'noun',
+            definition: 'deep respect or honor',
+            sentence: 'The ceremony demanded reverence — no one spoke above a whisper as the memorial was unveiled.'
+          },
+          {
+            word: 'presentment',
+            pos: 'noun',
+            definition: 'a feeling or intuition about something, especially a future event',
+            sentence: 'A cold presentment settled over him as he read the letter — somehow he already knew what it would say.'
+          }
+        ],
+        bellringer: [
+          {
+            stem: '1. What does "wistfulness" mean?',
+            choices: [
+              { letter: 'A', text: 'extreme anger or rage', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: 'a feeling of longing or gentle sadness', stopLabel: 'Proven', correct: true },
+              { letter: 'C', text: 'complete happiness and joy', stopLabel: 'Opposite', correct: false },
+              { letter: 'D', text: 'confusion and uncertainty', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: '2. What does "reverence" mean?',
+            choices: [
+              { letter: 'A', text: 'deep respect or honor', stopLabel: 'Proven', correct: true },
+              { letter: 'B', text: 'fear or anxiety', stopLabel: 'Opposite', correct: false },
+              { letter: 'C', text: 'boredom or indifference', stopLabel: 'Silly', correct: false },
+              { letter: 'D', text: 'playfulness or humor', stopLabel: 'Tricky', correct: false }
+            ]
+          },
+          {
+            stem: '3. What does "presentment" mean?',
+            choices: [
+              { letter: 'A', text: 'a gift or present', stopLabel: 'Silly', correct: false },
+              { letter: 'B', text: 'a formal presentation', stopLabel: 'Tricky', correct: false },
+              { letter: 'C', text: 'a feeling about something that will happen', stopLabel: 'Proven', correct: true },
+              { letter: 'D', text: 'being present at an event', stopLabel: 'Opposite', correct: false }
+            ]
+          }
+        ],
+        organizer: [
+          {
+            grPhase: 'i-do',
+            prompt: 'Identify the two parts of the CER prompt: (1) How does the author DEVELOP the internal conflict? (2) What does Shakuntala\'s RESOLUTION reveal about her character?',
+            evidence: 'Key ¶s: 1 (Kanva\'s verse — sadness), 8–13 (emotional farewell to grove), 12 (aside = KEY — internal conflict), 14 (reluctantly departs = RESOLUTION)',
+            analysis: 'Part 1: Author uses aside (¶12), verse, and nature imagery to develop the conflict. Part 2: "Reluctantly departs" (¶14) reveals she is dutiful, loyal, and brave — she chooses love and duty over comfort.'
+          },
+          {
+            grPhase: 'we-do',
+            prompt: 'Plan your evidence: Choose TWO quotes — one showing the conflict, one showing the resolution.',
+            evidence: '',
+            analysis: ''
+          },
+          {
+            grPhase: 'you-do',
+            prompt: 'Write your CLAIM sentence: Address BOTH parts — how the conflict is developed AND what the resolution reveals.',
+            evidence: '',
+            analysis: ''
+          }
+        ],
+        writtenResponse: {
+          title: 'CER Extended Response — Day 4',
+          prompt: 'In Act IV, Shakuntala faces a conflict between staying in her familiar home and leaving to reunite with the king. How does the author develop this internal conflict, and what does Shakuntala\'s resolution reveal about her character? Use evidence from the text to support your response. (Target: 200–300 words)',
+          frame: 'CLAIM: The author develops Shakuntala\'s internal conflict through __________ and __________, revealing that she is __________.\n\nEVIDENCE: In ¶___, the text states "___________." Additionally, in ¶___, ___________.\n\nREASONING: This evidence shows that __________ because __________. Her resolution — "__________" (¶___) — reveals her character as __________ because __________.',
+          modelResponse: 'The author develops Shakuntala\'s internal conflict through her aside in ¶12 and the emotional farewell to nature in ¶8–13, revealing that she values both love and home. Her resolution to leave shows she is dutiful and willing to follow her heart even when painful.\n\nIn ¶12, Shakuntala reveals her conflict: "I long to see my husband, and yet my feet will hardly move. It is hard, hard to leave the hermitage." The repetition of "hard, hard" emphasizes the depth of her struggle. In ¶13, Priyamvada observes how "the whole grove feels at parting from you," and ¶14 states "Shakuntala reluctantly departs."\n\nThe author shows both sides simultaneously: "longs" for her husband (wants to go) but feet "will hardly move" (wants to stay). "Hard, hard" makes the reader feel how torn she is. Nature mourning mirrors her own sadness, showing her deep connection to home. Her resolution — "reluctantly departs" — reveals her character as dutiful (goes because expected), loyal (chooses marriage), and brave (leaves despite real fear). "Reluctantly" is key: she does not give up her love for home but chooses love and duty over comfort. This resolution directly prepares the reader for Act V, where the King\'s cruel rejection makes her sacrifice even more devastating.'
+        },
+        exitTicket: {
+          prompt: 'Looking back at this unit, which CUBES strategy helped you most when answering test questions?',
+          frame: 'The strategy that helped me most was __________ because __________. I will use this on the next unit by __________.'
+        },
+        esol: {
+          l12: {
+            frames: [
+              'My claim is: The author develops the conflict through __________ and __________.',
+              'My evidence from ¶___ is: "__________ ."',
+              'This shows that Shakuntala is __________ because __________.'
+            ],
+            wordBank: ['conflict', 'aside', 'verse', 'nature imagery', 'reluctantly departs', 'dutiful', 'loyal', 'brave', 'torn between', 'internal', 'resolution', 'character']
+          },
+          l34: {
+            frames: [
+              'The author develops the conflict by using __________ in ¶___, which shows __________.',
+              'Shakuntala\'s resolution reveals she is __________ because she chooses __________ over __________.'
+            ],
+            wordBank: []
+          },
+          l5: {
+            frames: [
+              'Kalidasa develops Shakuntala\'s internal conflict through __________ (¶___) and __________ (¶___), while her resolution in ¶___ reveals her character as __________ because __________.'
+            ]
+          }
+        }
+      }
+    }
+  };
+  </script>
+  <script src="../../js/unit.js"></script>
+  <script>IR.init();</script>
+</body>
+</html>
